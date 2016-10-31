@@ -1,0 +1,25 @@
+Workflow to get the required files:
+
+Make sure you have a recent version of QGIS installed (http://www.qgis.org/en/site/). Note that in older versions of QGIS (such as 2.0 Darfur), you will not be able to follow this proceedure. If you do not have access to a recent version of QGIS, don't worry, the file require for executing the rest of the scripts (polygons.csv) are already in this repository.
+
+In the QGIS folder, open up 'shear_stress.shp' in QGIS, and follow the procedure below:
+
+# > Open shapefile
+# > Layer dropdown menu > save as
+# > in the options, change "Symbology Export" to "feature symbology", and "Geometry" as "AS_WKT".
+# > Change the CRS to WGS 84, or else it will not export the points as latitude/longitude, if that is desired
+# > make sure it has the filename "polygons.csv", and put it in the base folder (i.e. Greenland_final/shear_stress/)
+
+Execute the following commands in the command line.
+
+
+----------
+make create_ss_grid
+make convert_grid
+bash create_shear_stress_files.sh
+-----------
+
+
+Note that if you are running this on a Mac, you will need to make a change in 'create_shear_stress_files.sh'. Read the comments in the script to make the appropriate change.
+
+
