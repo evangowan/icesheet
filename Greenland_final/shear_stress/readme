@@ -1,6 +1,6 @@
 Workflow to get the required files:
 
-Make sure you have a recent version of QGIS installed (http://www.qgis.org/en/site/). Note that in older versions of QGIS (such as 2.0 Darfur), you will not be able to follow this proceedure. If you do not have access to a recent version of QGIS, don't worry, the file require for executing the rest of the scripts (polygons.csv) are already in this repository.
+Make sure you have a recent version of QGIS installed (http://www.qgis.org/en/site/). Note that in older versions of QGIS (such as 2.0 Darfur), you will not be able to follow this procedure. If you do not have access to a recent version of QGIS, don't worry, the file require for executing the rest of the scripts (polygons.csv) are already in this repository.
 
 In the QGIS folder, open up 'shear_stress.shp' in QGIS, and follow the procedure below:
 
