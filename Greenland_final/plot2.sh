@@ -180,7 +180,7 @@ psxy ${ice_margin_file} -K -O -R -JX -W1p,brown >> ${plot}
 
 psbasemap   -R${R_s_options} -JS${JS_options}   -Ba:/a:0wens -V -P -K -O -Lf${Lf_options} --MAP_TICK_LENGTH_PRIMARY=-.4c >> $plot
 
-psscale  -X-5 -Y1.5   -D9c/-2c/7c/0.5ch -O -K -Ba500:"Difference elevation (m)": -Cdiff.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} >> $plot
+psscale  -X-5 -Y1.5   -D9c/-2c/7c/0.5ch -O  -Ba500:"Difference elevation (m)": -Cdiff.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} >> $plot
 
 
 # plot the actual surface elevation and modelled surface elevation
@@ -270,7 +270,7 @@ pstext << END_READ -R${R_s_options} -JS${JS_options} -F+f24p -K -O -Gwhite >> ${
 END_READ
 
 
-psscale  -X-5 -Y1.5 -G0/3500  -D9c/-2c/7c/0.5ch -O -K -Ba1000f500:"Model elevation (m)": -Ciceshades.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} >> $plot
+psscale  -X-5 -Y1.5 -G0/3500  -D9c/-2c/7c/0.5ch -O  -Ba1000f500:"Model elevation (m)": -Ciceshades.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} >> $plot
 
 # plot shear stress
 
@@ -343,7 +343,7 @@ pstext << END_READ -R${R_s_options} -JS${JS_options} -F+f24p -K -O -Gwhite >> ${
 END_READ
 
 
-psscale  -X-5 -Y1.5   -D9c/-2c/7c/0.5ch -O -K -Ba200:"Measured - Model (m)": -Cdiff.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} >> $plot
+psscale  -X-5 -Y1.5   -D9c/-2c/7c/0.5ch -O  -Ba200:"Measured - Model (m)": -Cdiff.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} >> $plot
 
 
 
@@ -388,7 +388,7 @@ psbasemap   -R${R_s_options} -JS${JS_options}   -Ba:/a:0wens -V -P -K -O -Lf${Lf
 
 scale_style="9c/-2c/6c/0.5ch"
 
-psscale   -X-4 -Y1.5     -D${scale_style} -O -K -Ba1000:"Ice thickness (m)": -Cshades.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} >> $plot
+psscale   -X-4 -Y1.5     -D${scale_style} -O  -Ba1000:"Ice thickness (m)": -Cshades.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} >> $plot
 
 #rm awk.out mean.out shades.cpt shades_coarse.cpt  elev_surface.grd thickness_surface.grd 
 
@@ -575,6 +575,6 @@ ${letter_location}  (d)
 END_READ
 
 
-psscale  -X${scale_xshift} -Y${scale_yshift}   -D${scale_style} -O -K -Ba200:"Measured - Model (m)": -Cdiff.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} --MAP_LABEL_OFFSET=5p >> $plot
+psscale  -X${scale_xshift} -Y${scale_yshift}   -D${scale_style} -O  -Ba200:"Measured - Model (m)": -Cdiff.cpt --FONT_ANNOT_PRIMARY=${FONT_ANNOT_PRIMARY_size}  --FONT_LABEL=${FONT_LABEL_size} --MAP_LABEL_OFFSET=5p >> $plot
 
 

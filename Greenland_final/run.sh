@@ -2,11 +2,15 @@
 
 # run convert_grid.sh before attempting to run this script
 
+
+# path to the binaries of the ICESHEET program. This script assumes that the compiled programs are in the base directory (i.e. one up from where this file is). If you have put the binaries somewhere else (e.g. ${PATH}) change the variable below
+path_to_icesheet="../"
+
 # simulation id
 
 elevation_contour_interval=20 # in m
 initiation_distance_km=15
-time_period=20000
+time_period=0
 gia_iteration=0
 
 shear_stress=0
@@ -22,7 +26,6 @@ do
 
 simulation=${initiation_distance_km}k_${elevation_contour_interval}m_${time_period}a_gia${gia_iteration}_mostlikely_${shear_stress}
 
-path_to_icesheet="../"
 
 ice_margin="outline.xyz"
 elevation_parameter_file="elev_parameters.txt"

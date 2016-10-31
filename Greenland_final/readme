@@ -1,1 +1,34 @@
-Note, if you run these scripts, they must be run in BASH shell. Note that on many Linux distributions, the default shell is DASH shell. These scripts will NOT work in DASH shell, they have BASH specific commands!
+Instructions for making a reconstruction of the Greenland Ice Sheet.
+
+The prerequisite for running these scripts is that you have Generic Mapping Tools (GMT) (preferably version 5.x) and NetCDF tools (NCO) installed somewhere that is accessible by $PATH. Note that in some distributions, GMT binaries are not directly accessible by $PATH, and instead you have to call the wrapper command "GMT" before each GMT program is run. Since many of my scripts were created prior to this kind of structure being introduced, they cannot be run in this environment. The easiest way around this is to add a line in the script file to temporarily add the GMT binary directory to $PATH in the script.
+
+Note, if you run these scripts, they must be run in BASH shell. On many Linux distributions (i.e Ubuntu and derivatives), the default shell is DASH shell. These scripts will NOT work in DASH shell, they have BASH specific commands! Easiest way around this is to set scripts as executables, and run them by './script_name.sh' or by explicitly running them in bash 'bash script_name.sh'.
+
+
+1) The first thing you must do is compile the programs in the base directory. There should be the following programs:
+
+- icesheet
+- nearest_int
+- reduce_dem
+
+2) Go into the shear_stress folder and create the files that are needed as input for the scripts here. There is a readme file there, it has instructions. If you want to change the basal shear stress parameters (which ultimately control ice sheet thickness), you can edit the map provided in there.
+
+
+3) Download the Greenland ice sheet dataset from the NSIDC website (https://nsidc.org/data/IDBMG4/versions/2). There should be a file called MCdataset-2015-04-27.nc. By default, the script expects the file to be in this directory. If it is somewhere else, you have to change the path in the script 'convert_grid.sh'.
+
+4) Run 'convert_grid.sh'. This will produce the input files needed by ICESHEET. After running the script, the following files should exist:
+
+- outline.xyz
+- elev_parameters.txt
+- ss_parameters.txt
+- ss.bin
+- modern_topo.bin
+
+Note that this script must be run any time you make changes to the shear stress values (or basal topography, if you are dealing with glacial isostatic adjustment, but that isn't included in this example)
+
+4) Run 'run.sh'. This is the file that allows you to play around with the different ICESHEET parameters. There are two variables you can change:
+
+- initiation_distance_km: the coarseness of flowline initiation points along an elevation contour line. The default value is 20 km.
+- elevation_contour_interval: the elevation contour stepping interval. The default value is 20 m
+
+'run.sh' will automatically execute the 'plot2.sh' script to plot the results, which appear in the folder "plots". After the first time you run the script, you can go into 'plot2.sh' and turn off the calculation of the true Greenland ice sheet thickness, since this takes a couple of minutes to calculate and only needs to be done once. Just follow the instructions in the script.

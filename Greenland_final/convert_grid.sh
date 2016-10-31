@@ -8,6 +8,11 @@
 
 # Run the script in the shear stress folder first, or else this won't work
 
+
+# make sure you change the path to the location of the Greenland dataset
+# download from here: https://nsidc.org/data/IDBMG4/versions/2
+greenland_netcdf=MCdataset-2015-04-27.nc
+
 # note that the process of extracting the outline takes a while, so only set this to "y" the first time you run the script
 execute_outline=y
 
@@ -25,16 +30,14 @@ resolution=1000
 # make contour
 
 outline_file=outline.xyz
-# make sure you change the path to the location of the Greenland dataset
-# download from here: https://nsidc.org/data/IDBMG4/versions/2
-greenland_netcdf=/home/evan/experiments/ice_surface_5/needed/Greenland/MCdataset-2015-04-27.nc
+
 
 
 
 if [ "${execute_outline}" = "y" ]
 then
 
-
+# extract outlines
 
 ncks -v mask ${greenland_netcdf}  out.nc
 makecpt -Cgray -T0/1/0.1  > shades.cpt
