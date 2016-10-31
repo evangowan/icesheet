@@ -14,9 +14,12 @@ binary_path="."
 csv_file=polygons.csv
 
 
-gawk 'BEGIN { FPAT = "([^,]+)|(\"[^\"]+\")"} {if(NR > 1) {print ">", NR-1; print $1} }' ${csv_file} | sed -e 's/\"MULTIPOLYGON (((//g'  | sed -e 's/)))\"//g' | sed -e 's/,/\n/g' | sed -e 's/(//g' | sed -e 's/)//g' |  sed -e 's/\"POLYGON //g'  |  sed -e 's/\"//g' > gmt_file.txt
+awk 'BEGIN { FPAT = "([^,]+)|(\"[^\"]+\")"} {if(NR > 1) {print ">", NR-1; print $1} }' ${csv_file} | sed -e 's/\"MULTIPOLYGON (((//g'  | sed -e 's/)))\"//g' | sed -e 's/,/\n/g' | sed -e 's/(//g' | sed -e 's/)//g' |  sed -e 's/\"POLYGON //g'  |  sed -e 's/\"//g' > gmt_file.txt
 
-gawk 'BEGIN { FPAT = "([^,]+)|(\"[^\"]+\")"} {if(NR > 1) {print NR-1, $2} }' ${csv_file}  > shear_stress_domain_values.txt
+# if you are running on a MAC, use this command instead of the one above. Thanks to Felicity Williams for pointing this out.
+#awk 'BEGIN { FPAT = "([^,]+)|(\"[^\"]+\")"} {if(NR > 1) {print ">", NR-1; print $1} }' ${csv_file} | sed -e 's/\"MULTIPOLYGON (((//g'  | sed -e 's/)))\"//g' | sed -e 's/,/ \'$'\n/g' | sed -e 's/(//g' | sed -e 's/)//g' |  sed -e 's/\"POLYGON //g'  |  sed -e 's/\"//g' > gmt_file.txt
+
+awk 'BEGIN { FPAT = "([^,]+)|(\"[^\"]+\")"} {if(NR > 1) {print NR-1, $2} }' ${csv_file}  > shear_stress_domain_values.txt
 
 
 

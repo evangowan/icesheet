@@ -1,0 +1,1 @@
+Note, if you run these scripts, they must be run in BASH shell. Note that on many Linux distributions, the default shell is DASH shell. These scripts will NOT work in DASH shell, they have BASH specific commands!
