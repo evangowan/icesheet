@@ -13,6 +13,23 @@ binary_path="."
 
 csv_file=polygons.csv
 
+is_compiled=$(command -v ${binary_path}/convert_grid)
+
+
+if [ -z "${is_compiled}" ];
+then
+	binary_path="."
+	make convert_grid
+	make create_ss_grid
+
+fi
+
+if [ ! -f ${csv_file} ]; then
+    echo "File 'polygons.csv' does not exist, please go into the shear_stress folder"
+    echo "and follow the instructions in the readme file to create it"
+    exit 0
+fi
+
 
 awk 'BEGIN { FPAT = "([^,]+)|(\"[^\"]+\")"} {if(NR > 1) {print ">", NR-1; print $1} }' ${csv_file} | sed -e 's/\"MULTIPOLYGON (((//g'  | sed -e 's/)))\"//g' | sed -e 's/,/\n/g' | sed -e 's/(//g' | sed -e 's/)//g' |  sed -e 's/\"POLYGON //g'  |  sed -e 's/\"//g' > gmt_file.txt
 
