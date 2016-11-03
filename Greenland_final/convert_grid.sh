@@ -14,14 +14,62 @@
 greenland_netcdf=MCdataset-2015-04-27.nc
 
 # note that the process of extracting the outline takes a while, so only set this to "y" the first time you run the script
-execute_outline=y
+
+execute_outline=$1
+
+if [ -z "${execute_outline}" ]; # need to download Greenland data
+then
+	execute_outline=y
+
+fi
 
 # if you haven't made a change to the topography (i.e. after a GIA step) you can turn off the shear stress file calculation.
 # It doesn't really take a huge amount of time, so you can leave it on if you want.
-execute_ss=y
+execute_ss=$2
 
-binary_path="../" # leave blank if your binaries are already in $PATH
+if [ -z "${execute_ss}" ]; # need to download Greenland data
+then
+	execute_ss=y
 
+fi
+
+grid_resolution=$3
+
+if [ -z "${grid_resolution}" ]
+then
+
+	grid_resolution=5000
+
+fi
+
+binary_path=$4 
+
+
+icesheet_exists2=$(command -v ${binary_path}icesheet)
+
+
+if [ -z "${icesheet_exists2}" ]; 
+then
+
+	if [ -z ${binary_path} ]
+	then
+		binary_path="../"
+	else
+
+		binary_path=""
+
+	fi	
+
+fi
+
+icesheet_exists2=$(command -v ${binary_path}icesheet)
+
+if [ -z "${icesheet_exists2}" ]; 
+then
+
+	echo "compile icesheet before running this script"
+
+fi
 
 # note that the grid spacing must be an integer! (in metres)
 
@@ -39,7 +87,7 @@ then
 
 # extract outlines
 
-ncks -v mask ${greenland_netcdf}  out.nc
+ncks --overwrite -v mask ${greenland_netcdf}  out.nc
 makecpt -Cgray -T0/1/0.1  > shades.cpt
 grdmath out.nc 2 EQ = out2.nc
 
@@ -55,7 +103,7 @@ awk --field-separator='\t' '{if (NR > 1) print $1, $2}' contours_outline.txt > $
 fi
 
 min_ss=50000 # basal shear stress for areas outside of the domain
-resolution=5000 # spatial resolution
+resolution=${grid_resolution} # spatial resolution
 x_resolution=${resolution}
 y_resolution=${resolution}
 
@@ -143,7 +191,7 @@ fi
 
 # now make the topo grid
 
-resolution=5000
+resolution=${grid_resolution}
 
 
 
@@ -167,7 +215,7 @@ execute_area=n
 
 if [ "${execute_area}" = "y" ]
 then
-ncks -v bed ${greenland_netcdf}  bed.nc
+ncks --overwrite -v bed ${greenland_netcdf}  bed.nc
 grd2xyz bed.nc -bo -sa -R${xmin}/${xmax}/${ymin}/${ymax} > bed.bin
 
 blockmean bed.bin -bi -I${resolution} -R${xmin}/${xmax}/${ymin}/${ymax}  > area.xyz
@@ -278,7 +326,8 @@ grdimage ${binary_dem_file} -Cshades.cpt -X5 -Y7 -JX15/15 -K -R${xmin}/${xmax}/$
 psxy ${outline_file} -K -O -R -JX -Wthickest,yellow >> ${plot_topo}
 psscale -X-3 -Y-1 -D9c/-2c/15c/0.5ch -O -Ba1000:"Topography (m)": -Cshades.cpt  >> $plot_topo
 
-exit 0
 
-exit 0
 rm ${reduced_dem_file} ${even_grid_file} ${smaller_grid_file} x_values.txt y_values.txt ${xyz_file} area.grd
+
+
+

@@ -8,7 +8,14 @@ simulation=$1
 
 
 # The first time you run this, set to "y", so that it computes the averaged true Greenland ice thickness. Set to "n" after, it takes a lot of time to run!
-execute_surface_mean=y
+execute_surface_mean=$2
+
+if [ -z "${execute_surface_mean}" ]
+then
+
+	execute_surface_mean=y
+
+fi
 
 # make sure you change the path to the location of the Greenland dataset
 greenland_netcdf=MCdataset-2015-04-27.nc
@@ -52,7 +59,7 @@ ysubtickint=250000
 
 if [ "${execute_surface_mean}" = "y" ]
 then
-ncks -v surface ${greenland_netcdf}  surface.nc
+ncks --overwrite -v surface ${greenland_netcdf}  surface.nc
 
 grd2xyz surface.nc -bo -sa -R${xmin}/${xmax}/${ymin}/${ymax} > greenland_surface.xyz
 

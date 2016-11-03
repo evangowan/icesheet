@@ -4,6 +4,8 @@ ICESHEET - a program to create ice sheet reconstructions
 This is software to create perfectly plastic ice sheets. I used this to create reconstructions of the Laurentide Ice Sheet (see The NAICE model below). There is a paper on this in Geoscience Model Development. I have included a sample problem with the Greenland Ice Sheet with the scripts that should make it pretty easy to run the program. I usually modify these scripts to suit the problem I am working on. They require Generic Mapping Tools and NETCDF Tools. In particular, ICESHEET requires GMT formatted binary files as input for the basal shear stress and basal topography. Note if you downloaded the version of this file from the GMD website, I forgot to include the shapefiles needed to create the shear stress files, so download it again. Instructions to run this can be found on my website (https://raisedbeaches.net/2016/05/22/icesheet-1-0/).
 
 
+If you are just starting out, go into the "Greenland_final" folder and run "run_everything.sh". It will check to make sure everything is installed correctly, and you can easily change parameters related to making reconstructions.
+
 
 If you use this program, please site the following paper:
 

@@ -2,7 +2,19 @@ Instructions for making a reconstruction of the Greenland Ice Sheet.
 
 The prerequisite for running these scripts is that you have Generic Mapping Tools (GMT) (preferably version 5.x) and NetCDF tools (NCO) installed somewhere that is accessible by $PATH. Note that in some distributions, GMT binaries are not directly accessible by $PATH, and instead you have to call the wrapper command "GMT" before each GMT program is run. Since many of my scripts were created prior to this kind of structure being introduced, they cannot be run in this environment. The easiest way around this is to add a line in the script file to temporarily add the GMT binary directory to $PATH in the script.
 
+If you are just starting out, the script "run_everything.sh" is the only thing you need to run. It will automatically check to make sure everything is compiled and installed. You can edit the parameters related to making reconstructions there.
+
+
 Note, if you run these scripts, they must be run in BASH shell. On many Linux distributions (i.e Ubuntu and derivatives), the default shell is DASH shell. These scripts will NOT work in DASH shell, they have BASH specific commands! Easiest way around this is to set scripts as executables, and run them by './script_name.sh' or by explicitly running them in bash 'bash script_name.sh'.
+
+
+
+-------
+
+
+
+The following details are only if you want to run the scripts individually (i.e. for batch runs)
+
 
 
 1) The first thing you must do is compile the programs in the base directory. There should be the following programs:
