@@ -6,6 +6,8 @@ This is software to create perfectly plastic ice sheets. I used this to create r
 
 If you are just starting out, go into the "Greenland_final" folder and run "run_everything.sh". It will check to make sure everything is installed correctly, and you can easily change parameters related to making reconstructions.
 
+ICESHEET is written in Fortran. To compile, you will need to have automake and a Fortran compiler installed. By default it assumes you have gfortran, if you are using a different compiler, go into the makefile files and change it. Note that using the Intel Fortran compiler can result in a speed increase on the order of a factor of two for ICESHEET, if you have it, I definitely recommend it over gfortran!
+
 
 If you use this program, please site the following paper:
 
