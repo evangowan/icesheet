@@ -8,6 +8,11 @@
 # If you already have them in a projected coordinate system, comment out the commands that do the coordinate transformation
 
 
+# The final ice thickness values are in the following files:
+
+# grids/${simulation}_thickness.nc - projected coordinates
+# grids/${simulation}_thickness_ll.nc - geographical coordinates
+
 ###############################################################################################################################
 #
 # Make sure you check the variables below, particularly the path to the topography file and ICESHEET executable are correct!
@@ -81,7 +86,7 @@ map_width=20c # likely arbitrary
 
 J_options="-Jb${center_longitude}/${center_latitude}/${southern_standard_parallel}/${northern_standard_parallel}/${map_width}"
 
-# Longitude and latitude of region of interest, make sure it encompasses the provided outline at a minimum
+# Longitude and latitude of region of interest, make sure it encompasses the provided margin at a minimum
 
 long_min=0
 long_max=110
