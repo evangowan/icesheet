@@ -87,7 +87,7 @@ subroutine read_elevation_files()
 
 	open(unit=20, file=elevation_parameters_filename, form="formatted", access="sequential", status="old")
 
-	read(20,*) elevation_file
+	read(20,'(A)') elevation_file
 
 	! x and y limits for the grid, needs to be integers
 
@@ -150,7 +150,7 @@ subroutine read_ss_files()
 
 	open(unit=20, file=shear_stress_parameters_filename, form="formatted", access="sequential", status="old")
 
-	read(20,*) shear_stress_file
+	read(20,'(A)') shear_stress_file
 
 	! x and y limits for the grid, needs to be integers
 
