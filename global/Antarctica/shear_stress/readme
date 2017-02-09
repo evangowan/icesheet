@@ -1,0 +1,2 @@
+shear_stress_now.gmt is a GMT formatted polygon file containing a shear stress model that produces an ice sheet reconstruction of 
+modern day Antarctica that matches the BEDMAP2 ice thicknesses within 25 m (media value within each domain)
