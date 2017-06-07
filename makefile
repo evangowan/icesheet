@@ -46,3 +46,10 @@ read_dem.o: read_dem.f90
 
 reduce_dem: reduce_dem.f90 read_dem.o
 	$(FC) -o reduce_dem  $(FCFLAGS2) reduce_dem.f90 read_dem.o
+
+
+#####################
+
+
+create_ss_grid: create_ss_grid.f90 global_parameters.o
+	$(FC) -o create_ss_grid $(FCFLAGS) create_ss_grid.f90 global_parameters.o
