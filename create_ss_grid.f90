@@ -11,7 +11,7 @@ program create_ss_grid
 	implicit none
 
 	integer :: grid_spacing, minimum_y, minimum_x, maximum_x, maximum_y 
- 	double precision :: x, y, x1, y1, x2, y2, slope, intercept
+ 	double precision :: x, y, x1, y1, x2, y2, slope, intercept, x_offset, y_offset
 	double precision :: local_minimum_x, local_maximum_x, local_minimum_y, local_maximum_y
 	double precision :: local_x, local_y
 
@@ -88,6 +88,16 @@ program create_ss_grid
 	read(grid_parameters_unit,*) maximum_y
 	read(grid_parameters_unit,*) grid_spacing
 
+	! if there is an offset to the grid (i.e. QGIS had the projection center at the center coordinate using the Lambert projection, while 
+	! it is more convenient to use the bottom left corner as is default in GMT to keep it a regular grid
+	! if there is no offset, do not include it in ss_parameters.txt
+
+	read(grid_parameters_unit,*, iostat=istat)  x_offset, y_offset
+	if(istat /= 0) THEN
+		x_offset = 0.0
+		y_offset = 0.0
+	endif
+
 	close(unit=grid_parameters_unit)
 
 
@@ -158,7 +168,7 @@ program create_ss_grid
 
 
 	do ss_polygon_counter = 1, number_polygons, 1
-		write(6,*) ss_polygon_counter
+		!write(6,*) ss_polygon_counter
 
 		break_out: do
 			read(polygon_file_unit,*) bracket, dummy
@@ -176,7 +186,8 @@ program create_ss_grid
 			read(polygon_file_unit,*) x_array(ss_polygon_counter,point_counter), &
 							y_array(ss_polygon_counter,point_counter)
 
-
+			x_array(ss_polygon_counter,point_counter) = x_array(ss_polygon_counter,point_counter) + x_offset
+			y_array(ss_polygon_counter,point_counter) = y_array(ss_polygon_counter,point_counter) + y_offset
 
 		end do
 	end do
