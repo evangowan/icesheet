@@ -15,21 +15,21 @@ program create_ss_grid
 	double precision :: local_minimum_x, local_maximum_x, local_minimum_y, local_maximum_y
 	double precision :: local_x, local_y
 
-	character(len=255) :: input_parameter, dummy, bin_file, polygon_file, domain_max_file, domain_adjust_file
+	character(len=255) :: input_parameter, dummy, bin_file, polygon_file, domain_max_file, domain_adjust_file, info
 	character(len=255), parameter ::  output_file = "domains.txt"
 	character(len=255), parameter :: grid_parameters_file="ss_parameters.txt" ! parameter file used in ICESHEET
 
 	character(len=1) :: bracket
 
-	integer :: istat, number_polygons, ss_polygon_counter, point_counter, maximum_points, number_y, number_x
-	integer :: start_y_index, start_x_index, end_y_index, end_x_index
+	integer :: istat, number_polygons, ss_polygon_counter, point_counter, maximum_points, number_y, number_x, counter
+	integer :: start_y_index, start_x_index, end_y_index, end_x_index, domain_id, shear_stress
 	integer :: local_y_counter, local_x_counter, y_counter, x_counter
 	integer, parameter :: polygon_file_unit=10, max_polygons = 10000, output_file_unit=20, grid_parameters_unit=30
 
 	integer, dimension(max_polygons) :: polygon_point_size ! if you have more than 10000 polygons, you are ambitious!
 
 	double precision, allocatable, dimension(:,:) :: y_array, x_array
-	integer, allocatable, dimension(max_polygons) :: shear_stress_value_array
+	integer, dimension(max_polygons) :: shear_stress_value_array
 	integer, allocatable, dimension(:,:) :: grid
 
 	logical :: inside, use_max_file, use_adjust_file
@@ -68,7 +68,7 @@ program create_ss_grid
 		use_adjust_file = .true.
 	endif
 
-	stop
+	
 	! the program expects a file called ss_parameters.txt that contains the grid parameters, x and y min/max and grid spacing
 
 	open(unit=grid_parameters_unit, file=grid_parameters_file, access="sequential", form="formatted", status="old")
@@ -110,6 +110,16 @@ program create_ss_grid
 
 			! the QGIS output file will immediately afterwards have a line containing the domain number and shear stress
 
+			read(polygon_file_unit,*) dummy, info
+			! replace the | character with spaces
+			do counter=1,len_trim(info)
+   				if (info(counter:counter) == "|") info(counter:counter) = " "
+			end do
+
+			read(info,*) dummy, domain_id, shear_stress
+
+			write(6,*) domain_id, shear_stress
+
 		else if (bracket == "#") then
           		! skip
 		else
@@ -121,7 +131,7 @@ program create_ss_grid
 	rewind(unit=polygon_file_unit)
 
 	maximum_points = maxval(polygon_point_size)
-
+	stop
 	allocate(y_array(number_polygons,maximum_points), x_array(number_polygons,maximum_points),&
 		 stat=istat)
 	if(istat /=0) THEN
@@ -237,7 +247,7 @@ program create_ss_grid
 	close(output_file_unit)
 
 
-	deallocate(y_array, x_array,shear_stress_value_array, stat=istat)
+	deallocate(y_array, x_array, stat=istat)
 	if(istat /=0) THEN
 		write(6,*) "problem deallocating arrays"
 		stop
