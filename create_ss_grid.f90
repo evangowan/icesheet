@@ -10,8 +10,8 @@ program create_ss_grid
 	! reads in the file with polygons "gmt_file.txt" and creates a grid with a given resolution set by the user
 	implicit none
 
-	integer :: grid_spacing, minimum_y, minimum_x, maximum_x, maximum_y ! in the original version of this program, 
- 	double precision :: x, y
+	integer :: grid_spacing, minimum_y, minimum_x, maximum_x, maximum_y 
+ 	double precision :: x, y, x1, y1, x2, y2, slope, intercept
 	double precision :: local_minimum_x, local_maximum_x, local_minimum_y, local_maximum_y
 	double precision :: local_x, local_y
 
@@ -22,9 +22,12 @@ program create_ss_grid
 	character(len=1) :: bracket
 
 	integer :: istat, number_polygons, ss_polygon_counter, point_counter, maximum_points, number_y, number_x, counter
-	integer :: start_y_index, start_x_index, end_y_index, end_x_index, domain_id, shear_stress
+	integer :: start_y_index, start_x_index, end_y_index, end_x_index, domain_id, shear_stress, max_domain_id, current_time
 	integer :: local_y_counter, local_x_counter, y_counter, x_counter
+	integer :: time_of_maximum_ss, time_of_minimum_ss, minimum_ss
+
 	integer, parameter :: polygon_file_unit=10, max_polygons = 10000, output_file_unit=20, grid_parameters_unit=30
+	integer, parameter :: shear_stress_max_unit=40, adjust_unit=50
 
 	integer, dimension(max_polygons) :: polygon_point_size ! if you have more than 10000 polygons, you are ambitious!
 
@@ -66,6 +69,12 @@ program create_ss_grid
 	else
 		write(6,*) "using user derived time variable shear stress adjustments"
 		use_adjust_file = .true.
+
+		! read in the time value (in thosands of years before present so it is an integer)
+
+		call getarg(4,dummy)
+
+		read(dummy,*) current_time
 	endif
 
 	
@@ -90,7 +99,7 @@ program create_ss_grid
 	polygon_point_size = 0
 
 	shear_stress_value_array = nominal_shear_stress
-
+	max_domain_id = 0
 	open(unit=polygon_file_unit, file=polygon_file, access="sequential", form="formatted", status="old")
 
 	initial_read: do
@@ -118,7 +127,11 @@ program create_ss_grid
 
 			read(info,*) dummy, domain_id, shear_stress
 
-			write(6,*) domain_id, shear_stress
+			if(domain_id > max_domain_id) THEN
+				max_domain_id = domain_id
+			end if
+
+			shear_stress_value_array(domain_id) = shear_stress
 
 		else if (bracket == "#") then
           		! skip
@@ -131,7 +144,7 @@ program create_ss_grid
 	rewind(unit=polygon_file_unit)
 
 	maximum_points = maxval(polygon_point_size)
-	stop
+
 	allocate(y_array(number_polygons,maximum_points), x_array(number_polygons,maximum_points),&
 		 stat=istat)
 	if(istat /=0) THEN
@@ -141,16 +154,27 @@ program create_ss_grid
 
 
 
+	! read in the polygons
+
 
 	do ss_polygon_counter = 1, number_polygons, 1
+		write(6,*) ss_polygon_counter
 
-		read(polygon_file_unit,*) bracket, shear_stress_value_array(ss_polygon_counter)
+		break_out: do
+			read(polygon_file_unit,*) bracket, dummy
+			if(bracket == ">" .or. bracket == "#") then
+				cycle break_out
+			else
+				backspace polygon_file_unit
+				exit break_out
+			end if
 
+		end do break_out
 
 		do point_counter = 1, polygon_point_size(ss_polygon_counter), 1
 
 			read(polygon_file_unit,*) x_array(ss_polygon_counter,point_counter), &
-						      y_array(ss_polygon_counter,point_counter)
+							y_array(ss_polygon_counter,point_counter)
 
 
 
@@ -160,15 +184,65 @@ program create_ss_grid
 	close(polygon_file_unit)
 
 
-	! expand the region a bit
+	if(use_max_file) THEN
+		open(unit=shear_stress_max_unit, file=domain_max_file, access="sequential", form="formatted", status="old")
 
-!	minimum_x = dble(floor(minimum_x/grid_spacing))*grid_spacing - 2. * grid_spacing
-!	maximum_x = dble(ceiling(maximum_x/grid_spacing))*grid_spacing + 2. * grid_spacing
+		read_max: do
 
-!	minimum_y = dble(floor(minimum_y/grid_spacing))*grid_spacing - 2. * grid_spacing
-!	maximum_y = dble(ceiling(maximum_y/grid_spacing))*grid_spacing + 2. * grid_spacing
+			read(shear_stress_max_unit,*, iostat=istat)  domain_id, shear_stress
+			if(istat /=0) THEN
+				exit read_max
+			endif	
+
+			shear_stress_value_array(domain_id) = shear_stress
+		end do read_max
+		close(shear_stress_max_unit)
+		
+	end if
 
 
+	if(use_adjust_file) THEN 
+
+		! adjust the maximum shear stress values based on a format
+		! time_of_maximum_ss time_of_minimum_ss minimum_ss
+
+		! this will linearly go between those times and adjust the shear stress based on these values
+
+		open(unit=adjust_unit, file=domain_adjust_file, access="sequential", form="formatted", status="old")
+
+		read_adjust: do
+
+			read(adjust_unit,*, iostat=istat) domain_id, time_of_maximum_ss, time_of_minimum_ss, minimum_ss ! must be integers
+			if(istat /=0) THEN
+				exit read_adjust
+			endif	
+
+			! are adjustments to the current time necessary?
+
+			if(current_time >= min(time_of_maximum_ss,time_of_minimum_ss) .and. &
+      		   current_time <= max(time_of_maximum_ss,time_of_minimum_ss)) THEN
+
+
+				x1 = dble(time_of_minimum_ss)
+				y1 = dble(minimum_ss)
+				x2 = dble(time_of_maximum_ss)
+				y2 = dble(shear_stress_value_array(domain_id))
+
+				slope = (y2 - y1) / (x2 - x1)
+				intercept = y1 - slope * x1
+
+
+				shear_stress_value_array(domain_id) = slope * current_time + intercept
+
+			end if
+
+		end do read_adjust
+
+		close(adjust_unit)
+
+	end if
+
+	stop
 
 
 	number_y = nint(dble(maximum_y - minimum_y) / dble(grid_spacing)) + 1
