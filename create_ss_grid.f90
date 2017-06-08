@@ -10,14 +10,15 @@ program create_ss_grid
 	! reads in the file with polygons "gmt_file.txt" and creates a grid with a given resolution set by the user
 	implicit none
 
-	integer :: grid_spacing, minimum_y, minimum_x, maximum_x, maximum_y 
+	integer :: grid_spacing, minimum_y, minimum_x, maximum_x, maximum_y, x_int, y_int
  	double precision :: x, y, x1, y1, x2, y2, slope, intercept, x_offset, y_offset
-	double precision :: local_minimum_x, local_maximum_x, local_minimum_y, local_maximum_y
+	integer :: local_minimum_x, local_maximum_x, local_minimum_y, local_maximum_y
 	double precision :: local_x, local_y
 
 	character(len=255) :: input_parameter, dummy, bin_file, polygon_file, domain_max_file, domain_adjust_file, info
-	character(len=255), parameter ::  output_file = "domains.txt"
+	character(len=255), parameter ::  output_domains_file = "domains.txt"
 	character(len=255), parameter :: grid_parameters_file="ss_parameters.txt" ! parameter file used in ICESHEET
+	character(len=255), parameter :: output_grid_file = "shear_stress_grid.txt"
 
 	character(len=1) :: bracket
 
@@ -26,10 +27,10 @@ program create_ss_grid
 	integer :: local_y_counter, local_x_counter, y_counter, x_counter
 	integer :: time_of_maximum_ss, time_of_minimum_ss, minimum_ss
 
-	integer, parameter :: polygon_file_unit=10, max_polygons = 10000, output_file_unit=20, grid_parameters_unit=30
-	integer, parameter :: shear_stress_max_unit=40, adjust_unit=50
+	integer, parameter :: polygon_file_unit=10, max_polygons = 10000, output_domains_file_unit=20, grid_parameters_unit=30
+	integer, parameter :: shear_stress_max_unit=40, adjust_unit=50, output_grid_unit = 60
 
-	integer, dimension(max_polygons) :: polygon_point_size ! if you have more than 10000 polygons, you are ambitious!
+	integer, dimension(max_polygons) :: polygon_point_size, polygon_domain_id ! if you have more than 10000 polygons, you are ambitious!
 
 	double precision, allocatable, dimension(:,:) :: y_array, x_array
 	integer, dimension(max_polygons) :: shear_stress_value_array
@@ -142,6 +143,7 @@ program create_ss_grid
 			end if
 
 			shear_stress_value_array(domain_id) = shear_stress
+			polygon_domain_id(number_polygons) = domain_id
 
 		else if (bracket == "#") then
           		! skip
@@ -217,7 +219,8 @@ program create_ss_grid
 		! adjust the maximum shear stress values based on a format
 		! time_of_maximum_ss time_of_minimum_ss minimum_ss
 
-		! this will linearly go between those times and adjust the shear stress based on these values
+		! this will linearly go between those times and adjust the shear stress based on these values, the minimum time should probably represent an ice free time
+		! or zero time
 
 		open(unit=adjust_unit, file=domain_adjust_file, access="sequential", form="formatted", status="old")
 
@@ -233,7 +236,7 @@ program create_ss_grid
 			if(current_time >= min(time_of_maximum_ss,time_of_minimum_ss) .and. &
       		   current_time <= max(time_of_maximum_ss,time_of_minimum_ss)) THEN
 
-
+				! originally I thought of making the decay a 
 				x1 = dble(time_of_minimum_ss)
 				y1 = dble(minimum_ss)
 				x2 = dble(time_of_maximum_ss)
@@ -243,7 +246,7 @@ program create_ss_grid
 				intercept = y1 - slope * x1
 
 
-				shear_stress_value_array(domain_id) = slope * current_time + intercept
+				shear_stress_value_array(domain_id) = nint(slope * current_time + intercept)
 
 			end if
 
@@ -253,9 +256,19 @@ program create_ss_grid
 
 	end if
 
-	stop
+
+	! write out the domains file, not really used for anything else, just for checking
+
+	open(unit=output_domains_file_unit, file=output_domains_file, access="sequential", form="formatted", status="replace")
+
+	do counter = 1, max_domain_id, 1
+
+		write(output_domains_file_unit,*) counter, shear_stress_value_array(counter)
+
+	end do
 
 
+	! allocate the output grid
 	number_y = nint(dble(maximum_y - minimum_y) / dble(grid_spacing)) + 1
 	number_x = nint(dble(maximum_x - minimum_x) / dble(grid_spacing)) + 1
 
@@ -271,73 +284,89 @@ program create_ss_grid
 	! also, if your input shapefile has any gaps between polygons, they could also be skipped. 
 	! If they polygons overlap, the values could be overwritten
 
-	grid = 0
+	grid = nominal_shear_stress
 
-	do ss_polygon_counter = 1, number_polygons, 1
-
-
-		local_minimum_x = minval(x_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)))
-		local_maximum_x = maxval(x_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)))
-
-		local_minimum_y = minval(y_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)))
-		local_maximum_y = maxval(y_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)))
+	cycle_polygon: do ss_polygon_counter = 1, number_polygons, 1
 
 
-		local_minimum_x = dble(floor(local_minimum_x/grid_spacing)) * grid_spacing
-		local_maximum_x = dble(ceiling(local_maximum_x/grid_spacing)) * grid_spacing
+		local_minimum_x = int(minval(x_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)))/dble(grid_spacing))&
+		  *grid_spacing
+		local_maximum_x = ceiling(maxval(x_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)))/dble(grid_spacing))&
+		  *grid_spacing
 
-		local_minimum_y = dble(floor(local_minimum_y/grid_spacing)) * grid_spacing
-		local_maximum_y = dble(ceiling(local_maximum_y/grid_spacing)) * grid_spacing
+		local_minimum_y = int(minval(y_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)))/dble(grid_spacing))&
+		  *grid_spacing
+		local_maximum_y = ceiling(maxval(y_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)))/dble(grid_spacing))&
+		  *grid_spacing
 
-		start_y_index = nint((local_minimum_y - minimum_y)/grid_spacing) + 1
-		start_x_index = nint((local_minimum_x - minimum_x)/grid_spacing) + 1
-		end_y_index = nint((local_maximum_y - minimum_y)/grid_spacing) + 1
-		end_x_index = nint((local_maximum_x - minimum_x)/grid_spacing) + 1
+
+		start_y_index = (local_minimum_y - minimum_y)/grid_spacing + 1
+		start_x_index = (local_minimum_x - minimum_x)/grid_spacing + 1
+		end_y_index = (local_maximum_y - minimum_y)/grid_spacing + 1
+		end_x_index = (local_maximum_x - minimum_x)/grid_spacing + 1
+
+		if(end_x_index < 1 .or. start_x_index > number_x .or. end_y_index < 1 .or. start_y_index > number_y) THEN ! polygon is outside of the grid
+			cycle cycle_polygon
+		end if
+
+		if (start_x_index < 1) THEN
+			start_x_index = 1
+		endif
+		if (end_x_index > number_x) THEN
+			end_x_index = number_x
+		endif
+
+		if (start_y_index < 1) THEN
+			start_y_index = 1
+		endif
+		if (end_y_index > number_y) THEN
+			end_y_index = number_y
+		endif
 		
 		do  local_x_counter = start_x_index, end_x_index
 			do local_y_counter = start_y_index, end_y_index
 
 				
-				local_x = minimum_x + dble(local_x_counter-1) * grid_spacing
-				local_y = minimum_y + dble(local_y_counter-1) * grid_spacing
+				local_x = dble(minimum_x + (local_x_counter-1) * grid_spacing)
+				local_y = dble(minimum_y + (local_y_counter-1) * grid_spacing)
 
 				inside = point_in_polygon(x_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)), &
 				  y_array(ss_polygon_counter,1:polygon_point_size(ss_polygon_counter)), local_x, &
 				  local_y, polygon_point_size(ss_polygon_counter))
 
 				if(inside) THEN
-					grid(local_x_counter,local_y_counter) = shear_stress_value_array(ss_polygon_counter)
+					grid(local_x_counter,local_y_counter) = shear_stress_value_array(polygon_domain_id(ss_polygon_counter))
 				endif
 
 			end do
 		end do
 
 
-	end do
+	end do cycle_polygon
 
 
 	! output
 
-	open(unit=output_file_unit, file=output_file, access="sequential", form="formatted", status="replace")
+	open(unit=output_grid_unit, file=output_grid_file, access="sequential", form="formatted", status="replace")
 	do x_counter = 1, number_x, 1
 		do y_counter = 1, number_y, 1
-			local_x = minimum_x + dble(x_counter-1) * grid_spacing
-			local_y = minimum_y + dble(y_counter-1) * grid_spacing
+			x_int = minimum_x + (x_counter-1) * grid_spacing
+			y_int = minimum_y + (y_counter-1) * grid_spacing
 
-			write(output_file_unit,output_format) local_x, local_y, grid(x_counter,y_counter) 
+			write(output_grid_unit,output_format) x_int, y_int, grid(x_counter,y_counter) 
 
 		end do
 	end do
 
-	close(output_file_unit)
+	close(output_grid_unit)
 
 
-	deallocate(y_array, x_array, stat=istat)
+	deallocate(y_array, x_array, grid, stat=istat)
 	if(istat /=0) THEN
 		write(6,*) "problem deallocating arrays"
 		stop
 	endif
 
-
+	write(6,*) "finished create_ss_grid"
 
 end program create_ss_grid
