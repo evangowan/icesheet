@@ -1,7 +1,7 @@
 FC = gfortran
 
-#FCFLAGS = -g -fbacktrace -fbounds-check 
-FCFLAGS = -O2
+FCFLAGS = -g -fbacktrace -fbounds-check 
+#FCFLAGS = -O2
 
 # if compiling with the Intel Fortran compiler, you need to add an extra flag
 #FCFLAGS = -O2 -assume byterecl
@@ -53,3 +53,9 @@ reduce_dem: reduce_dem.f90 read_dem.o
 
 create_ss_grid: create_ss_grid.f90 global_parameters.o
 	$(FC) -o create_ss_grid $(FCFLAGS) create_ss_grid.f90 global_parameters.o
+
+
+####################
+
+no_ice: no_ice.f90 global_parameters.o
+	$(FC) -o no_ice $(FCFLAGS) no_ice.f90 global_parameters.o
