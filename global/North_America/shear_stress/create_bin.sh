@@ -3,7 +3,9 @@
 # Ice margin file for the desired time
 margin_file=../margins/12000.gmt
 
-bin_path="../../../" # leave blank if create_ss_grid is in ${PATH}
+root_directory=$(awk '{if (NR==1) print $0}' root_directory)
+
+bin_path="${root_directory}/.." # leave blank if create_ss_grid is in ${PATH}
 
 # The GMT formatted text file needs to be created before running this script.
 # Steps:
@@ -66,7 +68,8 @@ END
 
 # convert the GMT file into a binary grid
 
-${bin_path}create_ss_grid ${domain_gmt_file} domains_max.txt #adjust_0.txt 25000
+echo ./${bin_path}/create_ss_grid
+./${bin_path}/create_ss_grid ${domain_gmt_file} domains_max.txt #adjust_0.txt 25000
 
 nc_file=shear_stress.nc
 
