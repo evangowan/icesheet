@@ -6,6 +6,7 @@ program create_ss_grid
 
 	! heavily modified from the version of create_ss_grid that I was using before
 
+
 	use global_parameters
 	! reads in the file with polygons "gmt_file.txt" and creates a grid with a given resolution set by the user
 	implicit none
@@ -222,6 +223,8 @@ program create_ss_grid
 		! this will linearly go between those times and adjust the shear stress based on these values, the minimum time should probably represent an ice free time
 		! or zero time
 
+		! if minimum_ss is set to a value less than or equal to zero, a minimal value is used. Use this to flag off times that are ice free if you want.
+
 		open(unit=adjust_unit, file=domain_adjust_file, access="sequential", form="formatted", status="old")
 
 		read_adjust: do
@@ -236,17 +239,22 @@ program create_ss_grid
 			if(current_time >= min(time_of_maximum_ss,time_of_minimum_ss) .and. &
       		   current_time <= max(time_of_maximum_ss,time_of_minimum_ss)) THEN
 
-				! originally I thought of making the decay a 
-				x1 = dble(time_of_minimum_ss)
-				y1 = dble(minimum_ss)
-				x2 = dble(time_of_maximum_ss)
-				y2 = dble(shear_stress_value_array(domain_id))
 
-				slope = (y2 - y1) / (x2 - x1)
-				intercept = y1 - slope * x1
+				if(minimum_ss > 0) THEN
+					! originally I thought of making the decay a 
+					x1 = dble(time_of_minimum_ss)
+					y1 = dble(minimum_ss)
+					x2 = dble(time_of_maximum_ss)
+					y2 = dble(shear_stress_value_array(domain_id))
+
+					slope = (y2 - y1) / (x2 - x1)
+					intercept = y1 - slope * x1
 
 
-				shear_stress_value_array(domain_id) = nint(slope * current_time + intercept)
+					shear_stress_value_array(domain_id) = nint(slope * current_time + intercept)
+				else ! assume that minimum value is requested
+					shear_stress_value_array(domain_id) = nominal_shear_stress
+				endif
 
 			end if
 
