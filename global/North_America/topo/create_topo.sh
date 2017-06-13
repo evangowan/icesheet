@@ -51,6 +51,17 @@ fi
 # takes a lot less time
 #grdproject ${filtered_topo}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -G${area_grid} -D${resolution}000= -Fe  -V  
 
+# if the Devon ice cap file exists, include it
+
+if [ -e "devon_ice_thickness.nc" ]
+then
+
+grdmath ${area_grid} devon_ice_thickness.nc SUB = ${area_grid}
+
+
+fi
+
+
 x_min=$(grdinfo -F ${area_grid} | grep x_min  | awk -F':' '{print int($3)}')
 x_max=$(grdinfo -F ${area_grid} | grep x_max  | awk -F':' '{print int($3)}')
 y_min=$(grdinfo -F ${area_grid} | grep y_min  | awk -F':' '{print int($3)}')
