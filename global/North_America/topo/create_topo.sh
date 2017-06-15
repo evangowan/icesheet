@@ -30,9 +30,21 @@ ncrename -O -d londim,x -d latdim,y -v lon,x -v lat,y ${original_topo} ${topo}
 
 fi
 
-# load projection information
+# For Lambert azimuthal projection
 
-source ../projection_info.sh
+center_longitude=-94
+center_latitude=60
+resolution=5 # grid resolution, in km!
+
+# corner points of the grid (if we don't use this, gmt assumes a global grid, which will be huge!
+# west corresponds to the bottom left corner, east corresponds to the top right corner
+# probably easiest to pick off the cordinates off Google Earth, in a really zoomed out view
+west_latitude=25
+west_longitude=-135
+east_latitude=58
+east_longitude=3
+
+map_width=15c
 
 
 makecpt -Cglobe -T-10000/10000 > shades.cpt
@@ -49,17 +61,38 @@ grdfilter ${topo} -G${filtered_topo} -Fm${resolution} -D4  -V
 fi
 
 # takes a lot less time
-#grdproject ${filtered_topo}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -G${area_grid} -D${resolution}000= -Fe  -V  
+grdproject ${filtered_topo}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -G${area_grid} -D${resolution}000= -Fe  -V  
 
 # if the Devon ice cap file exists, include it
 
 if [ -e "devon_ice_thickness.nc" ]
 then
-
+echo 'subtracting Devon ice cap'
 grdmath ${area_grid} devon_ice_thickness.nc SUB = ${area_grid}
 
 
 fi
+
+if [ -e "ellesmere_ice_thickness.nc" ]
+then
+
+echo 'subtracting Ellesmere ice caps'
+grdmath ${area_grid} ellesmere_ice_thickness.nc SUB = ${area_grid}
+
+
+fi
+
+if [ -e "baffin_ice_thickness.nc" ]
+then
+
+echo 'subtracting Baffin ice caps'
+grdmath ${area_grid} baffin_ice_thickness.nc SUB = ${area_grid}
+
+
+fi
+
+
+grdproject ${area_grid}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -Gnorth_america_topo_geo.nc  -I -Fe  -V  
 
 
 x_min=$(grdinfo -F ${area_grid} | grep x_min  | awk -F':' '{print int($3)}')
