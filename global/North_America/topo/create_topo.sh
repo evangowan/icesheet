@@ -152,3 +152,21 @@ echo ${y_min} >> elev_parameters.txt
 echo ${y_max} >> elev_parameters.txt
 echo ${resolution}000 >> elev_parameters.txt
 
+# create NetCDF file with equivalent water load
+
+makecpt -Crainbow -T0/4000 -I > shades.cpt
+
+grdmath ${area_grid} 0 LT = ocean_mask.nc
+
+# 1025 / 917 = 1.118 (ratio of density of water to density of ice, used in ICESHEET)
+grdmath ${area_grid}  ocean_mask.nc MUL -1.118 MUL = ocean_equivalent_ice.nc
+
+plot=ocean_equivalent.ps
+
+grdimage ocean_equivalent_ice.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
+
+#psxy ${margin_file}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthickest,white >> ${plot}
+
+pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Di -A5000 >> ${plot}
+
+psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"equivalent ice thickness (m)" -G0/4000 -Cshades.cpt --FONT_LABEL=14p -V  >> $plot
