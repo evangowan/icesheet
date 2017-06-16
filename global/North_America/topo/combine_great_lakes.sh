@@ -67,7 +67,7 @@ y_max=$(echo "${y_max_temp} * ${spacing}" | bc)
 
 echo -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width}
 
-grdproject great_lakes_water_thickness.nc  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -Gwater_thickness_raw.nc -D${spacing}   -Fe  -V  
+grdproject great_lakes_water_thickness.nc  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -Gwater_thickness_raw.nc -D${spacing}=   -Fe  -V  
 
 grdmath water_thickness_raw.nc 0 DENAN = water_thickness_raw2.nc
 grdmath water_thickness_raw2.nc 0 GT = water_thickness_mask.nc
