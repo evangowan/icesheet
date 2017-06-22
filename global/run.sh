@@ -3,6 +3,27 @@
 # setup for global ice sheet reconstructions
 
 ####################################
+# Times to calculate
+####################################
+
+interval=1000
+max_time=21000
+
+number_times=$( echo "${max_time} / ${interval} + 1" | bc )
+
+# assuming time zero will take the least amount of time, so starting from the oldest time should be most computationally efficient with multiple processors
+
+seq ${max_time} -${interval} 0 > times_to_calculate
+
+# if instead you just want to calculate specific times, use this instead
+
+cat << END > times_to_calculate
+10000
+END
+
+
+
+####################################
 # Region
 ####################################
 
@@ -11,14 +32,13 @@
 region=North_America
 #region=Eurasia
 #region=Antarctica
-#region=Iceland
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
 run_number="1" 
 your_name="Evan" # no spaces or underscores!
-run_description="Initial model with null topography"
+run_description="Initial model with null topography for North America"
 
 
 
@@ -38,15 +58,16 @@ lower_mantle=k
 earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA, set to zero if they were not used 
-North_America_run_number=0
+North_America_run_number=1
 Eurasia_run_number=0
 Antarctica_run_number=0
-Iceland_run_number=0
 
 # if instead you want present day topography, set ${earth_model} to null
-earth_model="null" 
+#earth_model="null" 
 
-#gia_deformation=${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}_${Iceland_run_number}
+
+
+gia_deformation=icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}.dat
 
 ####################################
 # Resolution parameters
@@ -86,7 +107,28 @@ then
 	mkdir run
 fi
 
-for time in 12000
+cat <<END_CAT > run_parameters
+${max_time}
+${region}
+${run_number}
+${run_description}
+${earth_model}
+${North_America_run_number}
+${Eurasia_run_number}
+${Antarctica_run_number}
+${icesheet_spacing}
+${icesheet_interval}
+${latitude_spacing}
+${longitude_spacing}
+${interval}
+${number_times}
+${your_name}
+${gia_deformation}
+adjust_0.txt
+END_CAT
+
+
+for time in $(cat times_to_calculate)
 do
 
 	if [ -d "run/${time}" ]
@@ -110,6 +152,11 @@ ${icesheet_spacing}
 ${icesheet_interval}
 ${latitude_spacing}
 ${longitude_spacing}
+${interval}
+${number_times}
+${your_name}
+${gia_deformation}
+adjust_0.txt
 END_CAT
 
 	cp prepare_icesheet.sh run/${time}

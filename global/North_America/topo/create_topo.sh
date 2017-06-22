@@ -51,8 +51,9 @@ makecpt -Cglobe -T-10000/10000 > shades.cpt
 
 plot=topo_plot.ps
 
+region=North_America
 filtered_topo=filtered_topo.nc
-area_grid=north_america_topo.nc
+area_grid=${region}.nc
 
 # uncomment first time you run, but run only once because it takes a couple of hours!
 if [ "${first_run}" == "y" ]
@@ -141,7 +142,7 @@ psscale -X-2 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx4000f1000+l"Elevation (m)" --FONT
 
 # convert to gmt formatted binary file for use in ICESHEET
 
-bin_file="North_America.bin"
+bin_file="${region}.bin"
 
 grdconvert ${area_grid} ${bin_file}=bf 
 
