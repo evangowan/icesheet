@@ -1,5 +1,12 @@
 #! /bin/bash
 
+# load GMT module
+
+#module load GMT/GMT5dev
+
+# if ICESHEET is not in a place visible by ${PATH}, add it here
+#PATH=${PATH}:~/bin/
+
 time=$(awk '{if (NR == 1) print $0}' run_parameters)
 region=$(awk '{if (NR == 2) print $0}' run_parameters)
 run_number=$(awk '{if (NR == 3) print $0}' run_parameters)
@@ -157,6 +164,7 @@ then
 	echo "no adjustment to shear stress"
 else
 	cp ${root_directory}/${region}/shear_stress/${adjust_file} shear_stress/
+	cp ${root_directory}/${region}/shear_stress/domains_min.txt shear_stress/
 fi
 
 

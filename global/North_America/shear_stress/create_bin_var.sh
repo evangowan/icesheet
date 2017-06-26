@@ -83,7 +83,12 @@ if [ "${adjust_file}" = "" ]
 then
 	./${bin_path}/create_ss_grid ${domain_gmt_file} domains_max.txt
 else
-	./${bin_path}/create_ss_grid ${domain_gmt_file} domains_max.txt ${adjust_file} ${time}
+	if [ -f "domains_min.txt" ]
+	then
+		./${bin_path}/create_ss_grid ${domain_gmt_file} domains_max.txt ${adjust_file} ${time} domains_min.txt
+	else
+		./${bin_path}/create_ss_grid ${domain_gmt_file} domains_max.txt ${adjust_file} ${time}
+	fi
 fi
 
 nc_file=shear_stress.nc

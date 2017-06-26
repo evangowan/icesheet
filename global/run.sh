@@ -17,9 +17,9 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # if instead you just want to calculate specific times, use this instead
 
-cat << END > times_to_calculate
-10000
-END
+#cat << END > times_to_calculate
+#10000
+#END
 
 
 
@@ -63,11 +63,11 @@ Eurasia_run_number=0
 Antarctica_run_number=0
 
 # if instead you want present day topography, set ${earth_model} to null
-#earth_model="null" 
+earth_model="null" 
 
 
 
-gia_deformation=icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}.dat
+#gia_deformation=icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}.dat
 
 ####################################
 # Resolution parameters
