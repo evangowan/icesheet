@@ -17,6 +17,7 @@ program create_ss_grid
 	double precision :: local_x, local_y
 
 	character(len=255) :: input_parameter, dummy, bin_file, polygon_file, domain_max_file, domain_adjust_file, info
+	character(len=255) :: domain_min_file
 	character(len=255), parameter ::  output_domains_file = "domains.txt"
 	character(len=255), parameter :: grid_parameters_file="ss_parameters.txt" ! parameter file used in ICESHEET
 	character(len=255), parameter :: output_grid_file = "shear_stress_grid.txt"
@@ -29,15 +30,15 @@ program create_ss_grid
 	integer :: time_of_maximum_ss, time_of_minimum_ss, minimum_ss
 
 	integer, parameter :: polygon_file_unit=10, max_polygons = 10000, output_domains_file_unit=20, grid_parameters_unit=30
-	integer, parameter :: shear_stress_max_unit=40, adjust_unit=50, output_grid_unit = 60
+	integer, parameter :: shear_stress_max_unit=40, adjust_unit=50, output_grid_unit = 60, shear_stress_min_unit=70
 
 	integer, dimension(max_polygons) :: polygon_point_size, polygon_domain_id ! if you have more than 10000 polygons, you are ambitious!
 
 	double precision, allocatable, dimension(:,:) :: y_array, x_array
-	integer, dimension(max_polygons) :: shear_stress_value_array
+	integer, dimension(max_polygons) :: shear_stress_value_array, shear_stress_min
 	integer, allocatable, dimension(:,:) :: grid
 
-	logical :: inside, use_max_file, use_adjust_file
+	logical :: inside, use_max_file, use_adjust_file, use_min_file
 
 	integer, parameter :: nominal_shear_stress = 5000 ! default shear stress value
 
@@ -50,8 +51,8 @@ program create_ss_grid
 	call getarg(2,domain_max_file)
 !	read(input_parameter,*) 
 	call getarg(3,domain_adjust_file)
-!	read(input_parameter,*) 
 
+	domain_min_file = ""
 	if(polygon_file == "") THEN
 		write(6,*) "you need to include the shear stress GMT formatted polygon file as a command line argument"
 		stop
@@ -77,6 +78,17 @@ program create_ss_grid
 		call getarg(4,dummy)
 
 		read(dummy,*) current_time
+
+		call getarg(5,domain_min_file)
+	endif
+
+
+	if(domain_min_file == "") THEN
+		write(6,*) "using default minimum shear stress value:", nominal_shear_stress
+		use_min_file = .false.
+	else
+		write(6,*) "using user derived minimum shear stress values"
+		use_min_file = .true.
 	endif
 
 	
@@ -214,6 +226,23 @@ program create_ss_grid
 		
 	end if
 
+	shear_stress_min = nominal_shear_stress
+	if(use_min_file) THEN
+		open(unit=shear_stress_min_unit, file=domain_min_file, access="sequential", form="formatted", status="old")
+
+		read_min: do
+
+			read(shear_stress_min_unit,*, iostat=istat)  domain_id, shear_stress
+			if(istat /=0) THEN
+				exit read_min
+			endif	
+
+			shear_stress_min(domain_id) = shear_stress
+		end do read_min
+		close(shear_stress_min_unit)
+		
+	end if
+
 
 	if(use_adjust_file) THEN 
 
@@ -253,7 +282,7 @@ program create_ss_grid
 
 					shear_stress_value_array(domain_id) = nint(slope * current_time + intercept)
 				else ! assume that minimum value is requested
-					shear_stress_value_array(domain_id) = nominal_shear_stress
+					shear_stress_value_array(domain_id) = shear_stress_min(domain_id)
 				endif
 
 			end if
