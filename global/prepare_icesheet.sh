@@ -99,7 +99,7 @@ else
 
 
 
-	makecpt -Cglobe -T-10000/10000 > shades.cpt
+	makecpt -Cglobe  > shades.cpt
 	grdimage ${region}.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
 	pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
