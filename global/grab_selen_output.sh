@@ -22,7 +22,7 @@ your_name=$(awk '{if (NR == 15) print $0}' run_parameters)
 # region calculated from SELEN
 
 region="North_America"
-North_America_run_number=2
+North_America_run_number=${run_number}
 
 #Earth model used to calculate deformation
 

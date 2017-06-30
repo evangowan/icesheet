@@ -25,6 +25,20 @@ latitude_spacing=0.5 # make sure to delete this later
 
 file_out=${region}/reconstructions/icesheet_${run_number}
 
+if [ ! -e "temp/" ]
+then
+
+	mkdir temp/
+
+fi
+
+if [ ! -e "selen_input/" ]
+then
+
+	mkdir selen_input/
+
+fi
+
 
 # header information
 
