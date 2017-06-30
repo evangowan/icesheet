@@ -2,10 +2,11 @@
 
 # load GMT module
 
-#module load GMT/GMT5dev
+module load GMT
 
 # if ICESHEET is not in a place visible by ${PATH}, add it here
-#PATH=${PATH}:~/bin/
+PATH=${PATH}:/work/ollie/egowan/icesheet/icesheet
+
 
 time=$(awk '{if (NR == 1) print $0}' run_parameters)
 region=$(awk '{if (NR == 2) print $0}' run_parameters)

@@ -107,6 +107,8 @@ then
 	mkdir run
 fi
 
+chmod 777 run
+
 cat <<END_CAT > run_parameters
 ${max_time}
 ${region}
@@ -137,6 +139,7 @@ do
 	fi
 
   	mkdir run/${time}
+	chmod 777 run/${time}
 	# put all the parameters into a file that will be read in the next script
 
 	cat <<END_CAT > run/${time}/run_parameters
@@ -160,7 +163,7 @@ adjust_0.txt
 END_CAT
 
 	cp prepare_icesheet.sh run/${time}
-
+	chmod 777 run/${time}/prepare_icesheet.sh
 
 done
 
