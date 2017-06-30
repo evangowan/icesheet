@@ -19,7 +19,7 @@ echo ${times_thousand}
 ncea -O -d Time,${counter},${counter} ICE-6G_C_IceThickness_1deg.nc test.nc
 
 # North America and Greenland deleted
-grd2xyz test.nc?stgit | awk '{if ($2 > 0 && $1 > 180 && $1 < 347) {print $1, $2, 0} else {print $1, $2, $3}}'  > ${times_thousand}.xyz
+grd2xyz test.nc?stgit | awk '{if ($2 > 0 && $1 > 180 && $1 < 347) {  print $1, $2, 0  } else {print $1, $2, $3}}' | awk '{if( $1 >300 && $2 > 65 || $1 == 360)  {  print $1, $2, 0  } else {print $1, $2, $3}  }'  > ${times_thousand}.xyz
 
 done
 

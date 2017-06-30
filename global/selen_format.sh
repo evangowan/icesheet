@@ -21,14 +21,14 @@ your_name=$(awk '{if (NR == 15) print $0}' run_parameters)
 
 latitude_spacing=0.5 # make sure to delete this later
 
-max_time=20000 # make sure to delete this later
+#max_time=20000 # make sure to delete this later
 
 file_out=${region}/reconstructions/icesheet_${run_number}
 
 
 # header information
 
-cat << END_CAT > ${file_out}
+cat << END_CAT > temp/header
 ${region}     -  region calculated
 ${your_name}    -  name of person who calculated this
 ${run_number}   - run number
@@ -37,6 +37,20 @@ ${max_time}     -   Maximum time
 ${interval}     -  Time interval
 icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}    - file used to calculate GIA deformation
 END_CAT
+
+
+if [ "${region}" = "North_America" ]
+then
+	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${run_number}_${Eurasia_run_number}_${Antarctica_run_number}"
+elif [ "${region}" = "Eurasia" ]
+then
+	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${North_America_run_number}_${run_number}_${Antarctica_run_number}"
+elif ["${region}" = "Antarctica" ]
+then
+	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${run_number}"
+else
+	echo "invalid region: " ${region}
+fi
 
 # now the fun part, combine everything
 
@@ -75,7 +89,7 @@ grdmath ${ocean_equivalent} 0 GT = ocean_mask.nc
 
 makecpt -Crainbow -T0/5000  > shades_ice.cpt
 
-for times in 20000 15000 10000 6000 0 #$( seq ${max_time} -${interval} 0)
+for times in $( seq ${max_time} -${interval} 0)
 do
 
 	# as of SELEN 2.8, there is no accounting for grounded ice, so you have to subtract that part of the load off
@@ -123,7 +137,17 @@ latmax=85
 	surface bm.out -Gglobal.nc  -I${latitude_spacing} -Rg -T0.75  -V
 
 	grdmask ${region}/margins/${times}.gmt -Gglobal_mask.nc -I${latitude_spacing} -Rg
+
+
+
+
 	grdmath global.nc global_mask.nc MUL = ice_thickness_geo_regular.nc
+
+
+	# for now, the rest of the world uses ICE66. For these purposes, "I" is used as the run number
+
+	# get ICE6G for the rest of the world
+	triangulate ICE6G/${times}.xyz -bo -I${latitude_spacing} -Rglobal.nc -Gice6g_slice.nc
 
 
 
@@ -134,17 +158,28 @@ latmax=85
 #	grdmath ice_thickness_geo_regular.nc 0 DENAN = ice_thickness_geo_regular.nc
 
 	grd2xyz ice_thickness_geo_regular.nc > temp/${times}.xyz
+	grd2xyz ice6g_slice.nc | awk '{if ($1 < 360) print $1, $2, $3}' > temp/${times}_others.xyz
 
 	if [ "${times}" = "${max_time}" ]
 	then
 
 
 		awk -F'\t' '{ if($1 > 180) {long=$1-360} else {long=$1};  printf("%s\t%s\t%.0f\n"), long, $2, $3}' temp/${times}.xyz > temp/everything.xyz
+
+			awk  '{ if($1 > 180) {long=$1-360} else {long=$1};  printf("%s\t%s\t%.0f\n"), long, $2, $3}' temp/${times}_others.xyz > temp/everything_others.xyz	
+
 	else
 		awk -F'\t' '{ printf("%.0f\n"), $3}' temp/${times}.xyz > temp_file
 
 		paste temp/everything.xyz temp_file > temp_file2
 		mv -f temp_file2 temp/everything.xyz
+
+
+		awk  '{ printf("%.0f\n"), $3}' temp/${times}_others.xyz > temp_file
+
+		paste temp/everything_others.xyz temp_file > temp_file2
+		mv -f temp_file2 temp/everything_others.xyz
+
 	fi
 
 done
@@ -167,5 +202,21 @@ if (use_line) print \$0;
 END_CAT
 
 
-awk -F'\t' -f awk_test.awk temp/everything.xyz | sed 's/-0/0/g' >> ${file_out}
+
+awk -F'\t' -f awk_test.awk temp/everything.xyz | sed 's/-0/0/g' | sort --numeric-sort --reverse -k2,2 -k1,1 > temp/ice_results 
+
+
+# add in all other ice sheets
+
+awk -F'\t' -f awk_test.awk temp/everything_others.xyz | sed 's/-0/0/g' > temp/final_temp
+
+cat temp/ice_results > temp/temp_selen.txt
+cat temp/final_temp >> temp/temp_selen.txt
+
+sort --numeric-sort -k2,2 --reverse  -k1,1  temp/temp_selen.txt > temp/sorted.txt
+cat temp/header > ${selen_out}
+cat temp/sorted.txt >>  ${selen_out}
+
+cat temp/header  > ${file_out}
+cat temp/ice_results >> ${file_out}
 

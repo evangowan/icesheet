@@ -80,7 +80,7 @@ then
 else
 
 	echo "using deformed topography: ${gia_deformation}"
-	awk -v time=${time} '{if($1*1000 == time) print $2, $3, $4}' ${root_directory}/deform/${gia_deformation} > gia.txt
+	awk -v time=${time} '{if($1*1000 == time) print $2, $3, $4}' ${root_directory}/${region}/deform/${gia_deformation} > gia.txt
 
 	mapproject gia.txt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > gia_proj.xyz
 
