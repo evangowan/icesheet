@@ -18,7 +18,7 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 # if instead you just want to calculate specific times, use this instead
 
 #cat << END > times_to_calculate
-#10000
+#20000
 #END
 
 
@@ -36,9 +36,9 @@ region=North_America
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="1" 
+run_number="3" 
 your_name="Evan" # no spaces or underscores!
-run_description="Initial model with null topography for North America"
+run_description="Initial model with two iterations of deformed topography for North America"
 
 
 
@@ -57,17 +57,18 @@ lower_mantle=k
 
 earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
-# the ice models used for calculating GIA, set to zero if they were not used 
-North_America_run_number=1
-Eurasia_run_number=0
-Antarctica_run_number=0
+# the ice models used for calculating GIA
+# "I" stands for ICE6G
+North_America_run_number=2
+Eurasia_run_number=I
+Antarctica_run_number=I
 
 # if instead you want present day topography, set ${earth_model} to null
-earth_model="null" 
+#earth_model="null" 
 
 
 
-#gia_deformation=icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}.dat
+gia_deformation=icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}.dat
 
 ####################################
 # Resolution parameters
@@ -128,6 +129,9 @@ ${your_name}
 ${gia_deformation}
 adjust_0.txt
 END_CAT
+
+echo "------------------------------------------------"  >> ${region}/log_file.txt
+cat run_parameters >> ${region}/log_file.txt
 
 
 for time in $(cat times_to_calculate)

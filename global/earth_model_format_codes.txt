@@ -1,0 +1,104 @@
+Evan's orderly format
+
+Three layer earth model format, using four characters, the first character standing for "Earth", not "Evan" :p
+
+e(Lith)(UM)(LM)
+
+(Lith) is the lithosphere thickness code
+(UM) is the upper mantle viscosity code
+(LM) is the lower mantle viscosity code
+
+The interface between the upper mantle and lower mantle is at 660 km below the surface. Viscosity
+values are based on a log scale, with ten values per decade, which should give a wide variety of
+values for sensitivity studies. Lowest value for upper mantle is 1.0000E+19, which may be high in 
+certain places like subduction zones, but Spada et al warn against using values that are
+really low in SELEN.
+
+If using present day topography, the code is simply "null"
+
+
+#########################################
+# Lithosphere thicknes codes (in km)
+#########################################
+
+value	thickness
+a	50
+A	55
+b	60
+B	65
+c	70
+C	75
+d	80
+D	85
+e	90
+f	100
+g	110
+h	120
+i	130
+j	140
+
+
+#########################################
+# Upper Mantle viscosity codes (in Pa s)
+#########################################
+
+value	viscosity
+0	1.0000E+19
+1	1.2589E+19
+2	1.5849E+19
+3	1.9953E+19
+4	2.5119E+19
+5	3.1623E+19
+6	3.9811E+19
+7	5.0119E+19
+8	6.3096E+19
+9	7.9433E+19
+a	1.0000E+20
+b	1.2589E+20
+c	1.5849E+20
+d	1.9953E+20
+e	2.5119E+20
+f	3.1623E+20
+g	3.9811E+20
+h	5.0119E+20
+i	6.3096E+20
+j	7.9433E+20
+A	1.0000E+21
+B	1.2589E+21
+C	1.5849E+21
+D	1.9953E+21
+E	2.5119E+21
+F	3.1623E+21
+G	3.9811E+21
+H	5.0119E+21
+I	6.3096E+21
+J	7.9433E+21
+k	1.0000E+22
+
+
+#########################################
+# Lower Mantle viscosity codes (in Pa s)
+#########################################
+
+value	viscosity
+A	1.0000E+21
+B	1.2589E+21
+C	1.5849E+21
+D	1.9953E+21
+E	2.5119E+21
+F	3.1623E+21
+G	3.9811E+21
+H	5.0119E+21
+I	6.3096E+21
+J	7.9433E+21
+k	1.0000E+22
+l	1.2589E+22
+m	1.5849E+22
+o	1.9953E+22
+p	2.5119E+22
+q	3.1623E+22
+r	3.9811E+22
+s	5.0119E+22
+t	6.3096E+22
+u	7.9433E+22
+K	1.0000E+23

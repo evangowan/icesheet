@@ -76,32 +76,39 @@ if [ "${earth_model}" = "null" ]
 then
 	echo 'using modern topography'
 	cp ${root_directory}/${region}/topo/${region}.bin .
+	cp ${nc_grid} ${region}.nc
 	cp ${root_directory}/${region}/topo/elev_parameters.txt .
 else
 
 	echo "using deformed topography: ${gia_deformation}"
-	awk -v time=${time} '{if($1*1000 == time) print $2, $3, $4}' ${root_directory}/deform/${gia_deformation} > gia.txt
+	awk -v time=${time} '{if($1*1000 == time) print $2, $3, $4}' ${root_directory}/${region}/deform/${gia_deformation} > gia.txt
 
 	mapproject gia.txt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > gia_proj.xyz
 
-	blockmedian gia_proj.xyz -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}=   -C  > gia_median.xyz
+#	blockmedian gia_proj.xyz -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}=   -C  > gia_median.xyz
 
-	surface gia_median.xyz -Gdeform.nc -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.25 -V 
+#	surface gia_median.xyz -Gdeform.nc -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.75 -V 
+
+	triangulate gia_proj.xyz -bo -I5000 -R${x_min}/${x_max}/${y_min}/${y_max} -Gdeform.nc
 
 	grdmath ${nc_grid} deform.nc SUB = ${region}.nc
+
+
 
 	plot=deformed_base_topo.ps
 
 
 
 
-	makecpt -Cglobe -T-10000/10000 > shades.cpt
+	makecpt -Cglobe  > shades.cpt
 	grdimage ${region}.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
 	pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
 
 	makecpt -Cgray -T-500/1500/100    > deform.cpt
 	grdcontour deform.nc -Cdeform.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0  -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
+
+	mv ${plot} plots/
 
 	grdconvert ${region}.nc ${region}.bin=bf 
 
@@ -272,7 +279,7 @@ mv ${plot} plots/
 
 plot=ice_elevation.ps
 
-grdmath ice_thickness.nc ${root_directory}/${region}/topo/${region}.nc ADD = ice_topo.nc
+grdmath ice_thickness.nc ${region}.nc ADD = ice_topo.nc
 
 grdsample ice_topo.nc -Gice_topo_coarse.nc -I${coarse_spacing}
 
@@ -280,7 +287,7 @@ makecpt -Cjet -T-4000/4000/250  -I  > iceshades.cpt
 
 
 makecpt -Cglobe -T-10000/10000 > shades.cpt
-grdimage ${root_directory}/${region}/topo/${region}.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
+grdimage ${region}.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
 pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
 
