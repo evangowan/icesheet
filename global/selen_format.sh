@@ -201,6 +201,8 @@ done
 
 # put everything in the SELEN input file
 
+selen_out=temp/test_script.out
+file_out=temp/test_script_file.out
 
 cat << END_CAT > awk_test.awk
 {
@@ -211,18 +213,30 @@ for ( x = 3; x <= NF; x++ ) {
     }
 }
 
-if (use_line) print \$0;
+if (use_line) {
+   s = \$1" "\$2;
+   for ( x = 3; x <= NF; x++ ) {
+    if( \$x ==-0) {
+      s = s" "0;
+    } 
+    else {
+      s = s" "\$x;
+    }
+   }
+  print s;
+}
+
 }
 END_CAT
 
 
 
-awk -F'\t' -f awk_test.awk temp/everything.xyz | sed 's/-0/0/g' | sort --numeric-sort --reverse -k2,2 -k1,1 > temp/ice_results 
+awk -F'\t' -f awk_test.awk temp/everything.xyz | sort --numeric-sort --reverse -k2,2 -k1,1 > temp/ice_results 
 
 
 # add in all other ice sheets
 
-awk -F'\t' -f awk_test.awk temp/everything_others.xyz | sed 's/-0/0/g' > temp/final_temp
+awk -F'\t' -f awk_test.awk temp/everything_others.xyz  > temp/final_temp
 
 cat temp/ice_results > temp/temp_selen.txt
 cat temp/final_temp >> temp/temp_selen.txt
@@ -233,4 +247,5 @@ cat temp/sorted.txt >>  ${selen_out}
 
 cat temp/header  > ${file_out}
 cat temp/ice_results >> ${file_out}
+
 
