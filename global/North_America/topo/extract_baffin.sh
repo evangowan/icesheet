@@ -62,7 +62,7 @@ map_width=10c
 
 spacing=5000
 
-mapproject << END   -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > corners.txt
+mapproject << END   ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
@@ -90,13 +90,13 @@ awk '{if($1 != "#" && $1 !=">") print $1, $2, 0}' ${ice_margin_file} > thickness
 awk '{if($1 != "#" && $1 !=">") print $1, $2, $3}' ${ice_thickness_file} >> thickness_dump.txt
 
 
-mapproject thickness_dump.txt    -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > thickness_dump_proj.txt
+mapproject thickness_dump.txt    ${R_options} ${J_options} -F  > thickness_dump_proj.txt
 
 blockmedian thickness_dump_proj.txt -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}  -V  -C  > median_dump.txt
 
 surface median_dump.txt -Gice_thickness_raw.nc -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.75 -V 
 
-mapproject ${ice_margin_file} -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > margin_proj.txt
+mapproject ${ice_margin_file} ${R_options} ${J_options} -F  > margin_proj.txt
 
 grdmask margin_proj.txt -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}= -Gice_mask.nc
 
@@ -111,7 +111,7 @@ max_thickness_scale=1000
 makecpt -Crainbow -T-${max_thickness_scale}/${max_thickness_scale}  -I  > iceshades.cpt
 
 
-mapproject << END   -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > corners.txt
+mapproject << END   ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude2} ${west_latitude2}
 ${east_longitude2} ${east_latitude2}
 END
@@ -132,13 +132,13 @@ y_max_temp=$(printf '%.0f\n' $(echo "scale=2; ${r4} / ${spacing}" | bc ) )
 y_max=$(echo "${y_max_temp} * ${spacing}" | bc)
 
 plot=thickness_${base_name}.ps
-#psxy ${ice_thickness_file} -X2 -Y10  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -P -Sc0.2 -Ciceshades.cpt -V  > ${plot}
+#psxy ${ice_thickness_file} -X2 -Y10  ${R_options} ${J_options} -K -P -Sc0.2 -Ciceshades.cpt -V  > ${plot}
 
 grdimage ${base_name}_ice_thickness_plot.nc -Q -Y12 -X4 -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Ciceshades.cpt -V -nb > ${plot}
 
-psxy ${ice_thickness_file}   -R${west_longitude2}/${west_latitude2}/${east_longitude2}/${east_latitude2}r -JA${center_longitude}/${center_latitude}/${map_width} -K -P -O -V -Wthick,grey >> ${plot}
-psxy ${ice_thickness_file}   -R${west_longitude2}/${west_latitude2}/${east_longitude2}/${east_latitude2}r -JA${center_longitude}/${center_latitude}/${map_width} -K -P -O -V -Wthinnest,black >> ${plot}
-psxy ${ice_margin_file} -R${west_longitude2}/${west_latitude2}/${east_longitude2}/${east_latitude2}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -Wthickest,red >> ${plot}
+psxy ${ice_thickness_file}   -R${west_longitude2}/${west_latitude2}/${east_longitude2}/${east_latitude2}r ${J_options} -K -P -O -V -Wthick,grey >> ${plot}
+psxy ${ice_thickness_file}   -R${west_longitude2}/${west_latitude2}/${east_longitude2}/${east_latitude2}r ${J_options} -K -P -O -V -Wthinnest,black >> ${plot}
+psxy ${ice_margin_file} -R${west_longitude2}/${west_latitude2}/${east_longitude2}/${east_latitude2}r ${J_options} -K -O -Wthickest,red >> ${plot}
 pscoast -Bafg -O -K -R -J -P -Wthin -Dh -A500 -Wthin,black >> ${plot}
 
 psscale -X-4 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx200f50+l"ice thickness (m)" -G0/${max_thickness_scale} -Ciceshades.cpt --FONT_LABEL=14p -V  >> $plot

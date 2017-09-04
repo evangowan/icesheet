@@ -66,16 +66,21 @@ else
 	echo "invalid region: " ${region}
 fi
 
+echo ${region}
+echo ${selen_out}
+
+
+
 # now the fun part, combine everything
 
 source ${region}/projection_info.sh
 
-mapproject << END    -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > corners.txt
+mapproject << END    ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
 
-mapproject corners.txt    -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F -I
+mapproject corners.txt    ${R_options} ${J_options} -F -I
 
 
 spacing=${icesheet_spacing}000
@@ -132,9 +137,9 @@ do
 
 
 
-#grdimage adjusted_ice_thickness.nc -Y12  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r  -JX${map_width}/0 -K -P -Cshades_ice.cpt -V -nb > ${plot}
+#grdimage adjusted_ice_thickness.nc -Y12  ${R_options}  -JX${map_width}/0 -K -P -Cshades_ice.cpt -V -nb > ${plot}
 
-#pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+#pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
 #psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"Ice Thickness (m)" --FONT_LABEL=14p  -Cshades_ice.cpt -V  >> $plot
 
 	# convert grid to geographical coordinate system
@@ -145,7 +150,7 @@ latmin=30
 latmax=85
 
 	grd2xyz adjusted_ice_thickness.nc > temp.xyz
-	mapproject temp.xyz -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -I -F  > temp_geo.xyz
+	mapproject temp.xyz ${R_options} ${J_options} -I -F  > temp_geo.xyz
 	blockmean -Rg -I${latitude_spacing} temp_geo.xyz -V > bm.out
 
 	surface bm.out -Gglobal.nc  -I${latitude_spacing} -Rg -T0.75  -V
@@ -165,7 +170,7 @@ latmax=85
 
 
 
-#	grdproject adjusted_ice_thickness.nc   -JA${center_longitude}/${center_latitude}/${map_width} -I -Gice_thickness_geo.nc    -Fe  -V  
+#	grdproject adjusted_ice_thickness.nc   ${J_options} -I -Gice_thickness_geo.nc    -Fe  -V  
 #
 #	grdsample ice_thickness_geo.nc -Gice_thickness_geo_regular.nc -I${latitude_spacing}
 #
@@ -215,7 +220,7 @@ if (use_line) print \$0;
 }
 END_CAT
 
-
+echo "got here or something"
 
 awk -F'\t' -f awk_test.awk temp/everything.xyz | sed 's/-0/0/g' | sort --numeric-sort --reverse -k2,2 -k1,1 > temp/ice_results 
 
@@ -227,7 +232,22 @@ awk -F'\t' -f awk_test.awk temp/everything_others.xyz | sed 's/-0/0/g' > temp/fi
 cat temp/ice_results > temp/temp_selen.txt
 cat temp/final_temp >> temp/temp_selen.txt
 
+
+echo "again"
+
+
+
 sort --numeric-sort -k2,2 --reverse  -k1,1  temp/temp_selen.txt > temp/sorted.txt
+
+if [ -e "temp/sorted.txt" ]
+then
+
+	echo "sorted.txt exists"
+else
+	echo "sorted.txt does not exist"
+
+fi
+
 cat temp/header > ${selen_out}
 cat temp/sorted.txt >>  ${selen_out}
 

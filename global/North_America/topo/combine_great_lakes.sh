@@ -41,7 +41,7 @@ source projection_info.sh
 
 
 
-mapproject << END    -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > corners.txt
+mapproject << END    ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
@@ -65,9 +65,9 @@ y_max=$(echo "${y_max_temp} * ${spacing}" | bc)
 
 
 
-echo -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width}
+echo ${R_options} ${J_options}
 
-grdproject great_lakes_water_thickness.nc  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -Gwater_thickness_raw.nc -D${spacing}=   -Fe  -V  
+grdproject great_lakes_water_thickness.nc  ${R_options} ${J_options} -Gwater_thickness_raw.nc -D${spacing}=   -Fe  -V  
 
 grdmath water_thickness_raw.nc 0 DENAN = water_thickness_raw2.nc
 grdmath water_thickness_raw2.nc 0 GT = water_thickness_mask.nc
@@ -78,7 +78,7 @@ plot=projected_plot.ps
 
 grdimage equivalent_ice_thickness.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Ciceshades.cpt -V -nb > ${plot}
 
-pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
 
 
 

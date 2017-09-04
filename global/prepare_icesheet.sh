@@ -50,7 +50,7 @@ cp ${root_directory}/${region}/projection_info.sh .
 
 source projection_info.sh
 
-mapproject << END    -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > corners.txt
+mapproject << END    ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
@@ -83,7 +83,7 @@ else
 	echo "using deformed topography: ${gia_deformation}"
 	awk -v time=${time} '{if($1*1000 == time) print $2, $3, $4}' ${root_directory}/${region}/deform/${gia_deformation} > gia.txt
 
-	mapproject gia.txt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > gia_proj.xyz
+	mapproject gia.txt  ${R_options} ${J_options} -F  > gia_proj.xyz
 
 #	blockmedian gia_proj.xyz -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}=   -C  > gia_median.xyz
 
@@ -103,7 +103,7 @@ else
 	makecpt -Cglobe  > shades.cpt
 	grdimage ${region}.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
-	pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
+	pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
 
 	makecpt -Cgray -T-500/1500/100    > deform.cpt
 	grdcontour deform.nc -Cdeform.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0  -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
@@ -142,7 +142,7 @@ else
 fi
 
 # put into projected coordinates
-mapproject margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > margins/${time}_proj.gmt
+mapproject margins/${time}.gmt  ${R_options} ${J_options} -F  > margins/${time}_proj.gmt
 
 # split into multiple files
 
@@ -264,12 +264,12 @@ makecpt -Cgray -T0/4000/1000    > iceshades_coarse.cpt
 
 grdimage ice_thickness.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades_ice.cpt -V -nb > ${plot}
 
-pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
 
 grdcontour ice_thickness_coarse.nc -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
 
-psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthickest,white >> ${plot}
-psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthin,blue >> ${plot}
+psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
 
 psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"Ice Thickness (m)" --FONT_LABEL=14p -Cshades_ice.cpt -V  >> $plot
 
@@ -289,7 +289,7 @@ makecpt -Cjet -T-4000/4000/250  -I  > iceshades.cpt
 makecpt -Cglobe -T-10000/10000 > shades.cpt
 grdimage ${region}.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
-pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
+pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
 
 psclip margins/${time}_proj.gmt -K -O -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 >> $plot
 
@@ -301,8 +301,8 @@ psclip -K -O -C  >> $plot
 
 
 
-psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthickest,white >> ${plot}
-psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthin,blue >> ${plot}
+psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
 
 psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"Ice elevation (m)" -G0/4000 -Ciceshades.cpt --FONT_LABEL=14p -V  >> $plot
 

@@ -17,9 +17,9 @@ mapproject ${folder}2003JF000095-table3-ice.txt  -hi1 -Ju+17/1:1 -C -I -F  > ice
 source projection_info.sh
 
 
-mapproject     ice_thickness_ll.txt -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > ice_thickness_fine.txt
+mapproject     ice_thickness_ll.txt ${R_options} ${J_options} -F  > ice_thickness_fine.txt
 
-mapproject << END    -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F  > corners.txt
+mapproject << END    ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
@@ -42,7 +42,7 @@ y_max_temp=$(printf '%.0f\n' $(echo "scale=2; ${r4} / ${spacing}" | bc ) )
 y_max=$(echo "${y_max_temp} * ${spacing}" | bc)
 
 
-#grd2xyz -V great_lakes_water_thickness.nc | mapproject  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -F > dump.txt
+#grd2xyz -V great_lakes_water_thickness.nc | mapproject  ${R_options} ${J_options} -F > dump.txt
 
 makecpt -Crainbow -T-1000/1000  -I  > iceshades.cpt
 
@@ -54,19 +54,19 @@ grdmath ice_thickness_temp.nc 0 DENAN = devon_ice_thickness.nc
 
 #surface thickness.txt -Gice_thickness.nc -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.25 -V 
 
-#echo -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width}
+#echo ${R_options} ${J_options}
 
 
 plot=projected_plot.ps
 
 grdimage ice_thickness.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Ciceshades.cpt -V -nb > ${plot}
 
-pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
 
 #grdcontour ice_thickness_coarse.nc -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
 
-#psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthickest,white >> ${plot}
-#psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthin,blue >> ${plot}
+#psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+#psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
 
 psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx200f50+l"equ. ice thickness (m)" -G0/1000 -Ciceshades.cpt --FONT_LABEL=14p -V  >> $plot
 
