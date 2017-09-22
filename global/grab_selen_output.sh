@@ -7,7 +7,7 @@ max_time=$(awk '{if (NR == 1) print $0}' run_parameters)
 run_number=$(awk '{if (NR == 3) print $0}' run_parameters)
 run_description=$(awk '{if (NR == 4) print $0}' run_parameters)
 
-
+North_America_run_number=$(awk '{if (NR == 6) print $0}' run_parameters)
 Eurasia_run_number=$(awk '{if (NR == 7) print $0}' run_parameters)
 Antarctica_run_number=$(awk '{if (NR == 8) print $0}' run_parameters)
 icesheet_spacing=$(awk '{if (NR == 9) print $0}' run_parameters)
@@ -21,8 +21,11 @@ your_name=$(awk '{if (NR == 15) print $0}' run_parameters)
 
 # region calculated from SELEN
 
-region="North_America"
-North_America_run_number=${run_number}
+#region="North_America"
+#North_America_run_number=${run_number}
+
+region="Eurasia"
+Eurasia_run_number=${run_number}
 
 #Earth model used to calculate deformation
 

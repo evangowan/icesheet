@@ -101,7 +101,7 @@ else
 
 
 	makecpt -Cglobe  > shades.cpt
-	grdimage ${region}.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
+	grdimage ${region}.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
 	pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
 
@@ -262,7 +262,7 @@ makecpt -Cwysiwyg -T0/5000/250 > shades_ice.cpt
 
 makecpt -Cgray -T0/4000/1000    > iceshades_coarse.cpt
 
-grdimage ice_thickness.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades_ice.cpt -V -nb > ${plot}
+grdimage ice_thickness.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades_ice.cpt -V -nb > ${plot}
 
 pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
 
@@ -287,7 +287,7 @@ makecpt -Cjet -T-4000/4000/250  -I  > iceshades.cpt
 
 
 makecpt -Cglobe -T-10000/10000 > shades.cpt
-grdimage ${region}.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
+grdimage ${region}.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
 pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
 

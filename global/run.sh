@@ -7,7 +7,7 @@
 ####################################
 
 interval=1000
-max_time=21000
+max_time=30000
 
 number_times=$( echo "${max_time} / ${interval} + 1" | bc )
 
@@ -29,16 +29,16 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-region=North_America
-#region=Eurasia
+#region=North_America
+region=Eurasia
 #region=Antarctica
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="3" 
+run_number="5" 
 your_name="Evan" # no spaces or underscores!
-run_description="Initial model with two iterations of deformed topography for North America"
+run_description="First run of Eurasia with GIA"
 
 
 
@@ -59,8 +59,8 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=2
-Eurasia_run_number=I
+North_America_run_number=3
+Eurasia_run_number=4
 Antarctica_run_number=I
 
 # if instead you want present day topography, set ${earth_model} to null

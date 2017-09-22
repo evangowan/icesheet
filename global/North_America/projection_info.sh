@@ -18,5 +18,7 @@ east_longitude=3
 
 map_width=15c
 
+shift_up="-Y12"
+
 J_options="-JA${center_longitude}/${center_latitude}/${map_width}"
 R_options="-R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r"

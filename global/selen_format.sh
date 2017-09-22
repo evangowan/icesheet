@@ -151,9 +151,9 @@ latmax=85
 
 	grd2xyz adjusted_ice_thickness.nc > temp.xyz
 	mapproject temp.xyz ${R_options} ${J_options} -I -F  > temp_geo.xyz
-	blockmean -Rg -I${latitude_spacing} temp_geo.xyz -V > bm.out
+	blockmean -Rg -I${latitude_spacing} temp_geo.xyz  > bm.out
 
-	surface bm.out -Gglobal.nc  -I${latitude_spacing} -Rg -T0.75  -V
+	surface bm.out -Gglobal.nc  -I${latitude_spacing} -Rg -T0.75  
 
 	grdmask ${region}/margins/${times}.gmt -Gglobal_mask.nc -I${latitude_spacing} -Rg
 
@@ -176,19 +176,39 @@ latmax=85
 #
 #	grdmath ice_thickness_geo_regular.nc 0 DENAN = ice_thickness_geo_regular.nc
 
-	grd2xyz ice_thickness_geo_regular.nc > temp/${times}.xyz
-	grd2xyz ice6g_slice.nc | awk '{if ($1 < 360) print $1, $2, $3}' > temp/${times}_others.xyz
+	grd2xyz ice_thickness_geo_regular.nc | awk '{if ($1!=360) print $1, $2, $3}' > temp/${times}.xyz
+
+# add other times
+
+ rm temp/${times}_others.xyz
+
+	if [ "${region}" = "North_America" ]
+	then
+
+		awk '{if(NR>7) {print $0}}' Eurasia/reconstructions/icesheet_${Eurasia_run_number}  >> temp/${times}_others.xyz
+
+	fi
+
+	if [ "${region}" = "Eurasia" ]
+	then
+
+		awk '{if(NR>7) {print $0}}' North_America/reconstructions/icesheet_${North_America_run_number} >> temp/${times}_others.xyz
+
+	fi
+
+
+	grd2xyz ice6g_slice.nc | awk '{if ($1 < 360) print $1, $2, $3}' >> temp/${times}_others.xyz
 
 	if [ "${times}" = "${max_time}" ]
 	then
 
 
-		awk -F'\t' '{ if($1 > 180) {long=$1-360} else {long=$1};  printf("%s\t%s\t%.0f\n"), long, $2, $3}' temp/${times}.xyz > temp/everything.xyz
+		awk  '{ if($1 > 180) {long=$1-360} else {long=$1};  printf("%s\t%s\t%.0f\n"), long, $2, $3}' temp/${times}.xyz > temp/everything.xyz
 
 			awk  '{ if($1 > 180) {long=$1-360} else {long=$1};  printf("%s\t%s\t%.0f\n"), long, $2, $3}' temp/${times}_others.xyz > temp/everything_others.xyz	
 
 	else
-		awk -F'\t' '{ printf("%.0f\n"), $3}' temp/${times}.xyz > temp_file
+		awk  '{ printf("%.0f\n"), $3}' temp/${times}.xyz > temp_file
 
 		paste temp/everything.xyz temp_file > temp_file2
 		mv -f temp_file2 temp/everything.xyz
@@ -206,8 +226,8 @@ done
 
 # put everything in the SELEN input file
 
-selen_out=temp/test_script.out
-file_out=temp/test_script_file.out
+#selen_out=temp/test_script.out
+#file_out=temp/test_script_file.out
 
 cat << END_CAT > awk_test.awk
 {
@@ -233,6 +253,9 @@ if (use_line) {
 
 }
 END_CAT
+
+
+
 
 echo "got here or something"
 
