@@ -28,6 +28,12 @@ find_flowline_fisher_adaptive_4.o: find_flowline_fisher_adaptive_4.f90
 flowline_location.o: flowline_location.f90
 	$(FC) -o flowline_location.o $(FCFLAGS) -c flowline_location.f90
 
+
+
+read_polygons.o: read_polygons.f90
+	$(FC) -o read_polygons.o $(FCFLAGS) -c read_polygons.f90
+
+
 #####################
 
 nearest_int: nearest_int.f90 bicubic.o

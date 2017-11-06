@@ -8,7 +8,7 @@ module read_polygons
 	integer :: max_polygons
 	integer, parameter ::  max_points = 1000000, file_unit = 20, param_unit=10
 	integer, save :: number_polygons
-	integer, dimension(:,:), allocatable :: polygon_points
+	integer, dimension(:), allocatable :: polygon_points
 
 	double precision, dimension(:,:), allocatable :: x_coordinates, y_coordinates
 	double precision, save :: fining_increment
@@ -23,7 +23,7 @@ subroutine read_polygons_init(file_name)
 
 	implicit none
 
-	character (len=255), intent(in), file_name
+	character (len=255), intent(in) :: file_name
 
 	integer :: istat, counter, polygon_counter, add_points, add_counter
 
@@ -46,7 +46,7 @@ subroutine read_polygons_init(file_name)
 	read_divider: do 
 		read(file_unit,*, iostat=istat) divider
 		if(istat /=0) THEN
-			exit read_polygons
+			exit read_divider
 		endif
 
 
