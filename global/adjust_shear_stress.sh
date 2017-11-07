@@ -146,5 +146,143 @@ psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx200f100+l"Ice Thickness (m)" --FO
 fi
 
 
-rm shades_ice_diff.cpt shades_ice_diff.cpt
 
+
+# extract the shear stress domain numbers for each domain polygon
+
+grep "# @D" ${ss_domain_boundaries} | awk -F'|' '{print $2}' > shear_stress_polygon_ids.txt
+
+grd2xyz ${diff_file} > diff_file.xyz
+
+cat << END_CAT > diff_map_params.txt
+${x_min}
+${x_max}
+${y_min}
+${y_max}
+${spacing}
+${ss_domain_boundaries}
+shear_stress_polygon_ids.txt
+diff_file.xyz
+END_CAT
+
+#./../diff_map
+
+
+
+
+
+mean_file=mean_diff.gmt
+median_file=median_diff.gmt
+
+
+makecpt -Cwysiwyg -T-275/275/50 > shades_ice_diff.cpt
+
+# mean plot
+plot=${plot_dir}/ice_thickness_diff_regions_mean.ps
+psxy ${mean_file}  ${shift_up} -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -L -Cshades_ice_diff.cpt -V -K -Wthin,black -P > ${plot}
+
+
+pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+
+#grdcontour ${diff_file} -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
+
+psxy ${region}/margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+psxy ${region}/margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
+
+
+psxy ${ss_domain_boundaries} -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -P -V -Wthin,black >> ${plot}
+
+
+
+psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx100f50+l"Ice Thickness (m)" --FONT_LABEL=14p -Cshades_ice_diff.cpt -V  >> $plot
+
+
+# median plot
+plot=${plot_dir}/ice_thickness_diff_regions_median.ps
+psxy ${median_file}  ${shift_up} -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -L -Cshades_ice_diff.cpt -V -K -Wthin,black -P > ${plot}
+
+
+pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+
+#grdcontour ${diff_file} -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
+
+psxy ${region}/margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+psxy ${region}/margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
+
+
+psxy ${ss_domain_boundaries} -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -P -V -Wthin,black >> ${plot}
+
+
+
+psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx100f50+l"Ice Thickness (m)" --FONT_LABEL=14p -Cshades_ice_diff.cpt -V  >> $plot
+
+
+
+
+if [ ${region} = "North_America" ]
+then
+
+west_longitude2=-100
+west_latitude2=65
+east_longitude2=5
+east_latitude2=65
+
+R_options2="-R${west_longitude2}/${west_latitude2}/${east_longitude2}/${east_latitude2}r"
+
+mapproject << END    ${R_options} ${J_options} -F  > corners.txt
+${west_longitude2} ${west_latitude2}
+${east_longitude2} ${east_latitude2}
+END
+
+r1=$(awk '{if (NR==1) print $1}' corners.txt)
+r2=$(awk '{if (NR==2) print $1}' corners.txt)
+r3=$(awk '{if (NR==1) print $2}' corners.txt)
+r4=$(awk '{if (NR==2) print $2}' corners.txt)
+
+# round the numbers, should only need to do this for the top left corner, really
+
+x_min2=${r1}
+y_min2=${r3}
+x_max_temp=$(printf '%.0f\n' $(echo "scale=2; ${r2} / ${spacing}" | bc ) )
+x_max2=$(echo "${x_max_temp} * ${spacing}" | bc)
+y_max_temp=$(printf '%.0f\n' $(echo "scale=2; ${r4} / ${spacing}" | bc ) )
+y_max2=$(echo "${y_max_temp} * ${spacing}" | bc)
+
+
+plot=${plot_dir}/ice_thickness_diff_regions_mean_zoom.ps
+psxy ${mean_file}  ${shift_up} -R${x_min2}/${x_max2}/${y_min2}/${y_max2}  -JX${map_width}/0 -L -Cshades_ice_diff.cpt -V -K -Wthin,black -P > ${plot}
+
+pscoast -Bafg -O -K ${R_options2} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+
+#grdcontour ${diff_file} -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
+
+psxy ${region}/margins/${time}.gmt  ${R_options2} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+psxy ${region}/margins/${time}.gmt  ${R_options2} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
+
+
+psxy ${ss_domain_boundaries} -R${x_min2}/${x_max2}/${y_min2}/${y_max2}  -JX${map_width}/0 -K -O -P -V -Wthin,black >> ${plot}
+
+psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx200f100+l"Ice Thickness (m)" --FONT_LABEL=14p -Cshades_ice_diff.cpt -V  >> $plot
+
+
+
+plot=${plot_dir}/ice_thickness_diff_regions_median_zoom.ps
+psxy ${median_file}  ${shift_up} -R${x_min2}/${x_max2}/${y_min2}/${y_max2}  -JX${map_width}/0 -L -Cshades_ice_diff.cpt -V -K -Wthin,black -P > ${plot}
+
+pscoast -Bafg -O -K ${R_options2} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+
+#grdcontour ${diff_file} -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
+
+psxy ${region}/margins/${time}.gmt  ${R_options2} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+psxy ${region}/margins/${time}.gmt  ${R_options2} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
+
+
+psxy ${ss_domain_boundaries} -R${x_min2}/${x_max2}/${y_min2}/${y_max2}  -JX${map_width}/0 -K -O -P -V -Wthin,black >> ${plot}
+
+psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx200f100+l"Ice Thickness (m)" --FONT_LABEL=14p -Cshades_ice_diff.cpt -V  >> $plot
+
+
+fi
+
+
+rm shades_ice_diff.cpt shades_ice_diff.cpt

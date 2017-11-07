@@ -30,8 +30,6 @@ flowline_location.o: flowline_location.f90
 
 
 
-read_polygons.o: read_polygons.f90
-	$(FC) -o read_polygons.o $(FCFLAGS) -c read_polygons.f90
 
 
 #####################
@@ -65,3 +63,14 @@ create_ss_grid: create_ss_grid.f90 global_parameters.o
 
 no_ice: no_ice.f90 global_parameters.o
 	$(FC) -o no_ice $(FCFLAGS) no_ice.f90 global_parameters.o
+
+
+
+####################
+
+
+read_polygons.o: read_polygons.f90
+	$(FC) -o read_polygons.o $(FCFLAGS) -c read_polygons.f90
+
+diff_map: diff_map.f90 global_parameters.o read_polygons.o
+	$(FC) -o diff_map $(FCFLAGS) diff_map.f90 global_parameters.o read_polygons.o
