@@ -7,6 +7,10 @@ region="North_America"
 spacing=5000
 time=0
 
+
+domains_min=${region}/shear_stress/domains_min.txt
+domains_max=${region}/shear_stress/domains_max.txt
+
 source ${region}/projection_info.sh
 
 mapproject << END    ${R_options} ${J_options} -F  > corners.txt
@@ -165,7 +169,9 @@ shear_stress_polygon_ids.txt
 diff_file.xyz
 END_CAT
 
-#./../diff_map
+
+# this program creates gmt files and statistic files
+./../diff_map
 
 
 
@@ -284,5 +290,18 @@ psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx200f100+l"Ice Thickness (m)" --FO
 
 fi
 
+
+# make copy of the domains files for testing
+
+
+cp -f ${domains_max} domains_max_temp.txt
+cp -f ${domains_min} domains_min_temp.txt
+
+diff_file=mean_diff_id.txt
+
+# for now assuming that the adjust file doesn't need to be changed
+#./../adjust_ss  ${mean_file} ${domains_min} ${domains_max}
+
+./../adjust_ss  ${diff_file} domains_min_temp.txt domains_max_temp.txt
 
 rm shades_ice_diff.cpt shades_ice_diff.cpt

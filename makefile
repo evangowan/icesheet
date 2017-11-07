@@ -74,3 +74,9 @@ read_polygons.o: read_polygons.f90
 
 diff_map: diff_map.f90 global_parameters.o read_polygons.o
 	$(FC) -o diff_map $(FCFLAGS) diff_map.f90 global_parameters.o read_polygons.o
+
+
+#####################
+
+adjust_ss: adjust_ss.f90
+	$(FC) -o adjust_ss $(FCFLAGS) adjust_ss.f90

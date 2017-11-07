@@ -6,9 +6,11 @@ use read_polygons
 	implicit none
 	! constants
 	integer, parameter :: param_diff_unit = 100, grid_unit=200, id_unit = 300, boundary_unit = 400, mean_gmt_unit=500,&
-	 median_gmt_unit=600
+	 median_gmt_unit=600, mean_unit = 700, median_unit=800
 	character(len=255), parameter :: param_file = "diff_map_params.txt", mean_gmt="mean_diff.gmt", median_gmt="median_diff.gmt"
+	character(len=255), parameter :: mean_id = "mean_diff_id.txt", median_id = "median_diff_id.txt"
 
+	double precision, parameter :: difference_threshold = 0.1
 
 	! variables
 	integer :: x_min, x_max, y_min, y_max, grid_spacing, istat, num_x, num_y, counter, x_counter, y_counter, total_num, x, y
@@ -23,7 +25,6 @@ use read_polygons
 
 	logical :: inside, check_polygon
 
-	logical, dimension(max_points) :: outside_array
 
 	character(len=255) :: shear_stress_boundaries_file, polygon_id_file, grid_file, dummy, dummy2
 
@@ -33,6 +34,9 @@ use read_polygons
 	integer, parameter :: static_size = 10000
 
 	integer, dimension(static_size) :: polygon_id_array
+
+
+	logical, dimension(max_points) :: outside_array
 
 	! allocated memory
 
@@ -150,6 +154,10 @@ use read_polygons
 	open (unit=median_gmt_unit, file = median_gmt, status="replace", form="formatted", access="sequential")
 	open (unit=mean_gmt_unit, file = mean_gmt, status="replace", form="formatted", access="sequential")
 
+
+	open (unit=median_unit, file = median_id, status="replace", form="formatted", access="sequential")
+	open (unit=mean_unit, file = mean_id, status="replace", form="formatted", access="sequential")
+
 	do poly_diff_counter = 1, number_polygons, 1
 
 
@@ -263,48 +271,27 @@ use read_polygons
 
 		end do
 
+
+		if(abs(average_difference) > difference_threshold) THEN
+			write(mean_unit,*) polygon_id_array(poly_diff_counter), average_difference
+		end if
+		if(abs(median_difference) > difference_threshold) THEN
+			write(median_unit,*) polygon_id_array(poly_diff_counter), median_difference
+		end if
+
 		deallocate(diff_values, diff_mask, stat=istat)
 		if(istat /=0) THEN
 			write(6,*) "problem deallocating diff_values"
 			stop
 		endif
-!		scale_down = 0.5
 
-!		if (grid(poly_diff_counter) <= -250) THEN
-			
-!			multiplier(poly_diff_counter) = -0.1*scale_down
-!		elseif (grid(poly_diff_counter) <= -100) THEN
-!			multiplier(poly_diff_counter) = -0.05*scale_down
-!		elseif (grid(poly_diff_counter) <= -50) THEN
-!			multiplier(poly_diff_counter) = -0.02*scale_down
-!		elseif (grid(poly_diff_counter) <= -20) THEN
-!			multiplier(poly_diff_counter) = -0.01*scale_down
-!		elseif (grid(poly_diff_counter) <= -10) THEN
-!			multiplier(poly_diff_counter) = -0.005*scale_down
-!		elseif (grid(poly_diff_counter) <= 10) THEN
-!			multiplier(poly_diff_counter) = 0*scale_down
-!		elseif (grid(poly_diff_counter) <= 20) THEN
-!			multiplier(poly_diff_counter) = 0.005*scale_down
-!		elseif (grid(poly_diff_counter) <= 50) THEN
-!			multiplier(poly_diff_counter) = 0.01*scale_down
-!		elseif (grid(poly_diff_counter) <= 100) THEN
-!			multiplier(poly_diff_counter) = 0.02*scale_down
-!		elseif (grid(poly_diff_counter) <= 250) THEN
-!			multiplier(poly_diff_counter) = 0.05*scale_down
-!		else
-!			multiplier(poly_diff_counter) = 0.1*scale_down
-!		endif
-
-!		if (shear_stress(poly_diff_counter) < 500) THEN
-!			multiplier(poly_diff_counter) = 0
-!		endif
-
-!		write(ss_mod_unit,*) multiplier(poly_diff_counter)
 
 	end do
 
 	close(unit=mean_gmt_unit)
 	close(unit=median_gmt_unit)
+	close(unit=mean_unit)
+	close(unit=median_unit)
 
 	call read_polygons_clear()
 
