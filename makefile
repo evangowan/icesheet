@@ -1,7 +1,7 @@
 FC = gfortran
 
-FCFLAGS = -g -fbacktrace -fbounds-check 
-#FCFLAGS = -O2
+#FCFLAGS = -g -fbacktrace -fbounds-check 
+FCFLAGS = -O2
 
 # if compiling with the Intel Fortran compiler, you need to add an extra flag
 #FCFLAGS = -O2 -assume byterecl

@@ -5,7 +5,7 @@
 
 
 # line in the file "times_to_calculate"
-run_number=12
+run_number=1
 
 time_var=$(awk -v line_number=${run_number} '{if (NR == line_number) print $1}' times_to_calculate)
 

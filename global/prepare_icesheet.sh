@@ -21,8 +21,10 @@ icesheet_interval=$(awk '{if (NR == 10) print $0}' run_parameters)
 latitude_spacing=$(awk '{if (NR == 11) print $0}' run_parameters)
 longitude_spacing=$(awk '{if (NR == 12) print $0}' run_parameters)
 
+your_name=$(awk '{if (NR == 15) print $0}' run_parameters)
 gia_deformation=$(awk '{if (NR == 16) print $0}' run_parameters)
 adjust_file=$(awk '{if (NR == 17) print $0}' run_parameters)
+folder_on=$(awk '{if (NR == 18) print $0}' run_parameters)
 
 echo ${region}
 echo ${run_number}
@@ -132,9 +134,16 @@ fi
 mkdir margins
 
 
-if [ -e "${root_directory}/${region}/margins/${time}.gmt" ]
+if [ "${folder_on}" = "true" ]
 then
-	cp ${root_directory}/${region}/margins/${time}.gmt margins/
+   margin_file="${root_directory}/${region}/margins/${your_name}/${time}.gmt"
+else
+   margin_file="${root_directory}/${region}/margins/${time}.gmt"
+fi
+
+if [ -e "${margin_file}" ]
+then
+	cp ${margin_file} margins/
 else
 	echo "could not find margin for time: ${time}"
 	echo "terminating...."

@@ -18,7 +18,7 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 # if instead you just want to calculate specific times, use this instead
 
 #cat << END > times_to_calculate
-#20000
+#0
 #END
 
 
@@ -36,11 +36,11 @@ region=Eurasia
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="5" 
+run_number="7" 
 your_name="Evan" # no spaces or underscores!
-run_description="First run of Eurasia with GIA"
+run_description="Running Eurasia again"
 
-
+folder_on="false"
 
 ####################################
 # Earth Model
@@ -128,6 +128,7 @@ ${number_times}
 ${your_name}
 ${gia_deformation}
 adjust_0.txt
+${folder_on}
 END_CAT
 
 echo "------------------------------------------------"  >> ${region}/log_file.txt
@@ -164,6 +165,7 @@ ${number_times}
 ${your_name}
 ${gia_deformation}
 adjust_0.txt
+${folder_on}
 END_CAT
 
 	cp prepare_icesheet.sh run/${time}

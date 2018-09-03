@@ -19,9 +19,9 @@ west_longitude=-12
 east_latitude=65
 east_longitude=108
 
-map_width=13c
+map_width=14c
 
-shift_up="-Y6"
+shift_up="-Y5"
 
 J_options="-JA${center_longitude}/${center_latitude}/${map_width}"
 R_options="-R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r"

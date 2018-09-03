@@ -12,7 +12,7 @@ icesheet_spacing=$(awk '{if (NR == 9) print $0}' run_parameters)
 icesheet_interval=$(awk '{if (NR == 10) print $0}' run_parameters)
 latitude_spacing=$(awk '{if (NR == 11) print $0}' run_parameters)
 longitude_spacing=$(awk '{if (NR == 12) print $0}' run_parameters)
-
+your_name=$(awk '{if (NR == 15) print $0}' run_parameters)
 gia_deformation=$(awk '{if (NR == 16) print $0}' run_parameters)
 adjust_file=$(awk '{if (NR == 17) print $0}' run_parameters)
 
@@ -23,7 +23,7 @@ then
 
 fi
 
-storage_folder=${region}/plots/${run_number}
+storage_folder=${region}/plots/${your_name}_${run_number}
 mkdir ${storage_folder}
 
 mkdir ${storage_folder}/deform
