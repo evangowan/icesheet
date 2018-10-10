@@ -52,10 +52,22 @@ cp ${root_directory}/${region}/projection_info.sh .
 
 source projection_info.sh
 
+if [ "${special_projection}" = "y" ]
+then
+
+mapproject << END    ${R_options} ${J_options_project} -C -F  > corners.txt
+${west_longitude} ${west_latitude}
+${east_longitude} ${east_latitude}
+END
+
+else
+
 mapproject << END    ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
+
+fi
 
 r1=$(awk '{if (NR==1) print $1}' corners.txt)
 r2=$(awk '{if (NR==2) print $1}' corners.txt)
@@ -83,9 +95,14 @@ then
 else
 
 	echo "using deformed topography: ${gia_deformation}"
-	awk -v time=${time} '{if($1*1000 == time) print $2, $3, $4}' ${root_directory}/${region}/deform/${gia_deformation} > gia.txt
+	awk -v time=${time} '{if($1*1000 == time) print $2, $3, $4}' ${root_directory}/deform/${gia_deformation} > gia.txt
 
-	mapproject gia.txt  ${R_options} ${J_options} -F  > gia_proj.xyz
+	if [ "${special_projection}" = "y" ]
+	then
+		mapproject gia.txt  ${R_options} ${J_options_project} -F -C > gia_proj.xyz
+	else
+		mapproject gia.txt  ${R_options} ${J_options} -F  > gia_proj.xyz
+	fi
 
 #	blockmedian gia_proj.xyz -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}=   -C  > gia_median.xyz
 
@@ -151,7 +168,15 @@ else
 fi
 
 # put into projected coordinates
+if [ "${special_projection}" = "y" ]
+then
+echo "should be using new projected info"
+mapproject margins/${time}.gmt  ${R_options} ${J_options_project} -F -C > margins/${time}_proj.gmt
+else
+echo "should not be using new projected info"
+
 mapproject margins/${time}.gmt  ${R_options} ${J_options} -F  > margins/${time}_proj.gmt
+fi
 
 # split into multiple files
 

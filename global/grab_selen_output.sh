@@ -24,15 +24,19 @@ your_name=$(awk '{if (NR == 15) print $0}' run_parameters)
 #region="North_America"
 #North_America_run_number=${run_number}
 
-region="Eurasia"
-Eurasia_run_number=${run_number}
+#region="Eurasia"
+#Eurasia_run_number=${run_number}
+
+region="Antarctica"
+Antarctica_run_number=${run_number}
+
 
 #Earth model used to calculate deformation
 
 earth_model=ehgk
 
-selen_output="/scratch/users/egowan-local/gia/SELEN-forked/selen/DEPOTS/depot-TEST/rsl/rsl-contours/rsl_spreadsheet.dat"
+selen_output="/scratch/users/egowan-local/gia/SELEN-forked/selen/sea_level/rsl_spreadsheet.dat"
 
-cp ${selen_output} ${region}/deform/icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}.dat
+cp ${selen_output} deform/icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}.dat
 
 
