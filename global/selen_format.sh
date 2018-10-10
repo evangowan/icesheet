@@ -18,6 +18,10 @@ interval=$(awk '{if (NR == 13) print $0}' run_parameters)
 number_times=$(awk '{if (NR == 14) print $0}' run_parameters)
 your_name=$(awk '{if (NR == 15) print $0}' run_parameters)
 
+selen_North_America_run_number=$(awk '{if (NR == 19) print $0}' run_parameters)
+selen_Eurasia_run_number=$(awk '{if (NR == 20) print $0}' run_parameters)
+selen_Antarctica_run_number=$(awk '{if (NR == 21) print $0}' run_parameters)
+
 
 latitude_spacing=0.5 # make sure to delete this later
 
@@ -217,24 +221,24 @@ do
 	if [ "${region}" = "North_America" ]
 	then
 
-		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Eurasia/reconstructions/icesheet_${Eurasia_run_number}  >> temp/${times}_others.xyz
-		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Antarctica/reconstructions/icesheet_${Antarctica_run_number}  >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Eurasia/reconstructions/icesheet_${selen_Eurasia_run_number}  >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Antarctica/reconstructions/icesheet_${selen_Antarctica_run_number}  >> temp/${times}_others.xyz
 
 	fi
 
 	if [ "${region}" = "Eurasia" ]
 	then
 
-		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' North_America/reconstructions/icesheet_${North_America_run_number} >> temp/${times}_others.xyz
-		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Antarctica/reconstructions/icesheet_${Antarctica_run_number}  >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' North_America/reconstructions/icesheet_${selen_North_America_run_number} >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Antarctica/reconstructions/icesheet_${selen_Antarctica_run_number}  >> temp/${times}_others.xyz
 
 	fi
 
 	if [ "${region}" = "Antarctica" ]
 	then
 
-		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' North_America/reconstructions/icesheet_${North_America_run_number} >> temp/${times}_others.xyz
-		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Eurasia/reconstructions/icesheet_${Eurasia_run_number}  >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' North_America/reconstructions/icesheet_${selen_North_America_run_number} >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Eurasia/reconstructions/icesheet_${selen_Eurasia_run_number}  >> temp/${times}_others.xyz
 
 	fi
 
