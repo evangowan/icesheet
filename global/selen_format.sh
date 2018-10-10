@@ -59,7 +59,7 @@ then
 elif [ "${region}" = "Eurasia" ]
 then
 	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${North_America_run_number}_${run_number}_${Antarctica_run_number}"
-elif ["${region}" = "Antarctica" ]
+elif [ "${region}" = "Antarctica" ]
 then
 	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${run_number}"
 else
@@ -75,10 +75,23 @@ echo ${selen_out}
 
 source ${region}/projection_info.sh
 
+
+if [ "${special_projection}" = "y" ]
+then
+
+mapproject << END    ${R_options} ${J_options_project} -C -F  > corners.txt
+${west_longitude} ${west_latitude}
+${east_longitude} ${east_latitude}
+END
+
+else
+
 mapproject << END    ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
+
+fi
 
 mapproject corners.txt    ${R_options} ${J_options} -F -I
 
@@ -108,8 +121,12 @@ grdmath ${ocean_equivalent} 0 GT = ocean_mask.nc
 
 makecpt -Crainbow -T0/5000  > shades_ice.cpt
 
+column=2
+
 for times in $( seq ${max_time} -${interval} 0)
 do
+
+	column=$( echo "${column} + 1" | bc)
 
 	# as of SELEN 2.8, there is no accounting for grounded ice, so you have to subtract that part of the load off
 	# According to G. Spada, SELEN 4.0 will be able to take this into account
@@ -144,13 +161,27 @@ do
 
 	# convert grid to geographical coordinate system
 
-longmin=-180
-longmax=0
-latmin=30
-latmax=85
+#longmin=-180
+#longmax=0
+#latmin=30
+#latmax=85
 
 	grd2xyz adjusted_ice_thickness.nc > temp.xyz
-	mapproject temp.xyz ${R_options} ${J_options} -I -F  > temp_geo.xyz
+
+
+
+	if [ "${special_projection}" = "y" ]
+	then
+
+		mapproject temp.xyz ${R_options} ${J_options_project} -I -F -C > temp_geo.xyz
+
+	else
+
+		mapproject temp.xyz ${R_options} ${J_options} -I -F  > temp_geo.xyz
+
+	fi
+
+
 	blockmean -Rg -I${latitude_spacing} temp_geo.xyz  > bm.out
 
 	surface bm.out -Gglobal.nc  -I${latitude_spacing} -Rg -T0.75  
@@ -166,7 +197,8 @@ latmax=85
 	# for now, the rest of the world uses ICE66. For these purposes, "I" is used as the run number
 
 	# get ICE6G for the rest of the world
-	triangulate ICE6G/${times}.xyz -bo -I${latitude_spacing} -Rglobal.nc -Gice6g_slice.nc
+# ICE-6G no longer necessary
+#	triangulate ICE6G/${times}.xyz -bo -I${latitude_spacing} -Rglobal.nc -Gice6g_slice.nc
 
 
 
@@ -185,19 +217,29 @@ latmax=85
 	if [ "${region}" = "North_America" ]
 	then
 
-		awk '{if(NR>7) {print $0}}' Eurasia/reconstructions/icesheet_${Eurasia_run_number}  >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Eurasia/reconstructions/icesheet_${Eurasia_run_number}  >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Antarctica/reconstructions/icesheet_${Antarctica_run_number}  >> temp/${times}_others.xyz
 
 	fi
 
 	if [ "${region}" = "Eurasia" ]
 	then
 
-		awk '{if(NR>7) {print $0}}' North_America/reconstructions/icesheet_${North_America_run_number} >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' North_America/reconstructions/icesheet_${North_America_run_number} >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Antarctica/reconstructions/icesheet_${Antarctica_run_number}  >> temp/${times}_others.xyz
 
 	fi
 
+	if [ "${region}" = "Antarctica" ]
+	then
 
-	grd2xyz ice6g_slice.nc | awk '{if ($1 < 360) print $1, $2, $3}' >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' North_America/reconstructions/icesheet_${North_America_run_number} >> temp/${times}_others.xyz
+		awk -v column=${column} '{if(NR>7) {print $1, $2, $column}}' Eurasia/reconstructions/icesheet_${Eurasia_run_number}  >> temp/${times}_others.xyz
+
+	fi
+
+# ICE-6G no longer necessary
+#	grd2xyz ice6g_slice.nc | awk '{if ($1 < 360) print $1, $2, $3}' >> temp/${times}_others.xyz
 
 	if [ "${times}" = "${max_time}" ]
 	then
