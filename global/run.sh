@@ -30,15 +30,15 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
 #region=North_America
-#region=Eurasia
-region=Antarctica
+region=Eurasia
+#region=Antarctica
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="12" 
+run_number="14" 
 your_name="Evan" # no spaces or underscores!
-run_description="Second run of Antarctica with GIA, now with proper global solution!"
+run_description="First run of Eurasian, now with proper global solution!"
 
 folder_on="false"
 
@@ -46,8 +46,8 @@ folder_on="false"
 # one ice sheet at a time (e.g. the SELEN file must be created each time you calculate one ice sheet, otherwise the fragment file is not created!)
 # Just run "selen_format.sh" after every icesheet run!
 
-selen_North_America_run_number=3
-selen_Eurasia_run_number=4
+selen_North_America_run_number=13
+selen_Eurasia_run_number=14
 selen_Antarctica_run_number=12
 
 ####################################

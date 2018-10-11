@@ -95,7 +95,17 @@ then
 else
 
 	echo "using deformed topography: ${gia_deformation}"
-	awk -v time=${time} '{if($1*1000 == time) print $2, $3, $4}' ${root_directory}/deform/${gia_deformation} > gia.txt
+
+	if [ "${region}" = "Antarctica" ] 
+	then
+		awk -v time=${time} '{if($1*1000 == time && $3 < 0.0) print $2, $3, $4}' ${root_directory}/deform/${gia_deformation} > gia.txt
+	elif [ "${region}" = "North_America" ] || [ "${region}" = "Eurasia" ]
+	then
+		awk -v time=${time} '{if($1*1000 == time && $3 > 0.0) print $2, $3, $4}' ${root_directory}/deform/${gia_deformation} > gia.txt
+	else
+		echo "bad region"
+		exit 0
+	fi
 
 	if [ "${special_projection}" = "y" ]
 	then

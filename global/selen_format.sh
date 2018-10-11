@@ -59,13 +59,13 @@ END_CAT
 
 if [ "${region}" = "North_America" ]
 then
-	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${run_number}_${Eurasia_run_number}_${Antarctica_run_number}"
+	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${run_number}_${selen_Eurasia_run_number}_${selen_Antarctica_run_number}"
 elif [ "${region}" = "Eurasia" ]
 then
-	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${North_America_run_number}_${run_number}_${Antarctica_run_number}"
+	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${selen_North_America_run_number}_${run_number}_${selen_Antarctica_run_number}"
 elif [ "${region}" = "Antarctica" ]
 then
-	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${run_number}"
+	selen_out="selen_input/icesheet_${your_name}_${earth_model}_${selen_North_America_run_number}_${selen_Eurasia_run_number}_${run_number}"
 else
 	echo "invalid region: " ${region}
 fi
