@@ -18,6 +18,9 @@ interval=$(awk '{if (NR == 13) print $0}' run_parameters)
 number_times=$(awk '{if (NR == 14) print $0}' run_parameters)
 your_name=$(awk '{if (NR == 15) print $0}' run_parameters)
 
+selen_North_America_run_number=$(awk '{if (NR == 19) print $0}' run_parameters)
+selen_Eurasia_run_number=$(awk '{if (NR == 20) print $0}' run_parameters)
+selen_Antarctica_run_number=$(awk '{if (NR == 21) print $0}' run_parameters)
 
 # region calculated from SELEN
 
@@ -37,6 +40,6 @@ earth_model=ehgk
 
 selen_output="/scratch/users/egowan-local/gia/SELEN-forked/selen/sea_level/rsl_spreadsheet.dat"
 
-cp ${selen_output} deform/icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}.dat
+cp ${selen_output} deform/icesheet_${your_name}_${earth_model}_${selen_North_America_run_number}_${selen_Eurasia_run_number}_${selen_Antarctica_run_number}.dat
 
 
