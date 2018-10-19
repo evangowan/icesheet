@@ -229,9 +229,9 @@ double precision function elevation(x_coordinate, y_coordinate)
 
 
 
-	if(x_start >= 1 .and. x_start+6 <= x_count .and. y_start >= 1 .and. y_start+6 <= y_count) then ! can calculate interpolation
+	if(x_start >= 1 .and. x_start+5 <= x_count .and. y_start >= 1 .and. y_start+5 <= y_count) then ! can calculate interpolation
 
-		bicubic_input_array = elevation_values(x_start:x_start+6,y_start:y_start+6)
+		bicubic_input_array = elevation_values(x_start:x_start+5,y_start:y_start+5)
 
 		! check if any of the values are out of range
 

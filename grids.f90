@@ -63,6 +63,12 @@ module grids
 	integer, parameter :: header_offset = 896 / 4 ! header size of a standard GMT binary file
 
 
+	! settings for whether or not you want to store the DEMs in memory or read from file
+
+	logical, parameter :: store_dem = .true.
+
+	real, allocatable, dimension(:) :: ss_grid_store, elev_grid_store
+
 
 ! bicubic interpolation paramaters
 	integer, parameter, dimension(16,16) :: alpha_parameters =	reshape((/1, 0, -3, 2, 0, 0, 0, 0, -3, 0, 9, -6, 2, 0, -6, &
@@ -84,6 +90,8 @@ subroutine read_elevation_files()
 
 	implicit none
 
+	integer :: number_elev_points, istat, record_number, file_record
+	real :: grid_value
 
 	open(unit=20, file=elevation_parameters_filename, form="formatted", access="sequential", status="old")
 
@@ -109,7 +117,8 @@ subroutine read_elevation_files()
 	elev_ystep = elev_ymax-elev_ymin + elev_grid_spacing
 
 	write(6,*) "x and y step size:", elev_xstep, elev_ystep
-	write(6,*) "number of points in elev file:", (elev_xmax-elev_xmin) / elev_grid_spacing*(elev_ymax-elev_ymin)/elev_grid_spacing
+	number_elev_points = ((elev_xmax-elev_xmin) / elev_grid_spacing)*((elev_ymax-elev_ymin)/elev_grid_spacing)
+	write(6,*) "number of points in elev file:", number_elev_points
 
 	! The elevation file is left open while the program is running. the subroutine "end_elev" should be called at the end to close the file
 
@@ -118,7 +127,22 @@ subroutine read_elevation_files()
 
 	open(file=elevation_file, unit=elev_ncunit, access="direct", form='unformatted', action="read", RECL=4) 
 
+	if(store_dem) THEN
 
+		allocate(elev_grid_store(number_elev_points))
+
+		do record_number = 1, number_elev_points, 1
+			file_record = record_number + header_offset
+			read(elev_ncunit, rec=file_record, iostat=istat) grid_value
+			if(istat /=0) THEN ! out of bounds
+				write(6,*) "elevation grid out of bounds during initial read"
+				stop
+			end if
+
+			elev_grid_store(record_number) = grid_value
+		end do
+
+	endif
 
 	! set the storage to be a small value.  The storage means that the program doesn't constantly have to recalculate the bicubic alpha parameters.
 	elev_x_points = -99999999
@@ -137,6 +161,11 @@ subroutine end_elev()
 
 	close (unit=elev_ncunit)
 
+	if(store_dem) THEN
+
+		deallocate(elev_grid_store)
+	end if
+
 end subroutine end_elev
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -147,6 +176,8 @@ subroutine read_ss_files()
 
 	implicit none
 
+	integer :: number_ss_points, istat, record_number, file_record
+	real :: grid_value
 
 	open(unit=20, file=shear_stress_parameters_filename, form="formatted", access="sequential", status="old")
 
@@ -171,7 +202,12 @@ subroutine read_ss_files()
 	ss_xstep = ss_xmax - ss_xmin + ss_grid_spacing
 	ss_ystep = ss_ymax-ss_ymin + ss_grid_spacing
 	write(6,*) "x and y step size:", ss_xstep, ss_ystep
-	write(6,*) "number of points in ss file:", (ss_xmax-ss_xmin) / ss_grid_spacing * (ss_ymax-ss_ymin)/ss_grid_spacing
+
+
+
+
+	number_ss_points =  ((ss_xmax-ss_xmin) / ss_grid_spacing) * ((ss_ymax-ss_ymin)/ss_grid_spacing)
+	write(6,*) "number of points in ss file:", number_ss_points
 
 	! The shear stress file is left open while the program is running. the subroutine "end_ss" should be called at the end to close the file
 
@@ -180,6 +216,22 @@ subroutine read_ss_files()
 
 	open(file=shear_stress_file, unit=ss_ncunit, access="direct", form='unformatted', action="read", RECL=4) 
 
+	if(store_dem) THEN
+
+		allocate(ss_grid_store(number_ss_points))
+
+		do record_number = 1, number_ss_points, 1
+			file_record = record_number+header_offset
+			read(ss_ncunit, rec=file_record, iostat=istat) grid_value
+			if(istat /=0) THEN ! out of bounds
+				write(6,*) "elevation grid out of bounds during initial read"
+				stop
+			end if
+
+			ss_grid_store(record_number) = grid_value
+		end do
+
+	endif
 
 
 	! set the storage to be a small value. The storage means that the program doesn't constantly have to recalculate the bicubic alpha parameters.
@@ -198,6 +250,11 @@ subroutine end_ss()
 	implicit none
 
 	close (unit=ss_ncunit)
+
+	if(store_dem) THEN
+
+		deallocate(ss_grid_store)
+	end if
 
 end subroutine end_ss
 
@@ -286,10 +343,24 @@ subroutine get_grid_value(x_coordinate, y_coordinate, ncunit, grid_spacing, x_po
 				record_number =  (x_points(x_counter)-xmin)/grid_spacing + &
 					((ymax -y_points(y_counter)))/grid_spacing * (xstep/grid_spacing) &
 					 + header_offset
-			!		write(6,*) record_number, x_points(x_counter), y_points(y_counter),  grid_spacing, xmin, ymax
 
 				if(record_number > 0) THEN
-					read(ncunit, rec=record_number, iostat=istat) grid_value
+
+					if(store_dem) THEN
+						record_number = record_number - header_offset
+						if(ncunit == elev_ncunit) THEN
+							grid_value = elev_grid_store(record_number)
+						elseif(ncunit == ss_ncunit) THEN
+							grid_value = ss_grid_store(record_number)
+						endif
+
+						istat = 0
+
+					else
+						read(ncunit, rec=record_number, iostat=istat) grid_value
+
+					endif
+
 					if(istat /=0) THEN ! happens if the value goes wildly outside of the boundary. Currently set to stop the program
 						write(6,*) "istat:", istat
 						write(6,*) "grid value for unit ", ncunit, " is out of bounds", record_number
@@ -332,7 +403,7 @@ subroutine get_grid_value(x_coordinate, y_coordinate, ncunit, grid_spacing, x_po
 					stop
 				endif
 
-					grid_storage_array(x_counter, y_counter) = dble(grid_value)
+				grid_storage_array(x_counter, y_counter) = dble(grid_value)
 
 
 			end do
