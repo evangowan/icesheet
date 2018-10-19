@@ -24,3 +24,6 @@ J_options="-JA${center_longitude}/${center_latitude}/${map_width}"
 R_options="-R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r"
 
 
+# shear stress domain file
+
+shear_stress_domain_file=shear_stress_domains.gmt

@@ -68,12 +68,12 @@ grdfilter ${topo} -G${filtered_topo} -Fm${resolution} -D4  -V
 fi
 
 # takes a lot less time
-grdproject ${filtered_topo}  ${R_options} ${J_options} -G${area_grid} -D${resolution}000= -Fe  -V  
+grdproject ${filtered_topo}  ${R_options} ${J_options} -G${area_grid} -D${resolution}000= -Fe  -V  -C
 
 
 
 
-grdproject ${area_grid}  ${R_options} ${J_options} -G${region}_topo_geo.nc  -I -Fe  -V  
+grdproject ${area_grid}  ${R_options} ${J_options} -G${region}_topo_geo.nc  -I -Fe  -V  -C
 
 
 x_min=$(grdinfo -F ${area_grid} | grep x_min  | awk -F':' '{print int($3)}')

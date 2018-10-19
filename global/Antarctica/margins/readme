@@ -1,1 +1,25 @@
 the "0" margin is the outline of the Antarctic ice sheet and nearby glaciated islands from BEDMAP2 at 500 m resolution
+
+
+
+The RAISED reconstructions are used for the basis of the 20000 year margin, as are the 15000, 10000 and 5000 year margins for West Antarctica and the western parts of East Antarctica. I am using the "scenario B" margin at first, to try and maximize the ice volume. The margins have been adjusted in the intermediate time steps for the following reasons:
+
+- The inferred margins sometimes went over the modern margin
+- the intermediate time step margins sometimes overlapped with each other
+- the inferred margins sometimes omitted glaciated islands, such as Elephant Island
+
+I assume that the inconsistencies are a result of the margins being drawn on a physical map, then digitized independently, rather than being indicitive of a readvance, just due to the low resolution of digitized margins.
+
+I used the contour interpolation tools to create the margins at other time periods. The work flow went like this:
+
+1) First, I interpolated the margin between 20000 years and 0 years. I used the psudo 15000 year margin as the 15000 year margin for East Antarctica. The margin at Dronning Maud Land was specifically adjusted from the RAISED margin to account for a grounded rise at -74N, -21E
+
+2) I took the resulting 15000 year margin, and again interpolated to the modern margin to a psudo 10000 year margin. Several adjustments to the RAISED margin had to be made on the Antarctic Peninsula.
+
+3) I took the resulting 10000 year margin, and again interpolated to the modern margin to a psudo 5000 year margin. Several adjustments to the RAISED margin had to be made on the Antarctic Peninsula. The 5000 margin from the contour interpolation generally lined up favourably with the RAISED margin where there was overlap, so I used the psudo 5000 year margin, rather one with a more retreated extent. Obviously assuming a linear retreat is not going to work everywhere, but there isn't really a better assumption in areas with almost no data.
+
+4) The margins at 500 year intervals were done between 20000 and 10000 were done at a relatively low resolution (2000 m). This was sufficient in most places, and when there were problems, I manually fixed them.
+
+5) the interpolation between 10000 and 0 were done at a higher resolution because there were problems when the input margins got close together. Lightly edited, especially between 5000 and 0, some places still have inconsistencies and overlaps. Ideally, I want to go back and redo the 5000 to 0 year margins using the original unsimplified polygon, which should fix a lot of the problems. We'll see if I have time.
+
+6) For 30000 to 20000, I used the existing margins from between 20000 and 15000, but going backwards. That means 19500 margin represents 21000, 19000 represents 22000, and so on.

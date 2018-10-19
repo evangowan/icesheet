@@ -209,7 +209,7 @@ echo "${root_directory}/.." > shear_stress/root_directory
 
 
 cp ${root_directory}/${region}/shear_stress/create_bin_var.sh shear_stress/create_bin.sh
-cp ${root_directory}/${region}/shear_stress/shear_stress_domains.gmt shear_stress/
+cp ${root_directory}/${region}/shear_stress/${shear_stress_domain_file} shear_stress/shear_stress_domains.gmt
 cp ${root_directory}/${region}/shear_stress/domains_max.txt shear_stress/
 if [ "${adjust_file}" = "" ]
 then

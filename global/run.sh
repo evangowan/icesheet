@@ -30,15 +30,15 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
 #region=North_America
-region=Eurasia
-#region=Antarctica
+#region=Eurasia
+region=Antarctica
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="14" 
+run_number="18" 
 your_name="Evan" # no spaces or underscores!
-run_description="First run of Eurasian, now with proper global solution!"
+run_description="Antarctic shear stress domains adjusted to (hopefully) reduce the possibility of program crashing"
 
 folder_on="false"
 
@@ -46,9 +46,9 @@ folder_on="false"
 # one ice sheet at a time (e.g. the SELEN file must be created each time you calculate one ice sheet, otherwise the fragment file is not created!)
 # Just run "selen_format.sh" after every icesheet run!
 
-selen_North_America_run_number=13
-selen_Eurasia_run_number=14
-selen_Antarctica_run_number=12
+selen_North_America_run_number=16
+selen_Eurasia_run_number=15
+selen_Antarctica_run_number=18
 
 ####################################
 # Earth Model
@@ -67,9 +67,9 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=3
-Eurasia_run_number=4
-Antarctica_run_number=11
+North_America_run_number=16
+Eurasia_run_number=15
+Antarctica_run_number=17
 
 # if instead you want present day topography, set ${earth_model} to null
 #earth_model="null" 
