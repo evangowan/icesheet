@@ -1,5 +1,6 @@
 ICESHEET - a program to create ice sheet reconstructions
 
+Written by Evan Gowan (evangowan@gmail.com)
 
 This is software to create perfectly plastic ice sheets. I used this to create reconstructions of the Laurentide Ice Sheet (see The NAICE model below). There is a paper on this in Geoscience Model Development. I have included a sample problem with the Greenland Ice Sheet with the scripts that should make it pretty easy to run the program. I usually modify these scripts to suit the problem I am working on. They require Generic Mapping Tools and NETCDF Tools. In particular, ICESHEET requires GMT formatted binary files as input for the basal shear stress and basal topography. Note if you downloaded the version of this file from the GMD website, I forgot to include the shapefiles needed to create the shear stress files, so download it again. Instructions to run this can be found on my website (https://raisedbeaches.net/2016/05/22/icesheet-1-0/).
 
@@ -11,8 +12,16 @@ ICESHEET is written in Fortran. To compile, you will need to have automake and a
 
 If you use this program, please site the following paper:
 
-Gowan, E.J., Tregoning, P., Purcell, A., Lea, J., Fransner, O.J., Noormets, R. and Dowdeswell, J.A., 2016. ICESHEET 1.0: a program to produce paleo-ice sheet reconstructions with minimal assumptions. Geoscientific Model Development, 9(5), pp. 1673-1682, doi:10.5194/gmd-9-1673-2016
+Gowan, E.J., Tregoning, P., Purcell, A., Lea, J., Fransner, O.J., Noormets, R. and Dowdeswell, J.A., 2016. ICESHEET 1.0: a program to produce paleo-ice sheet reconstructions with minimal assumptions. Geoscientific Model Development, 9(5), pp. 1673-1682, https://doi.org/10.5194/gmd-9-1673-2016
 
 For a detailed application with the Laurentide Ice Sheet (the NAICE model), see this paper:
 
-Gowan, E.J., Tregoning, P., Purcell, A., Montillet, J.-P., and McClusky, S., 2016. A model of the western Laurentide Ice Sheet, using observations of glacial isostatic adjustment. Quaternary Science Reviews, 139, pp. 1-16, doi:10.1016/j.quascirev.2016.03.003
+Gowan, E.J., Tregoning, P., Purcell, A., Montillet, J.-P., and McClusky, S., 2016. A model of the western Laurentide Ice Sheet, using observations of glacial isostatic adjustment. Quaternary Science Reviews, 139, pp. 1-16, https://doi.org/10.1016/j.quascirev.2016.03.003
+
+
+Here is a list of papers that have made use of ICESHEET in some way. Please let me know if you have used this program and I will add it to the list.
+
+
+Gandy, N., Gregoire, L.J., Ely, J.C., Clark, C.D., Hodgson, D.M., Lee, V., Bradwell, T. and Ivanovic, R.F., 2018. Marine ice sheet instability and ice shelf buttressing of the Minch Ice Stream, northwest Scotland. The Cryosphere, 12(11), pp.3635-3651. https://doi.org/10.5194/tc-12-3635-2018
+
+Kirchner, N., van Dongen, E., Gowan, E.J., Pattyn, F., Noormets, R., Jakobsson, M. and Ingólfsson, Ó., 2018. GRANTSISM: An Excel™ ice sheet model for use in introductory Earth science courses. Journal of Geoscience Education, 66(2), pp.109-120. https://doi.org/10.1080/10899995.2018.1412177
