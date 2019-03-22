@@ -29,16 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-region=North_America
+#region=North_America
 #region=Eurasia
 #region=Antarctica
+region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="19" 
+run_number="20" 
 your_name="Evan" # no spaces or underscores!
-run_description="Fixed problems with North America margins where there were hidden overlapping polygons"
+run_description="First Patagonia run"
 
 folder_on="false"
 
@@ -72,7 +73,7 @@ Eurasia_run_number=15
 Antarctica_run_number=18
 
 # if instead you want present day topography, set ${earth_model} to null
-#earth_model="null" 
+earth_model="null" 
 
 
 

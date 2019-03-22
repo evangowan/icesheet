@@ -76,8 +76,15 @@ r4=$(awk '{if (NR==2) print $2}' corners.txt)
 
 # round the numbers, should only need to do this for the top left corner, really
 
-x_min=${r1}
-y_min=${r3}
+# on second though, need this check
+#x_min=${r1}
+#y_min=${r3}
+
+x_min_temp=$(printf '%.0f\n' $(echo "scale=2; ${r1} / ${spacing}" | bc ) )
+x_min=$(echo "${x_min_temp} * ${spacing}" | bc)
+y_min_temp=$(printf '%.0f\n' $(echo "scale=2; ${r3} / ${spacing}" | bc ) )
+y_min=$(echo "${y_min_temp} * ${spacing}" | bc)
+
 x_max_temp=$(printf '%.0f\n' $(echo "scale=2; ${r2} / ${spacing}" | bc ) )
 x_max=$(echo "${x_max_temp} * ${spacing}" | bc)
 y_max_temp=$(printf '%.0f\n' $(echo "scale=2; ${r4} / ${spacing}" | bc ) )
