@@ -1,0 +1,16 @@
+The margins are currently set up in the following way:
+
+30000-18000: use the same margin, which is from Ehlers et al (2011).
+
+13000-present: use the same margin, which is simplified from the GLIMS database (Raup et al., 2007).
+
+For the time slices between that, I interpolated between the LGM and modern margin, using Contour Interpolation (https://github.com/evangowan/contour_interpolation). I tried to have it
+retreat backwards through deep fjords, so that it is realistic retreat.
+
+I fully intend to replace this with Bethan Davies's margins, as soon as they become available.
+
+
+
+Ehlers, J., Ehlers, J., Gibbard, P.L. and Hughes, P.D. eds., 2011. Quaternary glaciations-extent and chronology: a closer look (Vol. 15). Elsevier.
+
+Raup, B., Racoviteanu, A., Khalsa, S.J.S., Helm, C., Armstrong, R. and Arnaud, Y., 2007. The GLIMS geospatial glacier database: a new tool for studying glacier change. Global and Planetary Change, 56(1-2), pp.101-110.
