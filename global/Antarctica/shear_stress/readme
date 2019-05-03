@@ -5,3 +5,56 @@ modern day Antarctica that matches the BEDMAP2 ice thicknesses within 25 m (medi
 October 15, 2018 - deleted domain 454 and merged it with 187, as it was a sliver
                  - Merged domain 625 with 94, as it was very small and had a huge contrast in shear stress that might cause problems
                  - increased the default shear stress of domain 68 to 5000, as it was causing the program to mess up since there was a high shear stress contrast
+
+
+--------------
+2019/05/02
+--------------
+
+Note: at this point, the maximum domain number is 693, so new domains are greater than this
+
+I am making the shelf regions that are currently not covered in grounded ice having a really low shear stress (i.e. less than 10000 Pa). This will better correspond to the observations of limited ice thickness growth at the LGM. I als0 am merging adjacent regions that have similar shear stress values.
+
+Merge: 89 --> 90
+Merge 76 --> with adjacent regions
+Merge 72 --> 70
+Merge 65 --> 63
+Merge 76 --> 80
+
+For the offshore regions, I used the following rules
+
+places with deep topography: 5000 Pa
+places with some uplands or islands: 10000 Pa
+
+Merged together all the Ross Shelf region together, made two shear stress regions:
+
+694: upstream Ross Shelf
+695: outer Ross Shelf
+
+697 - East Atarctica, outside of Ross Shelf region
+698 - East Antarctica
+699 - East Anarctica - place with some higher ridges
+700 - East Antarctica
+701 - East Antarctica
+702 - East Antarctica - place with some higher ridges
+703 - East Antarctica
+704 - Prydz Bay (I set this to 30000
+705 - outer Prydz Bay
+706 - East Antarctica - place with some higher ridges
+707 - East Antarctica
+708 - East Antarctica - place with some islands
+709 - East Antarctica
+710 - East Antarctica - place with some islands
+711 - East Antarctica - beside Ronne-Filchner Ice Shelf
+712 - Ronne-Filchner outer shelf
+713 - Filchner shelf region
+714 - Southern Ronne-Filchner Shelf
+715 - Ronne Shelf region\
+716 - Eastern side of West Antarctica Peninsula
+717 - Northern part of Antarctic Pensinsula
+718 - western part of West Antarctic Peninsula
+719 - West Antarctica
+720 - West Antarctica
+Merge 601 --> 659
+Merge 123, 124, 125 --> 126
+Merge 121 --> 120
