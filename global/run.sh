@@ -6,8 +6,8 @@
 # Times to calculate
 ####################################
 
-interval=1000
-max_time=30000
+interval=2500
+max_time=70000
 
 number_times=$( echo "${max_time} / ${interval} + 1" | bc )
 
@@ -31,15 +31,15 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 #region=North_America
 #region=Eurasia
-#region=Antarctica
-region=Patagonia
+region=Antarctica
+#region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="20" 
+run_number="22" 
 your_name="Evan" # no spaces or underscores!
-run_description="First Patagonia run"
+run_description="First run of 70000 year reconstruction at 2500 year intervals, no GIA"
 
 folder_on="false"
 
