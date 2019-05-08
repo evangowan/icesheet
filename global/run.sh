@@ -31,13 +31,13 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 #region=North_America
 #region=Eurasia
-region=Antarctica
-#region=Patagonia
+#region=Antarctica
+region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="28" 
+run_number="29" 
 your_name="Evan" # no spaces or underscores!
 run_description="First run of 70000 year reconstruction at 2500 year intervals, with GIA"
 
