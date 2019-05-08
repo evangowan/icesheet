@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-#region=North_America
+region=North_America
 #region=Eurasia
 #region=Antarctica
-region=Patagonia
+#region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="25" 
+run_number="26" 
 your_name="Evan" # no spaces or underscores!
-run_description="First run of 70000 year reconstruction at 2500 year intervals, no GIA"
+run_description="First run of 70000 year reconstruction at 2500 year intervals, with GIA"
 
 folder_on="false"
 
@@ -50,6 +50,8 @@ folder_on="false"
 selen_North_America_run_number=19
 selen_Eurasia_run_number=15
 selen_Antarctica_run_number=18
+
+# the above isn't currently used since I am now directly creating the Tegmark grid separately
 
 ####################################
 # Earth Model
@@ -62,22 +64,23 @@ selen_Antarctica_run_number=18
 # West Antarctica should have a lower upper mantle value, for instance.
 lithosphere=h
 upper_mantle=g
-lower_mantle=k
+lower_mantle=G
 
 earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=16
-Eurasia_run_number=15
-Antarctica_run_number=18
+North_America_run_number=23
+Eurasia_run_number=24
+Antarctica_run_number=22
+Patagonia_run_number=25
 
 # if instead you want present day topography, set ${earth_model} to null
-earth_model="null" 
+#earth_model="null" 
 
 
 
-gia_deformation=icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}.dat
+gia_deformation=icesheet_${your_name}_${earth_model}_${North_America_run_number}_${Eurasia_run_number}_${Antarctica_run_number}_${Patagonia_run_number}.dat
 
 ####################################
 # Resolution parameters
