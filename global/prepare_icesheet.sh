@@ -103,7 +103,7 @@ else
 
 	echo "using deformed topography: ${gia_deformation}"
 
-	if [ "${region}" = "Antarctica" ] 
+	if [ "${region}" = "Antarctica" ]  || [ "${region}" = "Patagonia" ]
 	then
 		awk -v time=${time} '{if($1*1000 == time && $3 < 0.0) print $2, $3, $4}' ${root_directory}/deform/${gia_deformation} > gia.txt
 	elif [ "${region}" = "North_America" ] || [ "${region}" = "Eurasia" ]
