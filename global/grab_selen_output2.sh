@@ -7,10 +7,10 @@ storage_location="gia/results"
 your_name=Evan
 
 # Ice sheet runs used to calculate GIA
-North_America_run_number=23
-Eurasia_run_number=24
-Antarctica_run_number=22
-Patagonia_run_number=25
+North_America_run_number=26
+Eurasia_run_number=27
+Antarctica_run_number=28
+Patagonia_run_number=29
 
 
 #Earth model used to calculate deformation
