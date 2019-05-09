@@ -31,15 +31,15 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 #region=North_America
 #region=Eurasia
-region=Antarctica
-#region=Patagonia
+#region=Antarctica
+region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="32" 
+run_number="33" 
 your_name="Evan" # no spaces or underscores!
-run_description="I set the shear stress to 10000 for all of the (presently) not glaciated shelf regions. It was 5000 in a lot of places. It should increase the thickness somewhat."
+run_description="Run with second iteration of GIA"
 
 folder_on="false"
 
