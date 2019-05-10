@@ -73,7 +73,7 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 North_America_run_number=30
 Eurasia_run_number=31
 Antarctica_run_number=32
-Patagonia_run_number=32
+Patagonia_run_number=33
 
 # if instead you want present day topography, set ${earth_model} to null
 #earth_model="null" 
