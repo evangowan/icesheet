@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-region=North_America
-#region=Eurasia
+#region=North_America
+region=Eurasia
 #region=Antarctica
 #region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="34" 
+run_number="35" 
 your_name="Evan" # no spaces or underscores!
-run_description="I increased the shear stress in a lot of areas in North America, probably higher than I would like. I want to see if this will fix the missing ice problem, though. Also extended the pre 30000 margins to have the Torngat mountains glaciated."
+run_description="Eurasia without any changes from last run, just with new GIA"
 
 folder_on="false"
 
