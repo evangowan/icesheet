@@ -1,0 +1,31 @@
+--------------------------
+2019/05/13
+--------------------------
+
+I need to improve the precision in some places, so I creating some new domains. The current largest number is 211, so the next domain is 212.
+
+9 (St Laurence valley and Erie/Ontario basins). Split north of Lake Erie.
+212 --> St Laurence Valley
+9 --> Erie and Ontario basins
+
+I kept 212 as the last shear stress value (50000) but lowered 9 to 20000. I set 10 (Michigan/Huron) to be 20000 as well
+
+16 (Grenville) and 17 (Superior Province) are going to need to be split. Here it goes:
+
+southern half of 17 is now a region I call "Clay Belt", which is a relatively flat area with lake sediment fill. Presumably it would have also been like that prior to the LGM. I am initially setting it to be the same shear stress as neighbouring 89 (50000)
+
+17 --> Western Quebec Superior Province
+213 --> Clay Belt
+
+Southern Half of 16 will also be split into a region I am calling "Ottawa River". In general, this area is much lower relief than the Grenville province further north. I will also set this area to have a lower shear stress (50000)
+
+16 --> Grenville Province in Quebec
+214 --> Ottawa River
+
+Splitting off the Strait of Georgia/Juan de Fuca Strait from 24 so that it can be a higher value.
+
+215 --> Strait of Georgia - set to 50000 Pa
+
+Increasing the moutainous areas by 20000 Pa, including 32 and 93
+
+Also reducing Appalation Mountains and Nova Scotia (domains 7 and 5) so that it is easier to have a Laurentide centered ice flow direction

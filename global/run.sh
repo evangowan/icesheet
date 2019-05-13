@@ -37,9 +37,9 @@ region=North_America
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="38" 
+run_number="39" 
 your_name="Evan" # no spaces or underscores!
-run_description="Reverted the shear stress in a lot of areas back down to an earlier run, but still increased in the east. I have also expanded all the pre-30000 year margins to account for the data Michelle Gauthier sent me that indicates higher sea level in northern Manitoba during MIS 3 (if the dates are actually MIS 3)."
+run_description="Did some splitting of the shear stress domains, also lowering the shear stress in some areas, and raising it in others. Hoping for a more balanced model."
 
 folder_on="false"
 
