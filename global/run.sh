@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-#region=North_America
+region=North_America
 #region=Eurasia
 #region=Antarctica
-region=Patagonia
+#region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="37" 
+run_number="38" 
 your_name="Evan" # no spaces or underscores!
-run_description="Patagonia without any changes from last run, just with new GIA"
+run_description="Reverted the shear stress in a lot of areas back down to an earlier run, but still increased in the east. I have also expanded all the pre-30000 year margins to account for the data Michelle Gauthier sent me that indicates higher sea level in northern Manitoba during MIS 3 (if the dates are actually MIS 3)."
 
 folder_on="false"
 
