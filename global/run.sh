@@ -70,10 +70,10 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=30
-Eurasia_run_number=31
-Antarctica_run_number=32
-Patagonia_run_number=33
+North_America_run_number=38
+Eurasia_run_number=35
+Antarctica_run_number=36
+Patagonia_run_number=37
 
 # if instead you want present day topography, set ${earth_model} to null
 #earth_model="null" 

@@ -29,3 +29,5 @@ Splitting off the Strait of Georgia/Juan de Fuca Strait from 24 so that it can b
 Increasing the moutainous areas by 20000 Pa, including 32 and 93
 
 Also reducing Appalation Mountains and Nova Scotia (domains 7 and 5) so that it is easier to have a Laurentide centered ice flow direction
+
+I also think that the values south of Hudson Bay need to be more similar, otherwise it is going to be trying to build a dome there. I put everything to be 30000 Pa.
