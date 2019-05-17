@@ -37,9 +37,9 @@ region=North_America
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="40" 
+run_number="41" 
 your_name="Evan" # no spaces or underscores!
-run_description="Run using updated GIA, no other changes."
+run_description="Restored the shear stress values back to the original values, because it is clear that using higher values than my original estimates are just going to result in sea level that is way too high in Hudson Bay."
 
 folder_on="false"
 
