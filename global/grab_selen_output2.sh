@@ -7,7 +7,7 @@ storage_location="gia/results"
 your_name=Evan
 
 # Ice sheet runs used to calculate GIA
-North_America_run_number=38
+North_America_run_number=39
 Eurasia_run_number=35
 Antarctica_run_number=36
 Patagonia_run_number=37

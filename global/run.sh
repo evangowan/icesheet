@@ -37,9 +37,9 @@ region=North_America
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="39" 
+run_number="40" 
 your_name="Evan" # no spaces or underscores!
-run_description="Did some splitting of the shear stress domains, also lowering the shear stress in some areas, and raising it in others. Hoping for a more balanced model."
+run_description="Run using updated GIA, no other changes."
 
 folder_on="false"
 
@@ -70,7 +70,7 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=38
+North_America_run_number=39
 Eurasia_run_number=35
 Antarctica_run_number=36
 Patagonia_run_number=37
