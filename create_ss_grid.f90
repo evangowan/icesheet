@@ -252,7 +252,9 @@ program create_ss_grid
 		! this will linearly go between those times and adjust the shear stress based on these values, the minimum time should probably represent an ice free time
 		! or zero time
 
-		! if minimum_ss is set to a value less than or equal to zero, a minimal value is used. Use this to flag off times that are ice free if you want.
+		! if minimum_ss is set to zero, the domains_min.txt value is used
+
+		! if minimum_ss is set to a value less than zero, a minimal value is used for the whole time period. Use this to flag off times that are ice free if you want.
 
 		open(unit=adjust_unit, file=domain_adjust_file, access="sequential", form="formatted", status="old")
 
@@ -269,10 +271,14 @@ program create_ss_grid
       		   current_time <= max(time_of_maximum_ss,time_of_minimum_ss)) THEN
 
 
-				if(minimum_ss > 0) THEN
+				if(minimum_ss >= 0) THEN
 					! originally I thought of making the decay a 
 					x1 = dble(time_of_minimum_ss)
-					y1 = dble(minimum_ss)
+					if (minimum_ss == 0) THEN
+						y1 = dble(shear_stress_min(domain_id))
+					else
+						y1 = dble(minimum_ss)
+					endif
 					x2 = dble(time_of_maximum_ss)
 					y2 = dble(shear_stress_value_array(domain_id))
 
