@@ -7,7 +7,7 @@
 ####################################
 
 interval=2500
-max_time=70000
+max_time=80000
 
 number_times=$( echo "${max_time} / ${interval} + 1" | bc )
 
@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-region=North_America
+#region=North_America
 #region=Eurasia
-#region=Antarctica
+region=Antarctica
 #region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="41" 
+run_number="42" 
 your_name="Evan" # no spaces or underscores!
-run_description="Restored the shear stress values back to the original values, because it is clear that using higher values than my original estimates are just going to result in sea level that is way too high in Hudson Bay."
+run_description="First Antarctica run for 80000 years, without GIA, east Antarctica adjusted to have lower profile in the middle, higher on the Prydz Bay area"
 
 folder_on="false"
 
@@ -76,7 +76,7 @@ Antarctica_run_number=36
 Patagonia_run_number=37
 
 # if instead you want present day topography, set ${earth_model} to null
-#earth_model="null" 
+earth_model="null" 
 
 
 
