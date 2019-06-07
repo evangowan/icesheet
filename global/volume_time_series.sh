@@ -13,10 +13,10 @@ resolution=5 # in km
 #region=North_America
 #region=Eurasia
 #region=Antarctica
-region=Patagonia
+#region=Patagonia
 
 your_name="Evan"
-run_number="37" 
+run_number="44" 
 
 folder="../../${region}/plots/${your_name}_${run_number}"
 
@@ -27,6 +27,7 @@ folder="../../${region}/plots/${your_name}_${run_number}"
 modern_ocean_mask=ocean_mask.nc
 
 cp ${folder}/topo/0.nc .
+
 grdmath 0.nc 0 LE = ${modern_ocean_mask}
 
 ocean_ice_equivalent="ocean_ice_thickness.nc"
