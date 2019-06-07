@@ -31,15 +31,15 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 #region=North_America
 #region=Eurasia
-#region=Antarctica
-region=Patagonia
+region=Antarctica
+#region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="45" 
+run_number="46" 
 your_name="Evan" # no spaces or underscores!
-run_description="First Patagonia run for 80000 years, without GIA"
+run_description="Second Antarctica run for 80000 years, without GIA"
 
 folder_on="false"
 
@@ -70,13 +70,13 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=39
-Eurasia_run_number=35
-Antarctica_run_number=36
-Patagonia_run_number=37
+North_America_run_number=44
+Eurasia_run_number=43
+Antarctica_run_number=42
+Patagonia_run_number=45
 
 # if instead you want present day topography, set ${earth_model} to null
-earth_model="null" 
+#earth_model="null" 
 
 
 
