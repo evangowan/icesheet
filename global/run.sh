@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-#region=North_America
+region=North_America
 #region=Eurasia
 #region=Antarctica
-region=Patagonia
+#region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="49" 
+run_number="50" 
 your_name="Evan" # no spaces or underscores!
-run_description="Second Patagonia run for 80000 years, with GIA"
+run_description="Running NA with much stiffer lower mantle, also reduced thinning in the late glacial"
 
 folder_on="false"
 
@@ -64,16 +64,16 @@ selen_Antarctica_run_number=18
 # West Antarctica should have a lower upper mantle value, for instance.
 lithosphere=h
 upper_mantle=g
-lower_mantle=G
+lower_mantle=r
 
 earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=44
-Eurasia_run_number=43
-Antarctica_run_number=42
-Patagonia_run_number=45
+North_America_run_number=47
+Eurasia_run_number=48
+Antarctica_run_number=46
+Patagonia_run_number=49
 
 # if instead you want present day topography, set ${earth_model} to null
 #earth_model="null" 

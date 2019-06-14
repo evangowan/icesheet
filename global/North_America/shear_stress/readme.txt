@@ -31,3 +31,16 @@ Increasing the moutainous areas by 20000 Pa, including 32 and 93
 Also reducing Appalation Mountains and Nova Scotia (domains 7 and 5) so that it is easier to have a Laurentide centered ice flow direction
 
 I also think that the values south of Hudson Bay need to be more similar, otherwise it is going to be trying to build a dome there. I put everything to be 30000 Pa.
+
+
+--------------------------
+2019/06/14
+--------------------------
+
+
+After playing around with the Earth models, I think using a higher lower mantle viscosity is needed in order to achieve proper ice volume values. I'm going to start with ehgr, which is 4x10^22. The first results will allow for much more ice in Hudson Bay by the looks of it, but I need to revert back to having the ice be thicker at later times for realism sake, I think.
+
+78 - this is an ice stream, currently set to a very high 90000 Pa. Lowering this a lot, maybe 50000 to start
+75 - this is a peninsula, it should be higher than 78
+
+Made a lot of adjustments to ensure that the core region stays thicker longer, thus making it so the far field sea level doesn't rise too early
