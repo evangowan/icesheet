@@ -44,3 +44,10 @@ After playing around with the Earth models, I think using a higher lower mantle 
 75 - this is a peninsula, it should be higher than 78
 
 Made a lot of adjustments to ensure that the core region stays thicker longer, thus making it so the far field sea level doesn't rise too early
+
+
+--------------------------
+2019/06/14
+--------------------------
+
+I think the main thing I want to change is that I want the ice stream going west of Baffin to be much lower than it is now. Also want to keep the ice thickness higher in the Hudson Strait region to help fit the sea level curves.

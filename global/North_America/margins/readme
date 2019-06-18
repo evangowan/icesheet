@@ -191,3 +191,37 @@ Prior to 60000, I am shifting the Labrador sector backwards by one time step eac
 Since binge/purge is back, the 60000 centered Heinrich even now simply has retreat in Hudson Strait. Got to keep northern Manitoba glaciated.
 
 I really think that I am going to have to shift the timing of the minimum point backwards, so that the 45000 Heinrich event clears out Hudson Bay. Then the 42500 time slice shows an ice free Hudson Bay, and regrowth happening by 40000. Overall, everything is larger in extent.
+
+-----------------------------
+2019/06/17
+-----------------------------
+
+At this point, it is clear that margins need updating in the east. This is particularly true in the Atlantic side. There is a conceptual model by Shaw et al 2006, which I will use. It shows the maximum extent to be further out than Dyke 2004.
+
+25000 - Shaw doesn't state exactly when the maximum extent happened, but his earliest dated time slice (23.5 cal kyr BP) shows there is already retreat. I am putting the 25000 margin at the shelf edge.
+
+22500 - Shaw showed there was some retreat in ice stream areas by this time. He has margin reconstructions at 23.5 and 21 cal kyr BP, so I set it to be between.
+
+19000 and 21000 - used the margins suggested by Shaw
+
+20000 - intermediate of 19000 and 21000
+
+17000 - based on the 16800 margin by Shaw, slightly expanded
+
+17500 - reading in Shaw's paper, he suggested that ice sheet retreat was very close to the 16800 margin, and it is possible the extent was still quite far out at 17500. I will have this much closer to the 20000 limit to show this.
+
+15000 - this is based on the 14800 margin by Shaw
+
+Occhietti et al (2011) created a revised margin chronology from 15500 to present for the eastern Canadian mainland. Unlike Dyke's reconstruction, they have ice going to the shelf edge in Labrador. This will help the sea level curves a lot, and I will do this for all time steps for the LGM.
+
+15000 - based on Occhietti 2011 15500 margin
+
+12500 - based on Occhietti 2011 12700 margin
+
+10000 - using the 10000 margin from Occhietti 2011
+
+7500 - using the 7500 margin from Occhietti 2011
+
+For LGM, I am going to put the margin at the shelf edge along the Labrador coast. Set maximum at 19000, slightly retreated at 17500. Set to maximum for 20000, 21000, 22500 and 25000
+
+The other intermediate times will need to be edited as well when I need them.

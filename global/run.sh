@@ -37,9 +37,9 @@ region=Patagonia
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="53" 
+run_number="54" 
 your_name="Evan" # no spaces or underscores!
-run_description="Running Patagonia with much stiffer lower mantle"
+run_description="New NA run with adjusted margins on the east coast so they go to the shelf edge, based on Shaw et al 2006 and Occhietti et al 2011. Also increased shear stress in Hudson Strait and reduced it in the Gulf of Boothia"
 
 folder_on="false"
 
@@ -70,10 +70,10 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=47
-Eurasia_run_number=48
-Antarctica_run_number=46
-Patagonia_run_number=49
+North_America_run_number=50
+Eurasia_run_number=51
+Antarctica_run_number=52
+Patagonia_run_number=53
 
 # if instead you want present day topography, set ${earth_model} to null
 #earth_model="null" 
