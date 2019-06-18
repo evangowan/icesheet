@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-region=North_America
-#region=Eurasia
+#region=North_America
+region=Eurasia
 #region=Antarctica
 #region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="54" 
+run_number="55" 
 your_name="Evan" # no spaces or underscores!
-run_description="New NA run with adjusted margins on the east coast so they go to the shelf edge, based on Shaw et al 2006 and Occhietti et al 2011. Also increased shear stress in Hudson Strait and reduced it in the Gulf of Boothia"
+run_description="In this Eurasia run, I reduced the shear stress in Finland, as well as southern Sweden, to try and reduce the sea level there"
 
 folder_on="false"
 
