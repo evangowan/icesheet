@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-#region=North_America
-region=Eurasia
+region=North_America
+#region=Eurasia
 #region=Antarctica
 #region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="57" 
+run_number="58" 
 your_name="Evan" # no spaces or underscores!
-run_description="Adjusted the shear stress downwards in regions where sea level is way too high"
+run_description="Most of the changes here are to start the reduction of shear stress to earlier times"
 
 folder_on="false"
 
@@ -70,8 +70,8 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=54
-Eurasia_run_number=55
+North_America_run_number=56
+Eurasia_run_number=57
 Antarctica_run_number=52
 Patagonia_run_number=53
 
