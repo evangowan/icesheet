@@ -70,8 +70,8 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=56
-Eurasia_run_number=57
+North_America_run_number=58
+Eurasia_run_number=59
 Antarctica_run_number=52
 Patagonia_run_number=53
 
