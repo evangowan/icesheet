@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-region=North_America
-#region=Eurasia
+#region=North_America
+region=Eurasia
 #region=Antarctica
 #region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="62" 
+run_number="63" 
 your_name="Evan" # no spaces or underscores!
-run_description="Made a slight adjustment to the Hudson Bay region pre-LGM."
+run_description="No changes to the shear stress, purely a run with the last deformation for convergence"
 
 folder_on="false"
 
