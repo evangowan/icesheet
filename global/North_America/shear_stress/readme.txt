@@ -51,3 +51,11 @@ Made a lot of adjustments to ensure that the core region stays thicker longer, t
 --------------------------
 
 I think the main thing I want to change is that I want the ice stream going west of Baffin to be much lower than it is now. Also want to keep the ice thickness higher in the Hudson Strait region to help fit the sea level curves. 78 is that ice stream
+
+--------------------------
+2019/08/12
+--------------------------
+
+I think it is prudent to have the ridge in Hudson Bay be on the east side of Hudson Bay during deglaciation. This will require adjustments to the shear stress in domains 24 and 92. I increased 24 and decreased 92. I also reduced 73.
+
+I also think I am reducing the shear stress too early in most places, I am advancing it one time step in all cases. This should make for a more realistic reconstruction.
