@@ -28,17 +28,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-region=North_America
-#region=Eurasia
+#region=North_America
+region=Eurasia
 #region=Antarctica
 #region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="66" 
+run_number="67" 
 your_name="Evan" # no spaces or underscores!
-run_description="Final (hopefully) adjustments to North America for final reconstruction, expanded Keewatin sector as per Paulen et al 2019"
+run_description="Final Eurasia run, with some slight adjustments to the shear stress domains to account for sediment thickness, with fixes to the shapefile."
 
 folder_on="false"
 
@@ -69,7 +69,7 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=62
+North_America_run_number=66
 Eurasia_run_number=63
 Antarctica_run_number=64
 Patagonia_run_number=65
