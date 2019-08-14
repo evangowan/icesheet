@@ -28,17 +28,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-#region=North_America
-region=Eurasia
+region=North_America
+#region=Eurasia
 #region=Antarctica
 #region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="67" 
+run_number="68" 
 your_name="Evan" # no spaces or underscores!
-run_description="Final Eurasia run, with some slight adjustments to the shear stress domains to account for sediment thickness, with fixes to the shapefile."
+run_description="Did some small adjustments to lower the ice volume west and south of Hudson Bay, should help the sea level here and in the far field."
 
 folder_on="false"
 
