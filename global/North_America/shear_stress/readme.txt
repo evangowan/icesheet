@@ -73,3 +73,5 @@ Another thing I am doing is increasing the shear stress in the Hudson Bay area a
 I also delayed the timing of reductions in shear stress in the Eastern parts of the Laurentide from 15000 to 12500, to try and match the global signal at that time.
 
 Another thing I did was fix a problem with domain 23 (Foxe Basin), which was instantly dropping the shear stress to a minimal value at 30000 yr BP. I expect this will increase the volume at this time by quite a bit.
+
+Edited the East Coast shear stress values so that they remain high at 15000
