@@ -75,3 +75,5 @@ I also delayed the timing of reductions in shear stress in the Eastern parts of 
 Another thing I did was fix a problem with domain 23 (Foxe Basin), which was instantly dropping the shear stress to a minimal value at 30000 yr BP. I expect this will increase the volume at this time by quite a bit.
 
 Edited the East Coast shear stress values so that they remain high at 15000
+
+I was not happy with what was going on in domain 90, so I reduced it to be the same as domain 92.
