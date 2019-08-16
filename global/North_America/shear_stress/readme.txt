@@ -59,3 +59,17 @@ I think the main thing I want to change is that I want the ice stream going west
 I think it is prudent to have the ridge in Hudson Bay be on the east side of Hudson Bay during deglaciation. This will require adjustments to the shear stress in domains 24 and 92. I increased 24 and decreased 92. I also reduced 73.
 
 I also think I am reducing the shear stress too early in most places, I am advancing it one time step in all cases. This should make for a more realistic reconstruction.
+
+
+
+--------------------------
+2019/08/16
+--------------------------
+
+After starting to plot up the classic "Eustatic" sites, I think it is safe to reduce the thickness of Hudson Bay more, which I am going to do by reducing the shear stress in Hudson Strait.
+
+Another thing I am doing is increasing the shear stress in the Hudson Bay area at around 30000 yr BP. This will help the fit to global sea level at that time, which it is currently underestimating.
+
+I also delayed the timing of reductions in shear stress in the Eastern parts of the Laurentide from 15000 to 12500, to try and match the global signal at that time.
+
+Another thing I did was fix a problem with domain 23 (Foxe Basin), which was instantly dropping the shear stress to a minimal value at 30000 yr BP. I expect this will increase the volume at this time by quite a bit.

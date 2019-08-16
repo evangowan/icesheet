@@ -36,9 +36,9 @@ region=North_America
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="68" 
+run_number="69" 
 your_name="Evan" # no spaces or underscores!
-run_description="Did some small adjustments to lower the ice volume west and south of Hudson Bay, should help the sea level here and in the far field."
+run_description="Adjustments to take into account global sea level constraints"
 
 folder_on="false"
 
@@ -69,8 +69,8 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=66
-Eurasia_run_number=63
+North_America_run_number=68
+Eurasia_run_number=67
 Antarctica_run_number=64
 Patagonia_run_number=65
 
