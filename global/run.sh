@@ -18,8 +18,7 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 # if instead you just want to calculate specific times, use this instead
 
 #cat << END > times_to_calculate
-#15000
-#17500
+#20000
 #END
 
 
@@ -37,9 +36,9 @@ region=North_America
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="70" 
+run_number="71" 
 your_name="Evan" # no spaces or underscores!
-run_description="Adjustments Hudson Bay and Hudson Strait region, also adjusted margin at Cordillera-Laurentide suture zone at 15000"
+run_description="Adjustments to northern Quebec and Labrador, since reducing the Hudson Strait thickness had a pretty large impact on the postglacial sea level there"
 
 folder_on="false"
 
@@ -70,7 +69,7 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=69
+North_America_run_number=70
 Eurasia_run_number=67
 Antarctica_run_number=64
 Patagonia_run_number=65

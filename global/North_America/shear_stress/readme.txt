@@ -85,3 +85,10 @@ I was not happy with what was going on in domain 90, so I reduced it to be the s
 --------------------------
 
 I think it can be justified to reduce the ice thickness in Hudson Bay further, which I am going to do by reducing Hudson Strait. I will also increase the shear stress in the lead up to the MIS 4 maximum in Hudson Bay. I also increased the Foxe Dome, and made it so that domain 90 was thicker at LGM than the last run
+
+
+--------------------------
+2019/08/20
+--------------------------
+
+The consequence of the last changes were that the sea levels along the Hudson Strait, especially Sugluk, are much lower now. I've increased the shear stress in domain 20 to try and help that situation. I've also done some reductions in the East Coast to try to bring down the sea level there.
