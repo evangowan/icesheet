@@ -77,3 +77,11 @@ Another thing I did was fix a problem with domain 23 (Foxe Basin), which was ins
 Edited the East Coast shear stress values so that they remain high at 15000
 
 I was not happy with what was going on in domain 90, so I reduced it to be the same as domain 92.
+
+
+
+--------------------------
+2019/08/19
+--------------------------
+
+I think it can be justified to reduce the ice thickness in Hudson Bay further, which I am going to do by reducing Hudson Strait. I will also increase the shear stress in the lead up to the MIS 4 maximum in Hudson Bay. I also increased the Foxe Dome, and made it so that domain 90 was thicker at LGM than the last run

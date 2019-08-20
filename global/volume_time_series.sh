@@ -16,7 +16,7 @@ region=North_America
 #region=Patagonia
 
 your_name="Evan"
-run_number="69" 
+run_number="70" 
 
 folder="../../${region}/plots/${your_name}_${run_number}"
 
@@ -27,6 +27,8 @@ folder="../../${region}/plots/${your_name}_${run_number}"
 modern_ocean_mask=ocean_mask.nc
 
 cp ${folder}/topo/0.nc .
+
+cp ${folder}/thickness/0.nc 0_thickness.nc
 
 grdmath 0.nc 0 LE = ${modern_ocean_mask}
 
@@ -48,6 +50,17 @@ do
 
 	cp -f ${folder}/thickness/${ice_file} ice_file.nc
 
+	# The nominal thickness does not take into account ice that is below present day sea level
+
+	grdmath ice_file.nc 0_thickness.nc SUB 1000 DIV = sub_thickness.nc # in km
+
+	grdmath sub_thickness.nc ${resolution} MUL ${resolution} MUL SUM  = nominal_volume_sum.nc
+
+	grdtrack -Gnominal_volume_sum.nc << END  | awk -v time=${time} -v resolution=${resolution} '{print time, $3, $3  / 1e6, $3 * 0.91 / 361 / 1e6 * 1000}' >> nominal_volume.txt
+0 0
+END
+
+	# this removes the ice that is below present day sea level that will not contribute to sea level
 	grdmath ice_file.nc 0 GT ${modern_ocean_mask} MUL = overlap.nc
 
 	grdmath ${ocean_ice_equivalent} overlap.nc MUL = overlap_thickness.nc
@@ -72,6 +85,11 @@ done
 sort -n volume.txt > volume_sorted.txt
 
 mv -f volume_sorted.txt ${folder}/volume_sorted.txt
+
+
+sort -n nominal_volume.txt > nominal_volume_sorted.txt
+
+mv -f nominal_volume_sorted.txt ${folder}/nominal_volume_sorted.txt
 
 
 cd ../..
