@@ -10,13 +10,13 @@ rm *
 
 resolution=5 # in km
 
-region=North_America
+#region=North_America
 #region=Eurasia
 #region=Antarctica
-#region=Patagonia
+region=Patagonia
 
 your_name="Evan"
-run_number="70" 
+run_number="75" 
 
 folder="../../${region}/plots/${your_name}_${run_number}"
 

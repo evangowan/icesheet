@@ -18,7 +18,7 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 # if instead you just want to calculate specific times, use this instead
 
 #cat << END > times_to_calculate
-#20000
+#42500
 #END
 
 
@@ -28,19 +28,23 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-#region=North_America
+region=North_America
 #region=Eurasia
 #region=Antarctica
-region=Patagonia
+#region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="75" 
+run_number="76" 
 your_name="Evan" # no spaces or underscores!
-run_description="Final runs, to stabilize the reconstruction"
+run_description="North America with alternative MIS 3 chronology"
 
-folder_on="false"
+
+# if you want to use an alternative margin chronology, turn this switch on. By default, it searches for a margin in the folder, and if it is not found, it will
+# take the default margins
+folder_on="true"
+folder="a1"
 
 # For the creation of the SELEN input file, indicate the run number of ice sheet that you want to use, since it is currently set up to calculate
 # one ice sheet at a time (e.g. the SELEN file must be created each time you calculate one ice sheet, otherwise the fragment file is not created!)
@@ -69,10 +73,10 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=71
-Eurasia_run_number=67
-Antarctica_run_number=64
-Patagonia_run_number=65
+North_America_run_number=72
+Eurasia_run_number=73
+Antarctica_run_number=74
+Patagonia_run_number=75
 
 # if instead you want present day topography, set ${earth_model} to null
 #earth_model="null" 
@@ -143,6 +147,7 @@ ${folder_on}
 ${selen_North_America_run_number}
 ${selen_Eurasia_run_number}
 ${selen_Antarctica_run_number}
+${folder}
 END_CAT
 
 echo "------------------------------------------------"  >> ${region}/log_file.txt
@@ -183,6 +188,7 @@ ${folder_on}
 ${selen_North_America_run_number}
 ${selen_Eurasia_run_number}
 ${selen_Antarctica_run_number}
+${folder}
 END_CAT
 
 	cp prepare_icesheet.sh run/${time}

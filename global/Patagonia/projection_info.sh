@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# For Lambert azimuthal projection. These parameters cover the entire range of places where North American ice sheets covered, so it shouldn't need to be changed.
+# For Lambert azimuthal projection. These parameters cover the entire range of places where Patagonia ice sheets covered, so it shouldn't need to be changed.
 # If you do change it, you need to re-run the topography map as well!
 
 center_longitude=-73

@@ -55,7 +55,7 @@ Cordilera
 
 
 
-MIS 3 - Ward and Clague 2011 - they have time slices for 35000 and 30000 yr BP, this is what I am using. There was not much ice at 35000.
+MIS 3 - Clague and Ward 2011 - they have time slices for 35000 and 30000 yr BP, this is what I am using. There was not much ice at 35000.
 
 
 The above margins do not include some areas where there is currently ice, I have shifted it to encompass these regions
@@ -66,7 +66,7 @@ MIS 4 - Ward et al 2007 - Northern Cordillera ice sheet was larger in Stage 4 th
 
 MIS 4 - Cosma and Hendy 2008 - increased sediment input prior to 42000 yr BP off the coast of Vancouver Island, probably some expansion during MIS 4
 
-MIS 4 - McDonald et al 2014 - they suggest that there were Missoula floods during MIS 4, indicating the ice sheet was quite extensive within central British Columbia, so that it could advance into Washington
+MIS 4 - McDonald et al 2012 - they suggest that there were Missoula floods during MIS 4, indicating the ice sheet was quite extensive within central British Columbia, so that it could advance into Washington
 
 MIS 4 - Mathewes et al 2015 - penultimate till on eastern Haida Gwaii is likely MIS 4 in age, based on an optical date (~57000 yr BP) in sediments overlying that till
 
@@ -146,7 +146,7 @@ I need to create 2500 year inteval ice margins, which means I have to add a few 
 
 For now, I am using the 30000 extent for Greenland all the way to the LGM
 
-25000 - margin from Ward and Clague (2011). Merged the 30000 margin for greenland with the old 25000 margin, which should give more ice extent
+25000 - margin from Clague and Ward (2011). Merged the 30000 margin for greenland with the old 25000 margin, which should give more ice extent
 
 22500 - should be slightly less than the current 22000 margin
 

@@ -25,6 +25,7 @@ your_name=$(awk '{if (NR == 15) print $0}' run_parameters)
 gia_deformation=$(awk '{if (NR == 16) print $0}' run_parameters)
 adjust_file=$(awk '{if (NR == 17) print $0}' run_parameters)
 folder_on=$(awk '{if (NR == 18) print $0}' run_parameters)
+folder=$(awk '{if (NR == 22) print $0}' run_parameters)
 
 echo ${region}
 echo ${run_number}
@@ -168,9 +169,9 @@ fi
 mkdir margins
 
 
-if [ "${folder_on}" = "true" ]
+if [ "${folder_on}" = "true" ] && [ -f "${root_directory}/${region}/margins/${folder}/${time}.gmt" ]
 then
-   margin_file="${root_directory}/${region}/margins/${your_name}/${time}.gmt"
+   margin_file="${root_directory}/${region}/margins/${folder}/${time}.gmt"
 else
    margin_file="${root_directory}/${region}/margins/${time}.gmt"
 fi
@@ -183,7 +184,8 @@ else
 	echo "terminating...."
 	exit 0
 fi
-
+echo "${margin_file}" 
+exit 0
 # put into projected coordinates
 if [ "${special_projection}" = "y" ]
 then
@@ -334,7 +336,7 @@ grdmath ice_thickness.nc ${region}.nc ADD = ice_topo.nc
 
 grdsample ice_topo.nc -Gice_topo_coarse.nc -I${coarse_spacing}
 
-makecpt -Cjet -T-4000/4000/250  -I  > iceshades.cpt
+makecpt -Cjet -T-4500/4500/250  -I  > iceshades.cpt
 
 
 makecpt -Cglobe -T-10000/10000 > shades.cpt
