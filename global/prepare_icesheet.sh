@@ -185,7 +185,7 @@ else
 	exit 0
 fi
 echo "${margin_file}" 
-exit 0
+
 # put into projected coordinates
 if [ "${special_projection}" = "y" ]
 then
