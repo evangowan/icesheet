@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-region=North_America
-#region=Eurasia
+#region=North_America
+region=Eurasia
 #region=Antarctica
 #region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="78" 
+run_number="79" 
 your_name="Evan" # no spaces or underscores!
-run_description="North America with alternative MIS 3 chronology, slight adjustment to shear stress at 35000"
+run_description="Eurasia run with the larger extent MIS 3 Laurentide signal"
 
 
 # if you want to use an alternative margin chronology, turn this switch on. By default, it searches for a margin in the folder, and if it is not found, it will
@@ -47,9 +47,11 @@ run_description="North America with alternative MIS 3 chronology, slight adjustm
 folder_on="true"
 folder="a1"
 
+folder_on="false"
+
 # shear stress adjustment file
-#shear_adjustment="adjust_0.txt"
-shear_adjustment="adjust_a1.txt"
+shear_adjustment="adjust_0.txt"
+#shear_adjustment="adjust_a1.txt"
 
 # For the creation of the SELEN input file, indicate the run number of ice sheet that you want to use, since it is currently set up to calculate
 # one ice sheet at a time (e.g. the SELEN file must be created each time you calculate one ice sheet, otherwise the fragment file is not created!)
