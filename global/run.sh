@@ -18,7 +18,8 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 # if instead you just want to calculate specific times, use this instead
 
 #cat << END > times_to_calculate
-#42500
+#35000
+#37500
 #END
 
 
@@ -36,9 +37,9 @@ region=North_America
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="77" 
+run_number="78" 
 your_name="Evan" # no spaces or underscores!
-run_description="North America with alternative MIS 3 chronology, now ramping up the shear stress using adjust_a1.txt"
+run_description="North America with alternative MIS 3 chronology, slight adjustment to shear stress at 35000"
 
 
 # if you want to use an alternative margin chronology, turn this switch on. By default, it searches for a margin in the folder, and if it is not found, it will
@@ -77,7 +78,7 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=76
+North_America_run_number=77
 Eurasia_run_number=73
 Antarctica_run_number=74
 Patagonia_run_number=75
