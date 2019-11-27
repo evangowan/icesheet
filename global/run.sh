@@ -31,15 +31,15 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 #region=North_America
 #region=Eurasia
-region=Antarctica
-#region=Patagonia
+#region=Antarctica
+region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="84" 
+run_number="85" 
 your_name="Evan" # no spaces or underscores!
-run_description="Final Antarctic run with a1"
+run_description="Final Patagonia run with a1"
 
 
 # if you want to use an alternative margin chronology, turn this switch on. By default, it searches for a margin in the folder, and if it is not found, it will
