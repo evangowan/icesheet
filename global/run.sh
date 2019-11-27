@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-#region=North_America
+region=North_America
 #region=Eurasia
 #region=Antarctica
-region=Patagonia
+#region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="81" 
+run_number="82" 
 your_name="Evan" # no spaces or underscores!
-run_description="Patagonia run with the larger extent MIS 3 Laurentide signal"
+run_description="Final North America run with a1"
 
 
 # if you want to use an alternative margin chronology, turn this switch on. By default, it searches for a margin in the folder, and if it is not found, it will
@@ -47,7 +47,7 @@ run_description="Patagonia run with the larger extent MIS 3 Laurentide signal"
 folder_on="true"
 folder="a1"
 
-folder_on="false"
+#folder_on="false"
 
 # shear stress adjustment file
 shear_adjustment="adjust_0.txt"
