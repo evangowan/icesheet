@@ -1,5 +1,27 @@
 ICESHEET - a program to create ice sheet reconstructions
 
+Contact: Evan J. Gowan: evangowan@gmail.com
+
+-------------------
+Version 2.0:
+
+This version of the code has minor changes to the core component of the program, mainly through loading up the topography and shear stress grids from memory. This results in a substantial increase in computation speed. The main component is a global setup to calculate ice sheets through time, located in the folder global/. This setup has margin reconstructions at 2500 year time intervals for the past 80000 years, and includes the North American, Eurasian, Patagonian and Antarctic ice sheets. 
+
+In order to generate the reconstructions, you first need to run the script "run.sh", which generates the files needed to run ICESHEET. Within run.sh, you can modify which ice sheet you want to calculate, and which times you want to calculate. You also need to modify the settings for the Earth deformation and sea level change file. After you run "run.sh", the running the scripts "run_parallel.sh" or "run_serial.sh" will calculate the ice sheets. If running in parallel, you can change the number of processors within the script. Note, the parallel script requires you to install GNU Parallel.
+
+In order to run with deformed topography, you need to put the deformation grid into the folder deform/. Instructions on how to format the file are in the readme file in that folder.
+
+Make sure to compile icesheet and create_ss_grid before running the scripts!
+
+The margin files and shear stress domains and values contained in ICESHEET 2.0 were used to create PaleoMIST 1.0. if you download the Earth deformation files from PaleoMIST 1.0 and put them in the deform/ folder, you can recalculate the ice sheet recontructions.
+
+If you use ICESHEET 2.0, please cite the following paper, in addition to the GMD paper:
+
+
+(insert reference when published)
+
+------------------
+Version 1.0:
 
 This is software to create perfectly plastic ice sheets. I used this to create reconstructions of the Laurentide Ice Sheet (see The NAICE model below). There is a paper on this in Geoscience Model Development. I have included a sample problem with the Greenland Ice Sheet with the scripts that should make it pretty easy to run the program. I usually modify these scripts to suit the problem I am working on. They require Generic Mapping Tools and NETCDF Tools. In particular, ICESHEET requires GMT formatted binary files as input for the basal shear stress and basal topography. Note if you downloaded the version of this file from the GMD website, I forgot to include the shapefiles needed to create the shear stress files, so download it again. Instructions to run this can be found on my website (https://raisedbeaches.net/2016/05/22/icesheet-1-0/).
 
@@ -9,7 +31,9 @@ If you are just starting out, go into the "Greenland_final" folder and run "run_
 ICESHEET is written in Fortran. To compile, you will need to have automake and a Fortran compiler installed. By default it assumes you have gfortran, if you are using a different compiler, go into the makefile files and change it. Note that using the Intel Fortran compiler can result in a speed increase on the order of a factor of two for ICESHEET, if you have it, I definitely recommend it over gfortran!
 
 
-If you use this program, please site the following paper:
+-------------------
+
+If you use this program, please cite the following paper:
 
 Gowan, E.J., Tregoning, P., Purcell, A., Lea, J., Fransner, O.J., Noormets, R. and Dowdeswell, J.A., 2016. ICESHEET 1.0: a program to produce paleo-ice sheet reconstructions with minimal assumptions. Geoscientific Model Development, 9(5), pp. 1673-1682, doi:10.5194/gmd-9-1673-2016
 
@@ -20,3 +44,15 @@ Gowan, E.J., Tregoning, P., Purcell, A., Montillet, J.-P., and McClusky, S., 201
 Adjustments to the Innuitian ice sheet were done by Sara Khosravi. Details can be found in her master's thesis. A paper is currently in preparation.
 
 Khosravi, S., 2017. Comparison of the past climate in Northern Canada and Greenland. Master's Thesis, University of Bremen and Alfred Wegener Institute, Helmholtz Center for Polar and Marine Research, 70p.
+
+
+----------------------
+
+
+
+Here is a list of papers that have made use of ICESHEET in some way. Please let me know if you have used this program and I will add it to the list.
+
+
+Gandy, N., Gregoire, L.J., Ely, J.C., Clark, C.D., Hodgson, D.M., Lee, V., Bradwell, T. and Ivanovic, R.F., 2018. Marine ice sheet instability and ice shelf buttressing of the Minch Ice Stream, northwest Scotland. The Cryosphere, 12(11), pp.3635-3651. https://doi.org/10.5194/tc-12-3635-2018
+
+Kirchner, N., van Dongen, E., Gowan, E.J., Pattyn, F., Noormets, R., Jakobsson, M. and Ingólfsson, Ó., 2018. GRANTSISM: An Excel™ ice sheet model for use in introductory Earth science courses. Journal of Geoscience Education, 66(2), pp.109-120. https://doi.org/10.1080/10899995.2018.1412177
