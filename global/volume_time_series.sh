@@ -16,7 +16,7 @@ resolution=5 # in km
 region=Patagonia
 
 your_name="Evan"
-run_number="75" 
+run_number="85" 
 
 folder="../../${region}/plots/${your_name}_${run_number}"
 
