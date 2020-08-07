@@ -29,17 +29,17 @@ seq ${max_time} -${interval} 0 > times_to_calculate
 
 # for sanity sake, I'm setting it up to do one region at a time, and combine them afterwards
 
-#region=North_America
+region=North_America
 #region=Eurasia
 #region=Antarctica
-region=Patagonia
+#region=Patagonia
 
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="85" 
+run_number="86" 
 your_name="Evan" # no spaces or underscores!
-run_description="Final Patagonia run with a1"
+run_description="First run of North America run with a1_high_ss"
 
 
 # if you want to use an alternative margin chronology, turn this switch on. By default, it searches for a margin in the folder, and if it is not found, it will
@@ -47,11 +47,10 @@ run_description="Final Patagonia run with a1"
 folder_on="true"
 folder="a1"
 
-folder_on="false"
-
 # shear stress adjustment file
-shear_adjustment="adjust_0.txt"
+#shear_adjustment="adjust_0.txt"
 #shear_adjustment="adjust_a1.txt"
+shear_adjustment="adjust_a1_high_ss.txt"
 
 # For the creation of the SELEN input file, indicate the run number of ice sheet that you want to use, since it is currently set up to calculate
 # one ice sheet at a time (e.g. the SELEN file must be created each time you calculate one ice sheet, otherwise the fragment file is not created!)
@@ -80,10 +79,10 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=77
-Eurasia_run_number=73
-Antarctica_run_number=74
-Patagonia_run_number=75
+North_America_run_number=78
+Eurasia_run_number=79
+Antarctica_run_number=80
+Patagonia_run_number=81
 
 # if instead you want present day topography, set ${earth_model} to null
 #earth_model="null" 
