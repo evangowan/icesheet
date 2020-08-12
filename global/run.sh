@@ -37,9 +37,9 @@ region=North_America
 # information that will be put into the file ${region}/run_info.txt
 # !!!!!!!! very important !!!!!!!!!, change this number for every run, the run number will be used to identify a GIA deformation run!
 # also include your name, this will make it possible to distinguish run numbers from different authors
-run_number="86" 
+run_number="87" 
 your_name="Evan" # no spaces or underscores!
-run_description="First run of North America run with a1_high_ss"
+run_description="Second run of North America run with a1_high_ss"
 
 
 # if you want to use an alternative margin chronology, turn this switch on. By default, it searches for a margin in the folder, and if it is not found, it will
@@ -79,10 +79,10 @@ earth_model=e${lithosphere}${upper_mantle}${lower_mantle}
 
 # the ice models used for calculating GIA
 # "I" stands for ICE6G
-North_America_run_number=78
-Eurasia_run_number=79
-Antarctica_run_number=80
-Patagonia_run_number=81
+North_America_run_number=86
+Eurasia_run_number=83
+Antarctica_run_number=84
+Patagonia_run_number=85
 
 # if instead you want present day topography, set ${earth_model} to null
 #earth_model="null" 
