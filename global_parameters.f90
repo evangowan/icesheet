@@ -111,19 +111,26 @@ logical function point_in_polygon(x_boundary, y_boundary, x, y, number_points)
 	double precision, intent(in) :: x, y
 	double precision, dimension(number_points), intent(in) :: x_boundary, y_boundary
 
-	integer :: current_point, next_point, last_point, crossover_counter
+	integer :: current_point, next_point, last_point, crossover_counter, number_adjusted_points
 	logical :: found_first, found_last, inside
 
 	found_first = .false.
 	found_last = .false.
 	inside = .false.
 
+
+	if(x_boundary(1) == x_boundary(number_points) .and. y_boundary(1) == y_boundary(number_points)) THEN
+		number_adjusted_points = number_points - 1 ! if the last and first point of the polygon are the same, ignore the last point
+	else
+		number_adjusted_points = number_points
+	end if
+
 	current_point = 1
 	search_boundary: do
 
 		next_point = current_point + 1
 	
-		if (next_point > number_points) THEN
+		if (next_point > number_adjusted_points) THEN
 			next_point = 1
 			found_last = .true.
 		endif

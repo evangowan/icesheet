@@ -28,6 +28,10 @@ find_flowline_fisher_adaptive_4.o: find_flowline_fisher_adaptive_4.f90
 flowline_location.o: flowline_location.f90
 	$(FC) -o flowline_location.o $(FCFLAGS) -c flowline_location.f90
 
+
+
+
+
 #####################
 
 nearest_int: nearest_int.f90 bicubic.o
@@ -46,3 +50,33 @@ read_dem.o: read_dem.f90
 
 reduce_dem: reduce_dem.f90 read_dem.o
 	$(FC) -o reduce_dem  $(FCFLAGS2) reduce_dem.f90 read_dem.o
+
+
+#####################
+
+
+create_ss_grid: create_ss_grid.f90 global_parameters.o
+	$(FC) -o create_ss_grid $(FCFLAGS) create_ss_grid.f90 global_parameters.o
+
+
+####################
+
+no_ice: no_ice.f90 global_parameters.o
+	$(FC) -o no_ice $(FCFLAGS) no_ice.f90 global_parameters.o
+
+
+
+####################
+
+
+read_polygons.o: read_polygons.f90
+	$(FC) -o read_polygons.o $(FCFLAGS) -c read_polygons.f90
+
+diff_map: diff_map.f90 global_parameters.o read_polygons.o
+	$(FC) -o diff_map $(FCFLAGS) diff_map.f90 global_parameters.o read_polygons.o
+
+
+#####################
+
+adjust_ss: adjust_ss.f90
+	$(FC) -o adjust_ss $(FCFLAGS) adjust_ss.f90
