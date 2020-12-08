@@ -14,6 +14,8 @@ In order to run with deformed topography, you need to put the deformation grid i
 
 Make sure to compile icesheet and create_ss_grid before running the scripts!
 
+These scripts make heavy use of Generic Mapping Tools (https://www.generic-mapping-tools.org/), so make sure it is installed before you run the scripts. I have been using GMT 5.4.5, but I assume version 6 will also work (but untested!).
+
 The margin files and shear stress domains and values contained in ICESHEET 2.0 were used to create PaleoMIST 1.0. if you download the Earth deformation files from PaleoMIST 1.0 and put them in the deform/ folder, you can recalculate the ice sheet recontructions. You can download PaleoMIST 1.0 from here: https://doi.pangaea.de/10.1594/PANGAEA.905800
 
 If you use ICESHEET 2.0, please cite the following paper, in addition to the GMD paper:
