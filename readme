@@ -18,9 +18,9 @@ These scripts make heavy use of Generic Mapping Tools (https://www.generic-mappi
 
 The margin files and shear stress domains and values contained in ICESHEET 2.0 were used to create PaleoMIST 1.0. if you download the Earth deformation files from PaleoMIST 1.0 and put them in the deform/ folder, you can recalculate the ice sheet recontructions. You can download PaleoMIST 1.0 from here: https://doi.pangaea.de/10.1594/PANGAEA.905800
 
-If you use ICESHEET 2.0, please cite the following paper, in addition to the GMD paper:
+If you use ICESHEET 2.0, please cite the following papers, in addition to the GMD paper:
 
-Gowan, E.J., Zhang, X., Khosravi, S., Rovere, A., Stocchi, P., Hughes, A.L.C., Gyllencreutz, R., Mangerud, J., Svendsen, J.-I., and Lohmann, G., accepted. A new global ice sheet reconstruction for the past 80000 years. Nature Communications.
+Gowan, E.J., Zhang, X., Khosravi, S., Rovere, A., Stocchi, P., Hughes, A.L.C., Gyllencreutz, R., Mangerud, J., Svendsen, J.-I., and Lohmann, G., 2021. A new global ice sheet reconstruction for the past 80000 years. Nature Communications, 12, 1199. ttps://doi.org/10.1038/s41467-021-21469-w
 
 Gowan, E.J., Tregoning, P., Purcell, A., Lea, J., Fransner, O.J., Noormets, R. and Dowdeswell, J.A., 2016. ICESHEET 1.0: a program to produce paleo-ice sheet reconstructions with minimal assumptions. Geoscientific Model Development, 9(5), pp. 1673-1682, doi:10.5194/gmd-9-1673-2016
 
