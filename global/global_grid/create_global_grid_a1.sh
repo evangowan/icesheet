@@ -78,8 +78,7 @@ do
 
 				if [ "${region}" = "North_America_a1" ]
 				then
-					R_options_temp="-R-135/25/0/90r"
-					grdproject temp/filtered.nc ${R_options_temp} ${J_options} -F -I -D${resolution} -Gtemp/ice_thickness_temp.nc 
+					grdproject temp/filtered.nc -Rg ${J_options} -Fe -I -D${resolution} -C4104009.40854/2625682.63373  -Gtemp/ice_thickness_temp.nc 
 				else
 					grdproject temp/filtered.nc ${R_options} ${J_options} -F -I -D${resolution} -Gtemp/ice_thickness_temp.nc
 
