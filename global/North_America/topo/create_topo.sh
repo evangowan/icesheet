@@ -102,10 +102,10 @@ fi
 gmt grdproject ${area_grid}  ${R_options} ${J_options} -Gnorth_america_topo_geo.nc  -I -Fe  -V  
 
 
-x_min=$(grdinfo -F ${area_grid} | grep x_min  | awk -F':' '{print int($3)}')
-x_max=$(grdinfo -F ${area_grid} | grep x_max  | awk -F':' '{print int($3)}')
-y_min=$(grdinfo -F ${area_grid} | grep y_min  | awk -F':' '{print int($3)}')
-y_max=$(grdinfo -F ${area_grid} | grep y_max  | awk -F':' '{print int($3)}')
+x_min=$(gmt grdinfo -F ${area_grid} | grep x_min  | awk -F':' '{print int($3)}')
+x_max=$(gmt grdinfo -F ${area_grid} | grep x_max  | awk -F':' '{print int($3)}')
+y_min=$(gmt grdinfo -F ${area_grid} | grep y_min  | awk -F':' '{print int($3)}')
+y_max=$(gmt grdinfo -F ${area_grid} | grep y_max  | awk -F':' '{print int($3)}')
 
 gmt grdimage ${area_grid} -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 

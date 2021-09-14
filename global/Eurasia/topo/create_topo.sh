@@ -53,7 +53,7 @@ source ../projection_info.sh
 
 
 
-makecpt -Cglobe -T-10000/10000 > shades.cpt
+gmt makecpt -Cglobe -T-10000/10000 > shades.cpt
 
 plot=topo_plot.ps
 
@@ -64,40 +64,40 @@ area_grid=${region}.nc
 # uncomment first time you run, but run only once because it takes a couple of hours!
 if [ "${first_run}" == "y" ]
 then
-grdfilter ${topo} -G${filtered_topo} -Fm${resolution} -D4  -V
+gmt grdfilter ${topo} -G${filtered_topo} -Fm${resolution} -D4  -V
 fi
 
 # takes a lot less time
-grdproject ${filtered_topo}  ${R_options} ${J_options} -G${area_grid} -D${resolution}000= -Fe  -V  -C
+gmt grdproject ${filtered_topo}  ${R_options} ${J_options} -G${area_grid} -D${resolution}000= -Fe  -V  -C
 
 
 
 
-grdproject ${area_grid}  ${R_options} ${J_options} -G${region}_topo_geo.nc  -I -Fe  -V  -C
+gmt grdproject ${area_grid}  ${R_options} ${J_options} -G${region}_topo_geo.nc  -I -Fe  -V  -C
 
 
-x_min=$(grdinfo -F ${area_grid} | grep x_min  | awk -F':' '{print int($3)}')
-x_max=$(grdinfo -F ${area_grid} | grep x_max  | awk -F':' '{print int($3)}')
-y_min=$(grdinfo -F ${area_grid} | grep y_min  | awk -F':' '{print int($3)}')
-y_max=$(grdinfo -F ${area_grid} | grep y_max  | awk -F':' '{print int($3)}')
+x_min=$(gmt grdinfo -F ${area_grid} | grep x_min  | awk -F':' '{print int($3)}')
+x_max=$(gmt grdinfo -F ${area_grid} | grep x_max  | awk -F':' '{print int($3)}')
+y_min=$(gmt grdinfo -F ${area_grid} | grep y_min  | awk -F':' '{print int($3)}')
+y_max=$(gmt grdinfo -F ${area_grid} | grep y_max  | awk -F':' '{print int($3)}')
 
-grdimage ${area_grid} -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
-
-
+gmt grdimage ${area_grid} -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
 
-psxy ${margin_file}  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
-psxy ${margin_file}  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
 
-pscoast -Bafg -O -K -J -R -P -Wthin -Di -A5000 >> ${plot}
 
-psscale -X-2 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx4000f1000+l"Elevation (m)" --FONT_LABEL=14p -Cshades.cpt -V  >> $plot
+gmt psxy ${margin_file}  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+gmt psxy ${margin_file}  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
+
+gmt pscoast -Bafg -O -K -J -R -P -Wthin -Di -A5000 >> ${plot}
+
+gmt psscale -X-2 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx4000f1000+l"Elevation (m)" --FONT_LABEL=14p -Cshades.cpt -V  >> $plot
 
 # convert to gmt formatted binary file for use in ICESHEET
 
 bin_file="${region}.bin"
 
-grdconvert ${area_grid} ${bin_file}=bf 
+gmt grdconvert ${area_grid} ${bin_file}=bf 
 
 echo ${bin_file} > elev_parameters.txt
 echo ${x_min} >> elev_parameters.txt
@@ -108,19 +108,19 @@ echo ${resolution}000 >> elev_parameters.txt
 
 # create NetCDF file with equivalent water load
 
-makecpt -Crainbow -T0/4000 -I > shades.cpt
+gmt makecpt -Crainbow -T0/4000 -I > shades.cpt
 
-grdmath ${area_grid} 0 LT = ocean_mask.nc
+gmt grdmath ${area_grid} 0 LT = ocean_mask.nc
 
 # 1025 / 917 = 1.118 (ratio of density of water to density of ice, used in ICESHEET)
-grdmath ${area_grid}  ocean_mask.nc MUL -1.118 MUL = ocean_equivalent_ice.nc
+gmt grdmath ${area_grid}  ocean_mask.nc MUL -1.118 MUL = ocean_equivalent_ice.nc
 
 plot=ocean_equivalent.ps
 
-grdimage ocean_equivalent_ice.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
+gmt grdimage ocean_equivalent_ice.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
 #psxy ${margin_file}  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
 
-pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 >> ${plot}
+gmt pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 >> ${plot}
 
-psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"equivalent ice thickness (m)" -G0/4000 -Cshades.cpt --FONT_LABEL=14p -V  >> $plot
+gmt psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"equivalent ice thickness (m)" -G0/4000 -Cshades.cpt --FONT_LABEL=14p -V  >> $plot
