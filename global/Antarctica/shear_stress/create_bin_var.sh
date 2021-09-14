@@ -30,7 +30,7 @@ source ../projection_info.sh
 
 
 
-mapproject << END    ${R_options} ${J_options_project} -F -C  > corners.txt
+gmt mapproject << END    ${R_options} ${J_options_project} -F -C  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
@@ -57,7 +57,7 @@ y_max=$(echo "${y_max_temp} * ${spacing}" | bc)
 
 bin_file="shear_stress.bin"
 
-makecpt -Cwysiwyg -T0/200000/10000 -I > shades_shearstress.cpt
+gmt makecpt -Cwysiwyg -T0/200000/10000 -I > shades_shearstress.cpt
 
 cat << END_CAT > ss_parameters.txt
 shear_stress.bin
@@ -68,7 +68,7 @@ ${y_max}
 ${spacing}
 END_CAT
 
-mapproject << END    ${R_options} ${J_options_project} -F -C >> ss_parameters.txt
+gmt mapproject << END    ${R_options} ${J_options_project} -F -C >> ss_parameters.txt
 ${center_longitude} ${center_latitude}
 END
 
@@ -93,16 +93,16 @@ fi
 
 nc_file=shear_stress.nc
 
-xyz2grd shear_stress_grid.txt -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -G${nc_file}
+gmt xyz2grd shear_stress_grid.txt -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -G${nc_file}
 
 # plot the file
 
 plot="shear_stress.ps"
 
-grdimage ${nc_file} ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades_shearstress.cpt -V -nb > ${plot}
+gmt grdimage ${nc_file} ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades_shearstress.cpt -V -nb > ${plot}
 
 
-mapproject << END    ${R_options} ${J_options_project} -F -C > corners.txt
+gmt mapproject << END    ${R_options} ${J_options_project} -F -C > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
@@ -112,17 +112,17 @@ r2=$(awk '{if (NR==2) print $1}' corners.txt)
 r3=$(awk '{if (NR==1) print $2}' corners.txt)
 r4=$(awk '{if (NR==2) print $2}' corners.txt)
 
-psxy ${domain_gmt_file}  -R${r1}/${r2}/${r3}/${r4} -JX -K -O -P -V -Wthin >> ${plot}
+gmt psxy ${domain_gmt_file}  -R${r1}/${r2}/${r3}/${r4} -JX -K -O -P -V -Wthin >> ${plot}
 
-pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthinnest,grey >> ${plot}
+gmt pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthinnest,grey >> ${plot}
 
-psxy ${margin_file}  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
-psxy ${margin_file}  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
+gmt psxy ${margin_file}  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+gmt psxy ${margin_file}  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
 
-psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx100000f20000+l"Shear Stress (Pa)" --FONT_LABEL=14p -Cshades_shearstress.cpt -V  >> $plot
+gmt psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx100000f20000+l"Shear Stress (Pa)" --FONT_LABEL=14p -Cshades_shearstress.cpt -V  >> $plot
 
 
 
 # convert the grid to a format used by ICESHEET (GMT binary)
 
-grdconvert ${nc_file} ${bin_file}=bf 
+gmt grdconvert ${nc_file} ${bin_file}=bf 

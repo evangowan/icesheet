@@ -83,21 +83,21 @@ source ${region}/projection_info.sh
 if [ "${special_projection}" = "y" ]
 then
 
-mapproject << END    ${R_options} ${J_options_project} -C -F  > corners.txt
+gmt mapproject << END    ${R_options} ${J_options_project} -C -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
 
 else
 
-mapproject << END    ${R_options} ${J_options} -F  > corners.txt
+gmt mapproject << END    ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
 
 fi
 
-mapproject corners.txt    ${R_options} ${J_options} -F -I
+gmt mapproject corners.txt    ${R_options} ${J_options} -F -I
 
 
 spacing=${icesheet_spacing}000
@@ -121,9 +121,9 @@ mkdir temp
 
 ocean_equivalent=${region}/topo/ocean_equivalent_ice.nc
 
-grdmath ${ocean_equivalent} 0 GT = ocean_mask.nc
+gmt grdmath ${ocean_equivalent} 0 GT = ocean_mask.nc
 
-makecpt -Crainbow -T0/5000  > shades_ice.cpt
+gmt makecpt -Crainbow -T0/5000  > shades_ice.cpt
 
 column=2
 
@@ -135,20 +135,20 @@ do
 	# as of SELEN 2.8, there is no accounting for grounded ice, so you have to subtract that part of the load off
 	# According to G. Spada, SELEN 4.0 will be able to take this into account
 
-	grdmath run/${times}/ice_thickness.nc 0 GT = ice_mask.nc
-	grdmath ice_mask.nc ocean_mask.nc MUL = ocean_ice_mask.nc
+	gmt grdmath run/${times}/ice_thickness.nc 0 GT = ice_mask.nc
+	gmt grdmath ice_mask.nc ocean_mask.nc MUL = ocean_ice_mask.nc
 
-	grdmath run/${times}/ice_thickness.nc ${ocean_equivalent} SUB ocean_ice_mask.nc MUL = ice_ocean_region.nc
+	gmt grdmath run/${times}/ice_thickness.nc ${ocean_equivalent} SUB ocean_ice_mask.nc MUL = ice_ocean_region.nc
 
-	grdmath ocean_ice_mask.nc 0 EQ run/${times}/ice_thickness.nc MUL ice_ocean_region.nc ADD = adjusted_ice_thickness.nc
+	gmt grdmath ocean_ice_mask.nc 0 EQ run/${times}/ice_thickness.nc MUL ice_ocean_region.nc ADD = adjusted_ice_thickness.nc
 
 	# account for Great Lakes if you are creating a North America grid. Will need to be added regardless of SELEN verison
 
 	if [ "${region}" = "North_America" ]
 	then
-		grdmath North_America/topo/great_lakes_equivalent_ice_thickness.nc 0 GT = lake_mask.nc
-		grdmath adjusted_ice_thickness.nc North_America/topo/great_lakes_equivalent_ice_thickness.nc LT lake_mask.nc MUL = add_lake_mask.nc
-		grdmath add_lake_mask.nc North_America/topo/great_lakes_equivalent_ice_thickness.nc adjusted_ice_thickness.nc IFELSE = adjusted_ice_thickness_lakes.nc
+		gmt grdmath North_America/topo/great_lakes_equivalent_ice_thickness.nc 0 GT = lake_mask.nc
+		gmt grdmath adjusted_ice_thickness.nc North_America/topo/great_lakes_equivalent_ice_thickness.nc LT lake_mask.nc MUL = add_lake_mask.nc
+		gmt grdmath add_lake_mask.nc North_America/topo/great_lakes_equivalent_ice_thickness.nc adjusted_ice_thickness.nc IFELSE = adjusted_ice_thickness_lakes.nc
 		mv -f  adjusted_ice_thickness_lakes.nc adjusted_ice_thickness.nc
 	fi
 
@@ -170,49 +170,49 @@ do
 #latmin=30
 #latmax=85
 
-	grd2xyz adjusted_ice_thickness.nc > temp.xyz
+	gmt grd2xyz adjusted_ice_thickness.nc > temp.xyz
 
 
 
 	if [ "${special_projection}" = "y" ]
 	then
 
-		mapproject temp.xyz ${R_options} ${J_options_project} -I -F -C > temp_geo.xyz
+		gmt mapproject temp.xyz ${R_options} ${J_options_project} -I -F -C > temp_geo.xyz
 
 	else
 
-		mapproject temp.xyz ${R_options} ${J_options} -I -F  > temp_geo.xyz
+		gmt mapproject temp.xyz ${R_options} ${J_options} -I -F  > temp_geo.xyz
 
 	fi
 
 
-	blockmean -Rg -I${latitude_spacing} temp_geo.xyz  > bm.out
+	gmt blockmean -Rg -I${latitude_spacing} temp_geo.xyz  > bm.out
 
-	surface bm.out -Gglobal.nc  -I${latitude_spacing} -Rg -T0.75  
+	gmt surface bm.out -Gglobal.nc  -I${latitude_spacing} -Rg -T0.75  
 
-	grdmask ${region}/margins/${times}.gmt -Gglobal_mask.nc -I${latitude_spacing} -Rg
-
-
+	gmt grdmask ${region}/margins/${times}.gmt -Gglobal_mask.nc -I${latitude_spacing} -Rg
 
 
-	grdmath global.nc global_mask.nc MUL = ice_thickness_geo_regular.nc
+
+
+	gmt grdmath global.nc global_mask.nc MUL = ice_thickness_geo_regular.nc
 
 
 	# for now, the rest of the world uses ICE66. For these purposes, "I" is used as the run number
 
 	# get ICE6G for the rest of the world
 # ICE-6G no longer necessary
-#	triangulate ICE6G/${times}.xyz -bo -I${latitude_spacing} -Rglobal.nc -Gice6g_slice.nc
+#	gmt triangulate ICE6G/${times}.xyz -bo -I${latitude_spacing} -Rglobal.nc -Gice6g_slice.nc
 
 
 
-#	grdproject adjusted_ice_thickness.nc   ${J_options} -I -Gice_thickness_geo.nc    -Fe  -V  
+#	gmt grdproject adjusted_ice_thickness.nc   ${J_options} -I -Gice_thickness_geo.nc    -Fe  -V  
 #
-#	grdsample ice_thickness_geo.nc -Gice_thickness_geo_regular.nc -I${latitude_spacing}
+#	gmt grdsample ice_thickness_geo.nc -Gice_thickness_geo_regular.nc -I${latitude_spacing}
 #
-#	grdmath ice_thickness_geo_regular.nc 0 DENAN = ice_thickness_geo_regular.nc
+#	gmt grdmath ice_thickness_geo_regular.nc 0 DENAN = ice_thickness_geo_regular.nc
 
-	grd2xyz ice_thickness_geo_regular.nc | awk '{if ($1!=360) print $1, $2, $3}' > temp/${times}.xyz
+	gmt grd2xyz ice_thickness_geo_regular.nc | awk '{if ($1!=360) print $1, $2, $3}' > temp/${times}.xyz
 
 # add other times
 

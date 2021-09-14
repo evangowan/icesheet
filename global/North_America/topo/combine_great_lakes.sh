@@ -21,16 +21,16 @@ x_max=-76.05
 y_min=41
 y_max=49.5
 
-grdblend Lake_Erie/equivalent_water.nc Lake_Huron/equivalent_water.nc Lake_Michigan/equivalent_water.nc Lake_Ontario/equivalent_water.nc Lake_Superior/equivalent_water.nc -Ggreat_lakes_water_thickness.nc  -R${x_min}/${x_max}/${y_min}/${y_max} -I0.002 -N0
+gmt grdblend Lake_Erie/equivalent_water.nc Lake_Huron/equivalent_water.nc Lake_Michigan/equivalent_water.nc Lake_Ontario/equivalent_water.nc Lake_Superior/equivalent_water.nc -Ggreat_lakes_water_thickness.nc  -R${x_min}/${x_max}/${y_min}/${y_max} -I0.002 -N0
 
 
-makecpt -Crainbow -T-200/200  -I  > iceshades.cpt
+gmt makecpt -Crainbow -T-200/200  -I  > iceshades.cpt
 plot=water_thickness.ps
-grdimage great_lakes_water_thickness.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}d/0d -K -P -Ciceshades.cpt -V -nb > ${plot}
-#grdimage equivalent_water.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}d/0d -K -P -Cshades.cpt -V -nb > ${plot}
-pscoast -Bafg -O -K -R -J -P -Wthin -Dh -A500 -Wthin,black >> ${plot}
+gmt grdimage great_lakes_water_thickness.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}d/0d -K -P -Ciceshades.cpt -V -nb > ${plot}
+#gmt grdimage equivalent_water.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}d/0d -K -P -Cshades.cpt -V -nb > ${plot}
+gmt pscoast -Bafg -O -K -R -J -P -Wthin -Dh -A500 -Wthin,black >> ${plot}
 
-psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx100f50+l"water thickness (m)" -G0/200 -Ciceshades.cpt --FONT_LABEL=14p -V  >> $plot
+gmt psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx100f50+l"water thickness (m)" -G0/200 -Ciceshades.cpt --FONT_LABEL=14p -V  >> $plot
 
 
 # convert to North America 5 km grid used in ICESHEET
@@ -41,7 +41,7 @@ source projection_info.sh
 
 
 
-mapproject << END    ${R_options} ${J_options} -F  > corners.txt
+gmt mapproject << END    ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
@@ -67,20 +67,20 @@ y_max=$(echo "${y_max_temp} * ${spacing}" | bc)
 
 echo ${R_options} ${J_options}
 
-grdproject great_lakes_water_thickness.nc  ${R_options} ${J_options} -Gwater_thickness_raw.nc -D${spacing}=   -Fe  -V  
+gmt grdproject great_lakes_water_thickness.nc  ${R_options} ${J_options} -Gwater_thickness_raw.nc -D${spacing}=   -Fe  -V  
 
-grdmath water_thickness_raw.nc 0 DENAN = water_thickness_raw2.nc
-grdmath water_thickness_raw2.nc 0 GT = water_thickness_mask.nc
-grdmath water_thickness_raw2.nc ${density_contrast} MUL water_thickness_mask.nc MUL = great_lakes_equivalent_ice_thickness.nc
+gmt grdmath water_thickness_raw.nc 0 DENAN = water_thickness_raw2.nc
+gmt grdmath water_thickness_raw2.nc 0 GT = water_thickness_mask.nc
+gmt grdmath water_thickness_raw2.nc ${density_contrast} MUL water_thickness_mask.nc MUL = great_lakes_equivalent_ice_thickness.nc
 
 
 plot=projected_plot.ps
 
-grdimage equivalent_ice_thickness.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Ciceshades.cpt -V -nb > ${plot}
+gmt grdimage equivalent_ice_thickness.nc -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Ciceshades.cpt -V -nb > ${plot}
 
-pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+gmt pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
 
 
 
-psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx100f50+l"equ. ice thickness (m)" -G0/200 -Ciceshades.cpt --FONT_LABEL=14p -V  >> $plot
+gmt psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx100f50+l"equ. ice thickness (m)" -G0/200 -Ciceshades.cpt --FONT_LABEL=14p -V  >> $plot
 

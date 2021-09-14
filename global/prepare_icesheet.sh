@@ -56,14 +56,14 @@ source projection_info.sh
 if [ "${special_projection}" = "y" ]
 then
 
-mapproject << END    ${R_options} ${J_options_project} -C -F  > corners.txt
+gmt mapproject << END    ${R_options} ${J_options_project} -C -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
 
 else
 
-mapproject << END    ${R_options} ${J_options} -F  > corners.txt
+gmt mapproject << END    ${R_options} ${J_options} -F  > corners.txt
 ${west_longitude} ${west_latitude}
 ${east_longitude} ${east_latitude}
 END
@@ -117,18 +117,18 @@ else
 
 	if [ "${special_projection}" = "y" ]
 	then
-		mapproject gia.txt  ${R_options} ${J_options_project} -F -C > gia_proj.xyz
+		gmt mapproject gia.txt  ${R_options} ${J_options_project} -F -C > gia_proj.xyz
 	else
-		mapproject gia.txt  ${R_options} ${J_options} -F  > gia_proj.xyz
+		gmt mapproject gia.txt  ${R_options} ${J_options} -F  > gia_proj.xyz
 	fi
 
-#	blockmedian gia_proj.xyz -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}=   -C  > gia_median.xyz
+#	gmt blockmedian gia_proj.xyz -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}=   -C  > gia_median.xyz
 
-#	surface gia_median.xyz -Gdeform.nc -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.75 -V 
+#	gmt surface gia_median.xyz -Gdeform.nc -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.75 -V 
 
-	triangulate gia_proj.xyz -bo -I5000 -R${x_min}/${x_max}/${y_min}/${y_max} -Gdeform.nc
+	gmt triangulate gia_proj.xyz -bo -I5000 -R${x_min}/${x_max}/${y_min}/${y_max} -Gdeform.nc
 
-	grdmath ${nc_grid} deform.nc SUB = ${region}.nc
+	gmt grdmath ${nc_grid} deform.nc SUB = ${region}.nc
 
 
 
@@ -137,17 +137,17 @@ else
 
 
 
-	makecpt -Cglobe  > shades.cpt
-	grdimage ${region}.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
+	gmt makecpt -Cglobe  > shades.cpt
+	gmt grdimage ${region}.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
-	pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
+	gmt pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
 
-	makecpt -Cgray -T-500/1500/100    > deform.cpt
-	grdcontour deform.nc -Cdeform.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0  -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
+	gmt makecpt -Cgray -T-500/1500/100    > deform.cpt
+	gmt grdcontour deform.nc -Cdeform.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0  -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
 
 	mv ${plot} plots/
 
-	grdconvert ${region}.nc ${region}.bin=bf 
+	gmt grdconvert ${region}.nc ${region}.bin=bf 
 
 	echo ${region}.bin > elev_parameters.txt
 	echo ${x_min} >> elev_parameters.txt
@@ -190,11 +190,11 @@ echo "${margin_file}"
 if [ "${special_projection}" = "y" ]
 then
 echo "should be using new projected info"
-mapproject margins/${time}.gmt  ${R_options} ${J_options_project} -F -C > margins/${time}_proj.gmt
+gmt mapproject margins/${time}.gmt  ${R_options} ${J_options_project} -F -C > margins/${time}_proj.gmt
 else
 echo "should not be using new projected info"
 
-mapproject margins/${time}.gmt  ${R_options} ${J_options} -F  > margins/${time}_proj.gmt
+gmt mapproject margins/${time}.gmt  ${R_options} ${J_options} -F  > margins/${time}_proj.gmt
 fi
 
 # split into multiple files
@@ -291,40 +291,40 @@ coarse_spacing=40000 # just for plotting
 
 
 
-grdmask margins/${time}_proj.gmt -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -Gmask.nc
-grdmask margins/${time}_proj.gmt -I${coarse_spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -Gmask_coarse.nc
+gmt grdmask margins/${time}_proj.gmt -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -Gmask.nc
+gmt grdmask margins/${time}_proj.gmt -I${coarse_spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -Gmask_coarse.nc
 
-blockmedian ${thickness_dump_file} -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}=   -C  > reconstruction_thickness.txt
+gmt blockmedian ${thickness_dump_file} -R${x_min}/${x_max}/${y_min}/${y_max} -I${spacing}=   -C  > reconstruction_thickness.txt
 
-surface reconstruction_thickness.txt -Gice_thickness_raw.nc -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.25 -V 
+gmt surface reconstruction_thickness.txt -Gice_thickness_raw.nc -I${spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.25 -V 
 
-grdmath ice_thickness_raw.nc mask.nc MUL = ice_thickness.nc
+gmt grdmath ice_thickness_raw.nc mask.nc MUL = ice_thickness.nc
 
 
 # make smoother contours
-blockmedian ${thickness_dump_file} -R${x_min}/${x_max}/${y_min}/${y_max} -I${coarse_spacing}   -C  > reconstruction_thickness_coarse.txt
+gmt blockmedian ${thickness_dump_file} -R${x_min}/${x_max}/${y_min}/${y_max} -I${coarse_spacing}   -C  > reconstruction_thickness_coarse.txt
 
-surface reconstruction_thickness_coarse.txt -Gice_thickness_raw_coarse.nc -I${coarse_spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.25 -V 
+gmt surface reconstruction_thickness_coarse.txt -Gice_thickness_raw_coarse.nc -I${coarse_spacing} -R${x_min}/${x_max}/${y_min}/${y_max} -T0.25 -V 
 
-grdmath ice_thickness_raw_coarse.nc mask_coarse.nc MUL = ice_thickness_coarse.nc
+gmt grdmath ice_thickness_raw_coarse.nc mask_coarse.nc MUL = ice_thickness_coarse.nc
 
 # ice thickness plot
 
 plot=ice_thickness.ps
-makecpt -Cwysiwyg -T0/5000/250 > shades_ice.cpt
+gmt makecpt -Cwysiwyg -T0/5000/250 > shades_ice.cpt
 
-makecpt -Cgray -T0/4000/1000    > iceshades_coarse.cpt
+gmt makecpt -Cgray -T0/4000/1000    > iceshades_coarse.cpt
 
-grdimage ice_thickness.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades_ice.cpt -V -nb > ${plot}
+gmt grdimage ice_thickness.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades_ice.cpt -V -nb > ${plot}
 
-pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
+gmt pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Dl -A5000 -Wthin,grey >> ${plot}
 
-grdcontour ice_thickness_coarse.nc -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
+gmt grdcontour ice_thickness_coarse.nc -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
 
-psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
-psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
+gmt psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+gmt psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
 
-psscale ${scale_x_shift} -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"Ice Thickness (m)" --FONT_LABEL=14p -Cshades_ice.cpt -V  >> $plot
+gmt psscale ${scale_x_shift} -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"Ice Thickness (m)" --FONT_LABEL=14p -Cshades_ice.cpt -V  >> $plot
 
 mv ${plot} plots/
 
@@ -332,32 +332,32 @@ mv ${plot} plots/
 
 plot=ice_elevation.ps
 
-grdmath ice_thickness.nc ${region}.nc ADD = ice_topo.nc
+gmt grdmath ice_thickness.nc ${region}.nc ADD = ice_topo.nc
 
-grdsample ice_topo.nc -Gice_topo_coarse.nc -I${coarse_spacing}
+gmt grdsample ice_topo.nc -Gice_topo_coarse.nc -I${coarse_spacing}
 
-makecpt -Cjet -T-4500/4500/250  -I  > iceshades.cpt
-
-
-makecpt -Cglobe -T-10000/10000 > shades.cpt
-grdimage ${region}.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
-
-pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
-
-psclip margins/${time}_proj.gmt -K -O -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 >> $plot
-
-grdimage ice_topo.nc -Ciceshades.cpt -J -R -V -P -nb+a+bg+t0.1 -K  -O >> ${plot}
-
-grdcontour ice_topo_coarse.nc -Ciceshades_coarse.cpt -R -J -K -O -W+0.75p -A+f8p,black+gwhite >> ${plot}
-
-psclip -K -O -C  >> $plot
+gmt makecpt -Cjet -T-4500/4500/250  -I  > iceshades.cpt
 
 
+gmt makecpt -Cglobe -T-10000/10000 > shades.cpt
+gmt grdimage ${region}.nc ${shift_up}  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades.cpt -V -nb > ${plot}
 
-psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
-psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
+gmt pscoast -Bafg -O -K ${R_options} ${J_options} -P -Wthin -Di -A5000 -Wthin,black >> ${plot}
 
-psscale ${scale_x_shift} -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"Ice elevation (m)" -G0/4000 -Ciceshades.cpt --FONT_LABEL=14p -V  >> $plot
+gmt psclip margins/${time}_proj.gmt -K -O -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 >> $plot
+
+gmt grdimage ice_topo.nc -Ciceshades.cpt -J -R -V -P -nb+a+bg+t0.1 -K  -O >> ${plot}
+
+gmt grdcontour ice_topo_coarse.nc -Ciceshades_coarse.cpt -R -J -K -O -W+0.75p -A+f8p,black+gwhite >> ${plot}
+
+gmt psclip -K -O -C  >> $plot
+
+
+
+gmt psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthickest,white >> ${plot}
+gmt psxy margins/${time}.gmt  ${R_options} ${J_options} -K -O -P -V -Wthin,blue >> ${plot}
+
+gmt psscale ${scale_x_shift} -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"Ice elevation (m)" -G0/4000 -Ciceshades.cpt --FONT_LABEL=14p -V  >> $plot
 
 
 mv ${plot} plots/

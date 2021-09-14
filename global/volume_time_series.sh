@@ -30,11 +30,11 @@ cp ${folder}/topo/0.nc .
 
 cp ${folder}/thickness/0.nc 0_thickness.nc
 
-grdmath 0.nc 0 LE = ${modern_ocean_mask}
+gmt grdmath 0.nc 0 LE = ${modern_ocean_mask}
 
 ocean_ice_equivalent="ocean_ice_thickness.nc"
 
-grdmath 0.nc NEG 1027 MUL 910 DIV ${modern_ocean_mask} MUL = ${ocean_ice_equivalent}
+gmt grdmath 0.nc NEG 1027 MUL 910 DIV ${modern_ocean_mask} MUL = ${ocean_ice_equivalent}
 
 zero_thickness=zero.nc
 
@@ -52,28 +52,28 @@ do
 
 	# The nominal thickness does not take into account ice that is below present day sea level
 
-	grdmath ice_file.nc 0_thickness.nc SUB 1000 DIV = sub_thickness.nc # in km
+	gmt grdmath ice_file.nc 0_thickness.nc SUB 1000 DIV = sub_thickness.nc # in km
 
-	grdmath sub_thickness.nc ${resolution} MUL ${resolution} MUL SUM  = nominal_volume_sum.nc
+	gmt grdmath sub_thickness.nc ${resolution} MUL ${resolution} MUL SUM  = nominal_volume_sum.nc
 
-	grdtrack -Gnominal_volume_sum.nc << END  | awk -v time=${time} -v resolution=${resolution} '{print time, $3, $3  / 1e6, $3 * 0.91 / 361 / 1e6 * 1000}' >> nominal_volume.txt
+	gmt grdtrack -Gnominal_volume_sum.nc << END  | awk -v time=${time} -v resolution=${resolution} '{print time, $3, $3  / 1e6, $3 * 0.91 / 361 / 1e6 * 1000}' >> nominal_volume.txt
 0 0
 END
 
 	# this removes the ice that is below present day sea level that will not contribute to sea level
-	grdmath ice_file.nc 0 GT ${modern_ocean_mask} MUL = overlap.nc
+	gmt grdmath ice_file.nc 0 GT ${modern_ocean_mask} MUL = overlap.nc
 
-	grdmath ${ocean_ice_equivalent} overlap.nc MUL = overlap_thickness.nc
+	gmt grdmath ${ocean_ice_equivalent} overlap.nc MUL = overlap_thickness.nc
 
-	grdmath ice_file.nc ${zero_thickness} SUB overlap_thickness.nc SUB 1000 DIV = relative_thickness.nc
+	gmt grdmath ice_file.nc ${zero_thickness} SUB overlap_thickness.nc SUB 1000 DIV = relative_thickness.nc
 
-	grdmath relative_thickness.nc ${resolution} MUL ${resolution} MUL SUM  = volume_sum.nc
+	gmt grdmath relative_thickness.nc ${resolution} MUL ${resolution} MUL SUM  = volume_sum.nc
 
-	grdtrack -Gvolume_sum.nc << END 
+	gmt grdtrack -Gvolume_sum.nc << END 
 0 0
 END
 
-	grdtrack -Gvolume_sum.nc << END  | awk -v time=${time} -v resolution=${resolution} '{print time, $3, $3  / 1e6, $3 * 0.91 / 361 / 1e6 * 1000}' >> volume.txt
+	gmt grdtrack -Gvolume_sum.nc << END  | awk -v time=${time} -v resolution=${resolution} '{print time, $3, $3  / 1e6, $3 * 0.91 / 361 / 1e6 * 1000}' >> volume.txt
 0 0
 END
 

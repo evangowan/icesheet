@@ -67,7 +67,7 @@ shelf_mask="shelf_mask.nc"
 if [ ! -e "${shelf_mask}" ]
 then
 echo "calculating shelf mask"
-grdmath ${ice_base} ${bedrock_topo} SUB ABS 3 LT = ${shelf_mask}
+gmt grdmath ${ice_base} ${bedrock_topo} SUB ABS 3 LT = ${shelf_mask}
 fi
 
 
@@ -76,7 +76,7 @@ fi
 if [ ! -e "${ice_thickness}" ]
 then
 echo "calculating ice_thickness"
-grdmath ${topo} ${bedrock_topo} SUB ${shelf_mask} MUL = ${ice_thickness}
+gmt grdmath ${topo} ${bedrock_topo} SUB ${shelf_mask} MUL = ${ice_thickness}
 rm ${greenland_thickness} ${greenland_outline}
 fi
 
@@ -86,7 +86,7 @@ greenland_outline="ice_contours_outline.gmt"
 if [ ! -e "${greenland_thickness}" ]
 then
 echo "projecting Greenland ice thickness"
-grdproject ${ice_thickness}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -G${greenland_thickness} -D${resolution}000= -Fe  -V 
+gmt grdproject ${ice_thickness}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -G${greenland_thickness} -D${resolution}000= -Fe  -V 
 
 fi
 
@@ -94,18 +94,18 @@ fi
 
 if [ ! -e "${greenland_outline}" ]
 then
-makecpt -Cgray -T0/1/0.1  > ice_mask_shades.cpt
+gmt makecpt -Cgray -T0/1/0.1  > ice_mask_shades.cpt
 
 if [ ! -e "thick_temp.nc" ]
 then
-grdproject ${ice_thickness}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -Gthick_temp.nc -D400= -Fe  -V 
+gmt grdproject ${ice_thickness}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -Gthick_temp.nc -D400= -Fe  -V 
 fi
 
-grdmath thick_temp.nc 3 GT = ice_mask.nc
+gmt grdmath thick_temp.nc 3 GT = ice_mask.nc
 
 
 
-grdcontour ice_mask.nc -Cice_mask_shades.cpt -Q300 -D -L0.45/0.55 -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -P  > ${greenland_outline}
+gmt grdcontour ice_mask.nc -Cice_mask_shades.cpt -Q300 -D -L0.45/0.55 -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -P  > ${greenland_outline}
 
 
 
@@ -118,13 +118,13 @@ ellesmere=ellesmere_ice_thickness.nc
 
 area_grid=ice_thickness_proj.nc
 
-grdmath ${greenland_thickness} ${baffin} ADD ${devon} ADD ${ellesmere} ADD = area_temp.nc
+gmt grdmath ${greenland_thickness} ${baffin} ADD ${devon} ADD ${ellesmere} ADD = area_temp.nc
 
-grdmath area_temp.nc 1 GT = area_temp_mask.nc
+gmt grdmath area_temp.nc 1 GT = area_temp_mask.nc
 
-grdmath area_temp.nc area_temp_mask.nc MUL = ${area_grid}
+gmt grdmath area_temp.nc area_temp_mask.nc MUL = ${area_grid}
 
-#grdproject ${ice_thickness}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -G${area_grid} -D${resolution}000= -Fe  -V  
+#gmt grdproject ${ice_thickness}  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -G${area_grid} -D${resolution}000= -Fe  -V  
 
 
 nccopy -k classic ${area_grid} ice_thickness_proj3.nc
@@ -132,19 +132,19 @@ nccopy -k classic ${area_grid} ice_thickness_proj3.nc
 # ice thickness plot
 
 plot=ice_thickness.ps
-makecpt -Cwysiwyg -T0/5000/250 > shades_ice.cpt
+gmt makecpt -Cwysiwyg -T0/5000/250 > shades_ice.cpt
 
-makecpt -Cgray -T0/4000/1000    > iceshades_coarse.cpt
+gmt makecpt -Cgray -T0/4000/1000    > iceshades_coarse.cpt
 
-grdimage ${area_grid} -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades_ice.cpt -V -nb > ${plot}
+gmt grdimage ${area_grid} -Y12  -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -P -Cshades_ice.cpt -V -nb > ${plot}
 
-pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Dl -A5000 -Wthinnest,grey >> ${plot}
+gmt pscoast -Bafg -O -K -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -P -Wthin -Dl -A5000 -Wthinnest,grey >> ${plot}
 
-psxy ice_contours_outline.gmt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -P -V -Wthin,white >> ${plot}
+gmt psxy ice_contours_outline.gmt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -P -V -Wthin,white >> ${plot}
 
-#grdcontour ${ice_thickness} -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
+#gmt grdcontour ${ice_thickness} -Ciceshades_coarse.cpt -R${x_min}/${x_max}/${y_min}/${y_max}  -JX${map_width}/0 -K -O -W0.75p,black -A+f8p,black+gwhite >> ${plot}
 
-#psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthickest,white >> ${plot}
-#psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthin,blue >> ${plot}
+#gmt psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthickest,white >> ${plot}
+#gmt psxy margins/${time}.gmt  -R${west_longitude}/${west_latitude}/${east_longitude}/${east_latitude}r -JA${center_longitude}/${center_latitude}/${map_width} -K -O -P -V -Wthin,blue >> ${plot}
 
-psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"Ice Thickness (m)" --FONT_LABEL=14p -Cshades_ice.cpt -V  >> $plot
+gmt psscale -X-1 -Y-3.5 -Dx9c/2c/9c/0.5ch -P -O -Bx1000f500+l"Ice Thickness (m)" --FONT_LABEL=14p -Cshades_ice.cpt -V  >> $plot

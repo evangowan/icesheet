@@ -59,7 +59,7 @@ echo ${R_options}
 echo ${xmin} ${ymin}
 echo ${xmax} ${ymax}
 
-mapproject << END    ${R_options} ${J_options_project} -Fe -I -C
+gmt mapproject << END    ${R_options} ${J_options_project} -Fe -I -C
 ${xmin} ${ymin}
 ${xmax} ${ymax}
 0 0
